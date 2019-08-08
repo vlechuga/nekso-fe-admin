@@ -1,0 +1,25 @@
+<div class="modal-header">
+  <div class="header-item">
+    <h5 class="margin-null text-blue-light font-bold" style="float: left;">{{confirmationModalVm.title}}</h5>
+    <button class="close" id="btn_close" ng-click="confirmationModalVm.close()" type="button">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+</div>
+<div class="modal-body">
+  <div class="row sub-header padding-bottom-null">
+    <div class="col-sm-12 panel margin-bottom-null">
+      <div class="row margin-bottom-15 margin-top-15">
+        <div class="col-sm-12">
+          <span class="font-bold text-light-grey">{{confirmationModalVm.description}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 pull-rigth margin-bottom-15">
+          <button class="btn btn-primary pull-right" ng-click="confirmationModalVm.accept()">{{confirmationModalVm.acceptStr}}</button>
+          <button class="btn btn-default pull-right margin-right-15" ng-click="confirmationModalVm.reject()">{{confirmationModalVm.rejectStr}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

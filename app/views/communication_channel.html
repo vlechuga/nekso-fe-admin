@@ -1,0 +1,303 @@
+<div ng-if="vm.notAuthMsg" not-authorized message="vm.notAuthMsg" class="not-authorized"></div>
+
+<div class="container-fluid padding-footer full-height">
+  <div class="row sub-header">
+    <div class="col-sm-12">
+      <h4>Communication Channel</h4>
+    </div>
+  </div>
+
+  <div class="row row-separation">
+    <div class="col-sm-12">
+      <tabset id="tabs" class="full-height">
+        <tab heading="All messages">
+          <div block-ui="messagesList">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="panel panel-default panel-rides panel-no-shadow">
+                  <div class="panel-heading"></div>
+                  <div class="panel-body padding-top-null">
+                    <div class="row sub-header">
+                      <div class="col-sm-12">
+                        <h5>Messages({{vm.totalMessages}})</h5>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="panel panel-default panel-rides panel-no-shadow" style="padding: 0">
+                          <div class="row shape-light-grey">
+                            <div class="col-sm-6 margin-bottom-15">
+                              <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+                                <li>
+                                  <filter_country_state multiple="true" country="vm.filter.country" states="vm.filter.states"></filter_country_state>
+                                </li>
+                                <li>
+                                  <select class="font-13 new-select" ng-model="vm.filter.target">
+                                    <option selected disabled value="">Select Target</option>
+                                    <option selected value="ALL">All</option>
+                                    <option selected value="DIGITAL">Digital</option>
+                                    <option selected value="TRADITIONAL">Regular</option>
+                                  </select>
+                                </li>
+                                <li>
+                                  <select class="font-13 new-select" ng-model="vm.filter.status">
+                                    <option selected disabled value="">Select Status</option>
+                                    <option value="ALL">All</option>
+                                    <option value="ACTIVE">Active</option>
+                                    <option value="EXPIRED">Expired</option>
+                                    <option value="NOT_STARTED">Not started</option>
+                                  </select>
+                                </li>
+                              </ul>
+                            </div>
+                            <div class="col-sm-6">
+                              <div class="form-group has-feedback pull-right">
+                                <input class="form-control" placeholder="Search" type="text" ng-model="vm.filter.searchText" ng-keydown="vm.searchMessagesOnEnter($event)"/>
+                                <i class="glyphicon glyphicon-search form-control-feedback"></i>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row panel-body padding-top-null">
+                            <table class="table table-hover table-condensed table-bordered">
+                              <thead>
+                                <tr>
+                                  <th class="column-header-color">
+                                    Message title
+                                  </th>
+                                  <th class="column-header-color"  ng-click="vm.order('validity.from')">
+                                    Start Date
+                                    <span ng-if="!vm.reverse && vm.predicate === 'validity.from'" class="fa fa-sort-down columnSortIcons"></span>
+                                    <span ng-if="vm.reverse && vm.predicate === 'validity.from'" class="fa fa-sort-up columnSortIcons"></span>
+                                  </th>
+                                  <th class="column-header-color"  ng-click="vm.order('validity.to')">
+                                    End date
+                                    <span ng-if="!vm.reverse && vm.predicate === 'validity.to'" class="fa fa-sort-down columnSortIcons"></span>
+                                    <span ng-if="vm.reverse && vm.predicate === 'validity.to'" class="fa fa-sort-up columnSortIcons"></span>
+                                  </th>
+                                  <th class="column-header-color">
+                                    Target
+                                  </th>
+                                  <th class="column-header-color">
+                                    Country
+                                  </th>
+                                  <th class="column-header-color">
+                                    State
+                                  </th>
+                                  <th class="column-header-color">
+                                    Status
+                                  </th>
+                                  <th class="column-header-color">
+                                    Number of drivers
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr ng-repeat="message in vm.messages track by $index">
+                                  <td ng-click="vm.openMessageDetail(message, 'messageList')">
+                                    <span><strong>{{message.title}}</strong></span>
+                                  </td>
+                                  <td>
+                                    <span>{{message.validity.from | date:'dd/MM/yyyy hh:mm a'}}</span>
+                                  </td>
+                                  <td>
+                                    <span>{{message.validity.to | date:'dd/MM/yyyy hh:mm a'}}</span>
+                                  </td>
+                                  <td>
+                                    <span>{{message.target}}</span>
+                                  </td>
+                                  <td>
+                                    <span>{{message.country.name}}</span>
+                                  </td>
+                                  <td>
+                                    <span ng-if="message.states && message.states.length < 1">All</span>
+                                    <span ng-if="message.states && message.states.length > 0">
+                                      <span ng-repeat="state in message.states track by $index">{{state.name}} </span>
+                                    </span>
+                                  </td>
+                                  <td>
+                                    <span>{{message.status}}</span>
+                                  </td>
+                                  <td>
+                                    <span>{{message.numberOfUsers}}</span>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="bar-pagination">
+                        <div class="row">
+                          <div class="col-sm-8 text-left">
+                            <pagination boundary-links="true" class="pagination" first-text="&laquo;" items-per-page="vm.controls.numPerPage" last-text="&raquo;" max-size="5" next-text="&rsaquo;" ng-model="vm.controls.currentPage" previous-text="&lsaquo;" rotate="false" total-items="vm.totalMessages"></pagination>
+                          </div>
+                          <div class="col-sm-4 text-right">
+                            <div class="btn-group items-per-page">
+                              <label btn-radio="10" class="btn btn-default" id="btn_numPerPage10" ng-model="vm.controls.numPerPage">10</label>
+                              <label btn-radio="25" class="btn btn-default" id="btn_numPerPage25" ng-model="vm.controls.numPerPage">25</label>
+                              <label btn-radio="50" class="btn btn-default" id="btn_numPerPage50" ng-model="vm.controls.numPerPage">50</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </tab>
+        <tab ng-click="vm.getMessagesReport()" heading="Message report">
+          <div block-ui="reportMessagesList">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="panel panel-default panel-rides panel-no-shadow">
+                  <div class="panel-heading"></div>
+                  <div class="panel-body padding-top-null">
+                    <div class="row sub-header">
+                      <div class="col-sm-9">
+                        <h5>Message report</h5>
+                      </div>
+                      <div class="col-sm-3 text-right pull-right">
+                        <a href="{{vm.getCsvUrl()}}">
+                          <button ladda="vm.loading.export" data-style="slide-left" class="btn btn-primary"
+                                  ng-click="vm.exportToCsv()">
+                            Export to CSV
+                          </button>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="panel panel-default panel-rides panel-no-shadow" style="padding: 0">
+                          <div class="row shape-light-grey">
+                            <div class="col-sm-6 margin-bottom-15">
+                              <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+                                <!--<li>
+                                  <filter_country_state multiple="true" country="vm.report.filter.country" states="vm.report.filter.states"></filter_country_state>
+                                </li>-->
+                                <li>
+                                  <select class="font-13 new-select" ng-model="vm.report.filter.country">
+                                    <option selected value="">Select country</option>
+                                    <option ng-repeat="country in vm.states.country | orderBy" value="{{country}}">{{country}}</option>
+                                  </select>
+                                </li>
+                                <li style="width: 200px;">
+                                  <select multiple="multiple" id="filter_report_states" class="multiple-state font-13" ng-model="vm.report.filter.states" >
+                                    <option ng-repeat="obj in vm.statesArr | orderBy: 'name'" ng-if="obj.country == vm.report.filter.country && vm.report.filter.country" ng-value="obj.name">{{obj.name}}</option>
+                                  </select>
+                                </li>
+                                <li class="col-xs-6">
+                                  <div class="has-feedback">
+                                    <input date-range-picker class="form-control date-picker font-11 inside-search-icon" type="text"
+                                           ng-model="vm.report.filter.date" options="vm.report.filter.date.opts" required/>
+                                    <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
+                                  </div>
+                                </li>
+                                <!--<li>-->
+                                  <!--<select class="font-13 new-select" ng-model="vm.filter.target">-->
+                                    <!--<option selected disabled value="">Select Target</option>-->
+                                    <!--<option selected value="ALL">All</option>-->
+                                    <!--<option selected value="DIGITAL">Digital</option>-->
+                                    <!--<option selected value="TRADITIONAL">Traditional</option>-->
+                                  <!--</select>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                  <!--<select class="font-13 new-select" ng-model="vm.filter.status">-->
+                                    <!--<option selected disabled value="">Select Status</option>-->
+                                    <!--<option value="ALL">All</option>-->
+                                    <!--<option value="ACTIVE">Active</option>-->
+                                    <!--<option value="EXPIRED">Expired</option>-->
+                                  <!--</select>-->
+                                <!--</li>-->
+                              </ul>
+                            </div>
+                            <div class="col-sm-6">
+                              <div class="form-group has-feedback pull-right">
+                                <input class="form-control" placeholder="Search" type="text" ng-model="vm.report.filter.searchText" ng-keydown="vm.searchMessagesReportOnEnter($event)"/>
+                                <i class="glyphicon glyphicon-search form-control-feedback"></i>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row panel-body padding-top-null">
+                            <table class="table table-hover table-condensed table-bordered">
+                              <thead>
+                              <tr>
+                                <th class="column-header-color">
+                                  Driver's name
+                                </th>
+                                <th class="column-header-color"  ng-click="vm.order('validity.to')">
+                                  Email
+                                  <span ng-if="!vm.reverse && vm.predicate === 'validity.to'" class="fa fa-sort-down columnSortIcons"></span>
+                                  <span ng-if="vm.reverse && vm.predicate === 'validity.to'" class="fa fa-sort-up columnSortIcons"></span>
+                                </th>
+                                <th class="column-header-color">
+                                  Message title
+                                </th>
+                                <th class="column-header-color">
+                                  Message date
+                                </th>
+                                <th class="column-header-color">
+                                  Read
+                                </th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <tr ng-repeat="report in vm.report.messages track by $index">
+                                <td>
+                                  <span>{{report.user.firstName}} {{report.user.lastName}}</span>
+                                </td>
+                                <td>
+                                  <span>{{report.user.email}}</span>
+                                </td>
+                                <td ng-click="vm.openMessageDetail(report.message, 'reportList')">
+                                  <span><strong>{{report.message.title}}</strong></span>
+                                </td>
+                                <td>
+                                  <span>{{report.message.createdAt | date:'dd/MM/yyyy hh:mm a'}}</span>
+                                </td>
+                                <td>
+                                  <span ng-if="report.readAt">
+                                    <i class="fa fa-check-square-o text-success fa-lg"></i>
+                                  </span>
+                                  <span ng-if="!report.readAt">
+                                    <i class="fa fa-times text-danger fa-lg"></i>
+                                  </span>
+                                </td>
+                              </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="bar-pagination">
+                        <div class="row">
+                          <div class="col-sm-8 text-left">
+                            <pagination boundary-links="true" class="pagination" first-text="&laquo;" items-per-page="vm.report.controls.numPerPage" last-text="&raquo;" max-size="5" next-text="&rsaquo;" ng-model="vm.report.controls.currentPage" previous-text="&lsaquo;" rotate="false" total-items="vm.report.totalMessages"></pagination>
+                          </div>
+                          <div class="col-sm-4 text-right">
+                            <div class="btn-group items-per-page">
+                              <label btn-radio="10" class="btn btn-default" ng-model="vm.report.controls.numPerPage">10</label>
+                              <label btn-radio="25" class="btn btn-default" ng-model="vm.report.controls.numPerPage">25</label>
+                              <label btn-radio="50" class="btn btn-default" ng-model="vm.report.controls.numPerPage">50</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </tab>
+        <tab heading="Create Message" ng-click="vm.createNewMessage()">
+        </tab>
+      </tabset>
+    </div>
+  </div>
+</div>

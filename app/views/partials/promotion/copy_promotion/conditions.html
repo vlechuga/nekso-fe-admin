@@ -1,0 +1,169 @@
+<article class="card conditions">
+
+  <header class="card__header">
+    <div class="card__header-title"><strong>Conditions</strong></div>
+    <div class="card__header-subtitle">Set the conditions of the promotions, such as target users, category and type of promotion.</div>
+  </header>
+
+  <div class="card__content">
+
+    <div class="row target-users">
+      <div class="col-md-2 col-xs-3">
+        <strong>TARGET USERS</strong>
+      </div>
+      <div class="col-md-10 col-xs-9 checkbox-list">
+        <div class="radio">
+
+            <input class="nekso-form__radio"
+                   id="option-driver"
+                   type="radio"
+                   name="optionsRadios6Copy"
+                   value="DRIVER"
+                   ng-model="vm.role">
+            <label for="option-driver">Driver</label>
+
+            <input class="nekso-form__radio"
+                   id="option-passenger"
+                   type="radio"
+                   name="optionsRadios6Copy"
+                   value="PASSENGER"
+                   ng-model="vm.role">
+            <label for="option-passenger">Passenger</label>
+
+            <input class="nekso-form__radio"
+                   id="option-corporate-guests"
+                   type="radio"
+                   name="optionsRadios6Copy"
+                   value="CORPORATE_GUESTS"
+                   ng-model="vm.role">
+            <label for="option-corporate-guests">Corporate (Guests)</label>
+
+            <input class="nekso-form__radio"
+                   id="option-corporate-employees"
+                   type="radio"
+                   name="optionsRadios6Copy"
+                   value="CORPORATE_EMPLOYEES"
+                   ng-model="vm.role">
+            <label for="option-corporate-employees">Corporate (Employees)</label>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row category" ng-if="vm.featureToggle.isFeatureEnabled('category')">
+      <div class="col-md-2 col-xs-3">
+        <strong>CATEGORY</strong>
+      </div>
+      <div class="col-md-5 col-xs-9"
+           ng-class="{ 'has-error' : edit_promotion.field_category.$invalid && !edit_promotion.$pristine}">
+        <select class="nekso-form__select"
+                ng-model="vm.categoryOption"
+                required
+                name="field_category">
+          <option disabled selected value="">Select</option>
+          <option value="SYSTEM">System</option>
+          <option ng-show="vm.role === 'PASSENGER' || vm.role === 'DRIVER'" value="PROMOTIONAL_CODE">Promotional codes</option>
+          <option ng-show="vm.role === 'PASSENGER'" value="COUPON">Coupon</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row" ng-if="vm.categoryOption === 'PROMOTIONAL_CODE'">
+      <div class="col-md-10 col-xs-12 col-md-offset-2">
+        <div ng-include="'/views/partials/promotion/copy_promotion/promotional_code.html'"></div>
+      </div>
+    </div>
+
+    <div class="row" ng-if="vm.categoryOption === 'COUPON'">
+      <div class="col-md-10 col-xs-12 col-md-offset-2">
+        <ng-include src="'/views/partials/promotion/copy_promotion/select_corporation.html'"></ng-include>
+      </div>
+    </div>
+
+    <div class="row type-promotions">
+
+      <div class="col-md-2 col-xs-3">
+        <strong>TYPE OF PROMOTIONS</strong>
+      </div>
+
+      <div class="col-md-10 col-xs-9">
+
+        <div class="row">
+
+          <div class="nekso-form col-md-6 col-xs-12 type-promotions-select">
+            <select class="nekso-form__select"
+                    data-width="100%"
+                    ng-model="vm.promotion.type"
+                    required
+                    name="field_type"
+                    ng-disabled="vm.role==='DRIVER'">
+              <option disabled selected value="">Select Type of Promotion</option>
+              <option ng-if="vm.role && vm.role !== 'CORPORATE'" value="PERCENTAGE">% disc.</option>
+              <option value="AMOUNT">Amount</option>
+            </select>
+          </div>
+
+          <div class="nekso-form col-md-6 col-xs-12"
+               ng-if="vm.promotion.type==='PERCENTAGE'"
+               ng-class="{ 'has-error' : edit_promotion.field_promotionValue.$invalid &&  !edit_promotion.field_promotionValue.$pristine}">
+            <div class="nekso-form__flex">
+              <input name="field_promotionValue"
+                     class="nekso-form__input"
+                     id="promotion-value-percentage-option"
+                     ng-model="vm.promotion.value"
+                     type="number"
+                     min="1"
+                     max="100"
+                     required
+                     placeholder="Promotion value">
+              <label>%</label>
+            </div>
+
+            <h6 class="text-danger"
+                ng-if="edit_promotion.field_promotionValue.$error.min && !edit_promotion.field_promotionValue.$pristine">
+              Min. 1%</h6>
+            <h6 class="text-danger"
+                ng-if="edit_promotion.field_promotionValue.$error.max && !edit_promotion.field_promotionValue.$pristine">
+              Max. 100%</h6>
+            <h6 class="text-danger"
+                ng-if="edit_promotion.field_promotionValue.$error.required && !edit_promotion.field_promotionValue.$pristine">
+              This filed is mandatory
+            </h6>
+
+          </div>
+
+          <div class="nekso-form col-sm-6"
+               ng-if="vm.promotion.type==='AMOUNT'"
+               ng-class="{ 'has-error' : edit_promotion.field_promotionValue.$invalid && !edit_promotion.$pristine}">
+            <input name="field_promotionValue"
+                   class="nekso-form__input"
+                   id="promotion-value-amount-option"
+                   ng-model="vm.promotion.value"
+                   type="number"
+                   min="1"
+                   max="999999999999"
+                   required
+                   placeholder="Promotion value">
+
+            <h6 class="text-danger"
+                ng-if="edit_promotion.field_promotionValue.$error.min &&  !edit_promotion.field_promotionValue.$pristine">
+              Min. 1%
+            </h6>
+            <h6 class="text-danger"
+                ng-if="edit_promotion.field_promotionValue.$error.max &&  !edit_promotion.field_promotionValue.$pristine">
+              Max. 999999999999
+            </h6>
+            <h6 class="text-danger"
+                ng-if="edit_promotion.field_promotionValue.$error.required &&  !edit_promotion.field_promotionValue.$pristine">
+              This field is mandatory
+            </h6>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</article>

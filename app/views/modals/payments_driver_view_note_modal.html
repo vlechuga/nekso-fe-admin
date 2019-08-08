@@ -1,0 +1,60 @@
+<div class="modal-header">
+  <button class="close" id="btn_close" ng-click="vm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <h4 class="modal-title">{{vm.noteTitle}}</h4>
+</div>
+<div class="modal-body">
+  <div class="row payment-credit-debit-note-panel">
+    <div class="col-sm-12">
+
+      <div class="row" ng-if="!vm.balanceDate">
+        <div class="col-sm-12 header">
+          <h5 class="text-center" ng-switch="vm.trxType">
+            <span ng-switch-when="DEPOSIT">Deposit</span>
+            <span ng-switch-when="SERVICE_CHARGE">Service charge</span>
+            <span ng-switch-when="THIRD_PARTY_FEE">Third party fee</span>
+            <span ng-switch-when="PROMOTION">Promotion</span>
+            <span ng-switch-when="APPLICATION_FEE">Commission</span>
+            <span ng-switch-when="CONTROLLER_FEE">Controller fee</span>
+            <span ng-switch-when="NEKSO_FEE">Nekso fee</span>
+            <span ng-switch-when="CREDIT_NOTE">Credit note</span>
+            <span ng-switch-when="DEBIT_NOTE">Debit note</span>
+            <span ng-switch-when="PAYMENT">Payment</span>
+            <span ng-switch-when="PAYMENT_REVERSE">Payment reverse</span>
+            <span ng-switch-when="SYSTEM">System</span>
+            <span ng-switch-when="ACHIEVEMENT">Achievement</span>
+            <span ng-switch-when="CREDIT_CARD">Credit card</span>
+            <span ng-switch-when="CORPORATE">Corporate</span>
+            <span ng-switch-when="REFERRAL_NEW_DRIVER">Referral new driver</span>
+            <span ng-switch-when="REFERRAL_DISCOUNT">Referral discount</span>
+            <span ng-switch-when="REFERRAL_DRIVER_BONUS">Referral driver bonus</span>
+            <span ng-switch-when="COMMISSION">Commission</span>
+            <span ng-switch-when="PROMOTIONAL_CODE">Promotional code</span>
+            <span ng-switch-default></span>
+          </h5>
+          <h4 class="text-center">{{vm.currency}} {{vm.trxAmount | number:2}}</h4>
+        </div>
+      </div>
+      <div class="row" ng-if="vm.balanceDate">
+        <div class="col-sm-12 header">
+          <h5 class="text-center">Balance Date:</h5>
+          <h4 class="text-center">{{vm.balanceDate | date:'dd/MM/yyyy'}}</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 body">
+          <h5 class="text-center">{{vm.labelAmountNote}}</h5>
+          <h4 class="text-center">{{vm.currency}} {{vm.noteAmount | number:2}}</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <h5>Comment:</h5>
+          <span class="text-justify"
+                style="word-break: break-all;">{{vm.comment | capitalize}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,141 @@
+<div ng-if="vm.notAuthMsg" not-authorized message="vm.notAuthMsg" class="not-authorized"></div>
+<div class="container-fluid padding-footer">
+  <div class="row sub-header">
+    <div class="col-sm-9">
+        <h4>Administration ({{vm.totalAdministrator}} Users)</h4>
+    </div>
+    <div class="col-sm-3 text-right">
+      <p class="input-group margin-top-input search-box">
+        <input class="form-control" placeholder="Search" type="text" ng-model="vm.filter.searchText" ng-keydown="vm.searchDriversOnEnter($event)"/>
+          <span class="input-group-btn margin-top-input search-btn" ng-click="vm.searchDrivers()">
+            <button class="btn btn-default" type="button">
+              <i class="material-icons text-dark-grey">search</i>
+            </button>
+          </span>
+          <span ng-if="vm.filter.searchText && vm.filter.searchText !== ''" class="input-group-btn margin-top-input clear-btn" ng-click="vm.clearSearchField()">
+            <button class="btn btn-default" type="button">
+              <i class="material-icons text-dark-grey">close</i>
+            </button>
+          </span>
+      </p>
+    </div>
+    <!-- <div class="col-sm-3 text-right">
+      <button ladda="vm.loading.export" data-style="slide-left" class="btn btn-primary" csv-header="['Ride ID', 'Ride date', 'Ride time', 'Taxi line', 'Driver', 'Driver email', 'Passenger', 'Passenger email', 'Pickup', 'Destination', 'Status', 'First time']" filename="rides.csv" ng-csv="vm.exportToCsv()" span>
+        Export to CSV
+      </button>
+    </div> -->
+  </div>
+  <div block-ui="PermissionsList">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-default panel-administration panel-no-shadow">
+          <div class="col-sm-12 margin-bottom-15 margin-top-15">
+            <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+              <!-- <li>
+                <span>Filters</span>
+              </li> -->
+              <li>
+                <button ng-if="vm.getUserPermission('create:administration')" ng-click="vm.openNewAdministratorDialog()" data-style="slide-left" class="btn btn-primary">
+                  Create user
+                </button>
+              </li>
+              <li>
+                <select class="font-13 new-select" ng-model="vm.filter.country">
+                  <option selected value="">Select user country</option>
+                  <option ng-repeat="country in vm.states.country" value="{{country}}">{{country}}</option>
+                </select>
+              </li>
+              <li style="width: 200px;">
+                <select multiple="multiple" id="field_source" class="multiple-state font-13" ng-model="vm.filter.state" ng-hide="vm.loadingMultiSelect">
+                  <option ng-repeat="obj in vm.statesArr | orderBy: 'name'" ng-if="obj.country == vm.filter.country && vm.filter.country" value="{{obj.name}}">{{obj.name}}</option>
+                  <option ng-repeat="obj in vm.statesArr" ng-if="!obj.country && !vm.filter.country" value="{{obj.name}}">{{obj.name}}</option>
+                </select>
+              </li>
+              <li>
+                <select class="new-select font-13" id="field_status" ng-model="vm.filter.status">
+                  <option disabled selected value="">Select status</option>
+                  <option value="ALL">All</option>
+                  <option value="SUSPENDED">Suspended</option>
+                  <option value="OK">Active</option>
+                </select>
+              </li>
+            </ul>
+          </div>
+          <div class="panel-body padding-top-null">
+            <table class="table table-hover table-condensed table-bordered">
+              <thead>
+              <th class="column-header-color" ng-click="vm.order('firstName')">
+                Name
+                <span ng-if="!vm.reverse && vm.predicate === 'firstName'" class="fa fa-sort-down columnSortIcons"></span>
+                <span ng-if="vm.reverse && vm.predicate === 'firstName'" class="fa fa-sort-up columnSortIcons"></span>
+              </th>
+              <th class="column-header-color">
+                Email
+              </th>
+              <th class="column-header-color">
+                Created Date
+              </th>
+              <th class="column-header-color">
+                Status
+              </th>
+              <th class="column-header-color">
+                Admin
+              </th>
+              <th class="column-header-color">
+                User Country - State
+              </th>
+              </thead>
+              <tbody>
+              <tr ng-repeat="administrator in vm.administrators track by $index" ng-click="vm.openAdministratorProfileDialog(administrator)">
+                <td>
+                  <span>{{administrator.fullName}}</span>
+                </td>
+                <td>
+                  <span>{{administrator.email}}</span>
+                </td>
+                <td>
+                  <span>{{administrator.createdDate | date:'dd/MM/yyyy hh:mm a'}}</span>
+                </td>
+                <td>
+                  <span>{{administrator.status.replace('OK','ACTIVE')}}</span>
+                </td>
+                <td>
+                  <span>{{administrator.admin}}</span>
+                </td>
+                <td>
+                  <span>{{administrator.location.country}} - {{administrator.location.state}}</span>
+                </td>
+                <!-- <td>
+                  {{administrator.expiryDate}}
+                </td>
+                <td>
+                  {{administrator.status}}
+                </td>
+                <td>
+                  <label ng-click="vm.editAdministrator(administrator)">EDIT</label>
+                </td> -->
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bar-pagination">
+        <div class="row">
+          <div class="col-sm-8 text-left">
+            <pagination boundary-links="true" class="pagination" first-text="&laquo;" items-per-page="vm.controls.numPerPage" last-text="&raquo;" max-size="5" next-text="&rsaquo;" ng-model="vm.controls.currentPage" previous-text="&lsaquo;" rotate="false" total-items="vm.totalAdministrator"></pagination>
+          </div>
+          <div class="col-sm-4 text-right">
+            <div class="btn-group items-per-page">
+              <label btn-radio="10" class="btn btn-default" id="btn_numPerPage10" ng-model="vm.controls.numPerPage">10</label>
+              <label btn-radio="25" class="btn btn-default" id="btn_numPerPage25" ng-model="vm.controls.numPerPage">25</label>
+              <label btn-radio="50" class="btn btn-default" id="btn_numPerPage50" ng-model="vm.controls.numPerPage">50</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

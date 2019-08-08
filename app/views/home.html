@@ -1,0 +1,141 @@
+<div class="container-fluid padding-footer">
+  <div class="row home-view top-mobile home-counters">
+    <div class="col-xs-12 text-left">
+      <div class="row state-overview">
+        <div class="col-lg-5ths">
+          <section class="panel-terques">
+            <div class="value"><h1>{{homeVm.addSeparator(homeVm.counter.drivers)}}</h1>
+              <p>Approved drivers</p>
+            </div>
+          </section>
+        </div>
+        <div class="col-lg-5ths">
+          <section class="panel-red">
+            <div class="value"><h1>{{homeVm.addSeparator(homeVm.counter.passengers)}}</h1>
+              <p>Registered passengers</p>
+            </div>
+          </section>
+        </div>
+        <div class="col-lg-5ths">
+          <section class="panel-violet">
+            <div class="value"><h1>{{homeVm.addSeparator(homeVm.counter.passengersToday)}}</h1>
+              <p>Passengers today</p>
+            </div>
+          </section>
+        </div>
+        <div class="col-lg-5ths">
+          <section class="panel-orange">
+            <div class="value"><h1>{{homeVm.addSeparator(homeVm.counter.completedRides)}}</h1>
+              <p>Completed rides</p>
+            </div>
+          </section>
+        </div>
+        <div class="col-lg-5ths">
+          <section class="panel-blue">
+            <div class="value"><h1>{{homeVm.addSeparator(homeVm.counter.ridesToday)}}</h1>
+              <p>Completed rides today</p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row home-view">
+    <div class="col-xs-12">
+      <!-- panel de filtro -->
+      <div class="panel panel-home">
+
+        <div class="row panel-heading margin-top-5">
+          <div class="col-xs-12 col-sm-5 col-md-3">
+            <p class="input-group date-box ">
+              <input date-range-picker class="nekso-form__input" type="text"
+                     ng-model="homeVm.date" options="homeVm.date.opts" required id="calendar-input"/>
+              <span class="input-group-btn margin-top-input">
+                  <button id="btn_openEndCalendar" class="btn btn-default" type="button">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                  </button>
+                </span>
+            </p>
+          </div>
+          <div class="col-xs-12 col-sm-7 col-md-6">
+            <div class="centered-input">
+              <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+                <li>
+                  <filter_country_state multiple="true" country="homeVm.filter.country"
+                                        states="homeVm.filter.states"></filter_country_state>
+                </li>
+                <li>
+                  <button class="nekso-button" ng-click="homeVm.search()">Search</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row home-view">
+    <div class="col-xs-12">
+      <!-- panel de graficas -->
+      <div class="panel panel-home">
+        <div class="panel-heading" style="background-color: transparent;">
+          <h4>Rides by status</h4>
+        </div>
+        <div class="panel-body">
+          <div class="nvd3Chart" id="ridesOverviewChart">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row home-view">
+    <div class="col-xs-12">
+      <!-- panel de graficas -->
+      <div class="panel panel-home">
+        <div class="panel-heading" style="background-color: transparent;">
+          <h4>Completed rides by source</h4>
+        </div>
+        <div class="panel-body">
+          <div class="nvd3Chart" id="rideSourceOverviewChart">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row home-view">
+    <div class="col-xs-12 col-sm-6 text-left">
+      <div class="panel panel-home">
+        <div class="panel-heading" style="background-color: transparent;">
+          <h4>Approved Drivers by Country</h4>
+        </div>
+        <div class="panel-body">
+          <div class="nvd3Chart" id="driversStatusPieChart">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 text-left">
+      <div class="panel panel-home">
+        <div class="row panel-heading">
+          <div class="col-sm-12">
+            <h4>Registered users</h4>
+          </div>
+        </div>
+        <div class="row panel-body">
+          <div class="col-sm-12">
+            <div class="nvd3Chart" id="usersOverviewChart">
+              <svg></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

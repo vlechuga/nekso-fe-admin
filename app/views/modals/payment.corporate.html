@@ -1,0 +1,95 @@
+<div class="modal-header">
+  <button class="close" id="btn_close" ng-click="corporateModalVm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row sub-header">
+    <div class="col-xs-6">
+      <div class="input-group header-item">
+        <h4 class="margin-null font-dark-blue">{{corporateModalVm.modalTitle}}</h4>
+      </div>
+    </div>
+  </div>
+  <form name="form_register">
+    <div class="row panel margin-null" style="padding-bottom: 30px;">
+      <div class="col-sm-12">
+        <div class="row">
+          <h5 ng-if="corporateModalVm.corporate.user.fullName.length >= 50" title="{{corporateModalVm.corporate.user.fullName}}" class="text-center font-dark-blue">{{corporateModalVm.corporate.user.fullName | cut:true:50:'...'}}</h5>
+          <h5 ng-if="corporateModalVm.corporate.user.fullName.length < 50" class="text-center font-dark-blue">{{corporateModalVm.corporate.user.fullName | cut:true:50:'...'}}</h5>
+        </div>
+        <div class="row">
+          <h5 class="text-center font-dark-blue font-bold">{{corporateModalVm.corporate.currency}} {{corporateModalVm.corporate.amount}}</h5>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <span>Update status</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <select ng-model="corporateModalVm.status" class="form-control new-select">
+              <option value="" disabled="">Select Status</option>
+              <!-- <option value="PENDING">Pending</option>
+              <option value="IN_PROCESS">In process</option> -->
+              <option value="COMPLETED">Completed</option>
+              <option value="REJECTED">Rejected</option>
+            </select>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 15px;" ng-if="corporateModalVm.status=='REJECTED'">
+          <div class="col-sm-12">
+            <input
+              type="checkbox"
+              name="selectedOpt[]"
+              value="WRONG_DATE"
+              ng-checked="corporateModalVm.rejectionArr.indexOf('WRONG_DATE') > -1"
+              ng-click="corporateModalVm.toggleSelection('WRONG_DATE')"
+            >
+            <span>Wrong date</span>
+          </div>
+          <div class="col-sm-12">
+            <input
+              type="checkbox"
+              name="selectedOpt[]"
+              value="INCORRECT_AMOUNT"
+              ng-checked="corporateModalVm.rejectionArr.indexOf('INCORRECT_AMOUNT') > -1"
+              ng-click="corporateModalVm.toggleSelection('INCORRECT_AMOUNT')"
+            >
+            <span>Incorrect amount</span>
+          </div>
+          <div class="col-sm-12">
+            <input
+              type="checkbox"
+              name="selectedOpt[]"
+              value="WRONG_ATTACHMENT"
+              ng-checked="corporateModalVm.rejectionArr.indexOf('WRONG_ATTACHMENT') > -1"
+              ng-click="corporateModalVm.toggleSelection('WRONG_ATTACHMENT')"
+            >
+            <span>Wrong attachment</span>
+          </div>
+        </div>
+        <!-- <div class="row">
+          <div class="col-sm-12">
+          </div>
+        </div> -->
+      </div>
+
+        <!--<div class="row">
+          <div class="form-group" ng-class="{ 'has-error' : form_register.field_comments.$invalid }">
+            <label class="padding-left-null col-sm-3 control-label">Comments</label>
+            <div class="col-sm-9">
+              <textarea ng-disabled="!corporateModalVm.editable" name="field_comments" class="form-control" rows="2" style="resize:vertical;" ng-model="corporateModalVm.comments"></textarea>
+            </div>
+          </div>
+        </div>-->
+    </div>
+    <div class="row">
+      <div class="col-sm-12 text-center" style="padding-top: 25px;">
+        <button ladda="corporateModalVm.loading.create" data-style="slide-left"  class="btn btn-success" ng-click="corporateModalVm.setStatus()" ng-disabled="corporateModalVm.status=='' || (corporateModalVm.status=='REJECTED' && corporateModalVm.rejectionArr.length==0)">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

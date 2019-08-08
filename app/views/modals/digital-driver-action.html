@@ -1,0 +1,119 @@
+<div class="modal-header">
+  <button class="close" id="btn_close" ng-click="vm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row sub-header">
+    <div class="col-sm-6">
+      <div class="input-group header-item">
+        <h4 class="margin-null">Digital Driver</h4>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="col-sm-6 row header-item" ng-if="!administratorModalVm.new && !administratorModalVm.editable && administratorModalVm.getUserPermission('update:administration')">
+        <button class="btn btn-primary" name="button" ng-click="administratorModalVm.setEditable()">Edit profile</button>
+      </div>
+      <div class="col-sm-6 row header-item" ng-if="administratorModalVm.editable && !administratorModalVm.new">
+        <button class="btn btn-danger" name="button" ng-click="administratorModalVm.removeEditable()">Cancel</button>
+      </div>
+      <div class="col-sm-6 row header-item" ng-if="administratorModalVm.editable && !administratorModalVm.new">
+        <button ladda="administratorModalVm.loading.create" data-style="slide-left" class="btn btn-success" ng-click="administratorModalVm.editAdministrator()" ng-disabled="form_edit_corporate.$invalid">
+          Save profile
+        </button>
+      </div>
+      <div class="col-sm-6 row header-item" ng-if="administratorModalVm.new">
+        <button ng-if="administratorModalVm.new" ladda="administratorModalVm.loading.create" data-style="slide-left" class="btn btn-success" ng-disabled="form_edit_corporate.$invalid || form_edit_corporate.$pristine" ng-click="administratorModalVm.createAdministrator()">
+          Create user
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+
+  </div>
+  <div class="row panel margin-null digital-driver-action-panel">
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-12">
+          <span class="text-blue-light">Driver name: </span>
+          <span class="information">{{vm.driver.firstName}} {{vm.driver.lastName}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <span class="text-blue-light">Mobile phone number: </span>
+          <span class="information">{{vm.driver.phone}}</span>
+        </div>
+      </div>
+      <div class="row action-row">
+        <div class="col-sm-12 text-center">
+          <label>
+            <input type="radio" ng-model="vm.action" value="APPROVE">
+            Approve
+          </label>
+          <label class="padding-left-15">
+            <input type="radio" ng-model="vm.action" value="REJECT">
+            Reject
+          </label>
+        </div>
+      </div>
+      <div class="row" ng-if="vm.action === 'APPROVE'">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-12">
+              <h5 for="field_taxiLines" class="text-blue-light">List of Taxi Lines:</h5>
+              <select name="field_taxiLines" class="form-control" ng-model="vm.selectedController" required>
+                <option disabled selected value="">Select</option>
+                <option value="{{controller}}" ng-repeat="controller in vm.controllers track by $index">{{controller.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row padding-top-25" ng-if="vm.selectedController">
+            <div class="col-sm-12 text-center">
+              <h5 class="text-blue-light">Selected taxi line for driver:</h5>
+              <h6>{{vm.selectedControllerName}}</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" ng-if="vm.action === 'REJECT'">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-12">
+              <ul>
+                <li class="list-style-none" ng-repeat="(key, reason) in vm.rejectReasonsList" >
+                  <input type="checkbox" checklist-model="vm.reject.reasons" checklist-value="key"> {{reason}}
+                </li>
+              </ul>
+              <!-- <h5 class="text-blue-light">Rejection options:</h5>
+              <label>
+                <input type="checkbox" ng-click="vm.toggleReason('Foto de perfil no adecuada.')">
+                Wrong profile picture.
+              </label><br/>
+              <label>
+                <input type="checkbox" ng-click="vm.toggleReason('Foto del vehículo no adecuada.')">
+                Wrong car picture.
+              </label><br/>
+              <label>
+                <input type="checkbox" ng-click="vm.toggleReason('Información personal inconsistente.')">
+                Wrong personal information.
+              </label><br/>
+              <label>
+                <input type="checkbox" ng-click="vm.toggleReason('Información del vehículo inconsistente.')">
+                Wrong car information.
+              </label> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" ng-if="vm.action === 'APPROVE' || vm.action === 'REJECT'" style="padding-top: 25px; padding-bottom: 25px;">
+        <div class="col-sm-8 col-sm-offset-2">
+          <button class="btn btn-primary pull-left" ng-click="vm.close()">Cancel</button>
+          <button class="btn btn-success pull-right" ng-click="vm.confirmAction()" ng-disabled="vm.disableConfirmButton()"
+                  ladda="vm.loading.confirm" data-style="slide-left" >Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

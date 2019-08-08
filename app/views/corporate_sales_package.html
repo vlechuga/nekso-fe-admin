@@ -1,0 +1,159 @@
+<div ng-if="vm.notAuthMsg" not-authorized message="vm.notAuthMsg" class="not-authorized"></div>
+<div class="container-fluid padding-footer">
+  <div class="row row-separation">
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-12">
+          <div>
+            <div class="row sub-header">
+              <div class="col-sm-9">
+                <h4>Corporations - Sales Package ({{vm.totalCorporates}})</h4>
+              </div>
+            </div>
+            <div class="panel-heading">
+              <div class="row shape-light-grey">
+                <div class="col-sm-1 text-left">
+                  <h5 class="text-left">Join date</h5>
+                </div>
+                <div class="col-sm-8">
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <p class="input-group date-box has-feedback">
+                        <input date-range-picker class="form-control date-picker font-11 inside-search-icon"
+                               type="text"
+                               ng-model="vm.filter.date" options="vm.filter.date.opts" required/>
+                        <i class="glyphicon glyphicon-calendar form-control-feedback no-zindex"></i>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3 text-right">
+                  <p class="input-group search-box">
+                    <input class="form-control" placeholder="Search" type="text" ng-model="vm.filter.searchText"
+                           ng-keydown="vm.searchOnEnter($event)"/>
+                    <span class="input-group-btn margin-top-input search-btn" ng-click="vm.searchCorporates()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">search</i>
+              </button>
+            </span>
+                    <span ng-if="vm.filter.searchText && vm.filter.searchText !== ''"
+                          class="input-group-btn margin-top-input clear-btn" ng-click="vm.clearSearchField()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">close</i>
+              </button>
+            </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div block-ui="corporatesList" class="panel">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="panel panel-default panel-no-shadow panel-corporates-sales-package">
+
+                    <div class="shape-light-grey">
+                      <div class="col-sm-12 margin-bottom-15 margin-top-15">
+                        <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+                          <li>
+                            <filter_country_state multiple="true" country="vm.filter.country" states="vm.filter.states"></filter_country_state>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div class="panel-body padding-top-null">
+                      <table class="table table-hover table-condensed table-bordered">
+                        <thead>
+                        <tr>
+                          <th class="column-header-color" ng-click="vm.order('companyName')">
+                            Corporation
+                            <span ng-if="!vm.reverse && vm.predicate === 'companyName'"
+                                  class="fa fa-sort-down columnSortIcons"></span>
+                            <span ng-if="vm.reverse && vm.predicate === 'companyName'"
+                                  class="fa fa-sort-up columnSortIcons"></span>
+                          </th>
+                          <th class="column-header-color">
+                            Country State
+                          </th>
+
+                          <th class="column-header-color" ng-click="vm.order('createdDate')">
+                            Sign up Date
+                            <span ng-if="!vm.reverse && vm.predicate === 'createdDate'"
+                                  class="fa fa-sort-down columnSortIcons"></span>
+                            <span ng-if="vm.reverse && vm.predicate === 'createdDate'"
+                                  class="fa fa-sort-up columnSortIcons"></span>
+                          </th>
+                          <th class="column-header-color">
+                            Sales package status
+                          </th>
+                          <th class="column-header-color">
+                            Bonus
+                          </th>
+                          <th class="column-header-color">
+                            Benefit
+                          </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="corporate in vm.corporates track by $index" ng-click="vm.openCorporateSalesPackageHistoryDialogFn(corporate)">
+                          <td>
+                            <span> {{corporate.companyName}} </span>
+                          </td>
+                          <td>
+                            <span> {{corporate.city}}</span>
+                          </td>
+                          <td>
+                            <span> {{corporate.createdDate | date: 'dd/MM/yyyy hh:mm a'}} </span>
+                          </td>
+                          <td>
+                            <span> {{corporate.salesPackage.status}} </span>
+                          </td>
+                          <td>
+                            <span> {{corporate.salesPackage.bonus}} </span>
+                          </td>
+                          <td>
+                            <span> {{corporate.salesPackage.benefits}} </span>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="bar-pagination">
+                  <div class="row">
+                    <div class="col-sm-8 text-left">
+                      <pagination boundary-links="true"
+                                  class="pagination"
+                                  first-text="&laquo;"
+                                  items-per-page="vm.controls.numPerPage"
+                                  last-text="&raquo;"
+                                  max-size="5"
+                                  next-text="&rsaquo;"
+                                  ng-model="vm.controls.currentPage"
+                                  previous-text="&lsaquo;"
+                                  rotate="false"
+                                  total-items="vm.totalCorporates"></pagination>
+                    </div>
+                    <div class="col-sm-4 text-right">
+                      <div class="btn-group items-per-page">
+                        <label btn-radio="10" class="btn btn-default" id="btn_numPerPage10"
+                               ng-model="vm.controls.numPerPage">10</label>
+                        <label btn-radio="25" class="btn btn-default" id="btn_numPerPage25"
+                               ng-model="vm.controls.numPerPage">25</label>
+                        <label btn-radio="50" class="btn btn-default" id="btn_numPerPage50"
+                               ng-model="vm.controls.numPerPage">50</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

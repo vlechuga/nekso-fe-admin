@@ -1,0 +1,43 @@
+<div class="modal-header">
+  <button class="close" id="btn_close" ng-click="vm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row sub-header">
+    <div class="col-sm-12">
+      <div class="input-group header-item">
+        <h4 class="margin-null">Edit sales package detail</h4>
+      </div>
+    </div>
+  </div>
+  <div class="row panel margin-null digital-driver-action-panel">
+    <div class="col-sm-12">
+      <form name="sales_package_action">
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <label for="benefit_field" style="font-weight: bold;">Benefit date:</label>
+            <input id="benefit_field" type="date" class="form-control" name="input" ng-model="vm.benefitsDeliveredAt" required />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <label for="reference_field" style="font-weight: bold;">Reference:</label>
+            <input id="reference_field" type="text" class="form-control" name="input" ng-model="vm.benefitsReference" required />
+          </div>
+        </div>
+        <!--<div class="row">
+          <div class="col-sm-12 form-group">
+            <label for="comment_field" style="font-weight: bold;">Comment:</label>
+            <textarea id="comment_field" class="form-control new-select" ng-model="vm.transaction.notes" maxlength="150" ></textarea>
+          </div>
+        </div>-->
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-success" ng-click="vm.updateTransaction()" ng-disabled="sales_package_action.$invalid"
+          ladda="vm.loading" data-style="slide-left" >Ok</button>
+  <button class="btn btn-danger" ng-click="vm.close()">Cancel</button>
+</div>

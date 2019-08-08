@@ -1,0 +1,185 @@
+<div ng-if="vm.notAuthMsg" not-authorized message="vm.notAuthMsg" class="not-authorized"></div>
+<div class="container-fluid padding-footer">
+  <div class="row sub-header">
+    <div class="col-sm-9">
+      <div class="input-group">
+        <h3>Rides</h3>
+      </div>
+    </div>
+    <div class="col-sm-4 text-left pull-left">
+      <h5 class="text-left">{{vm.totalNotifications}} notifications(s)</h5>
+    </div>
+    <div class="col-sm-3 text-right pull-right">
+      <button ladda="vm.loading.export" data-style="slide-left" class="btn btn-primary" csv-header="['Ride ID', 'Ride date', 'Ride time', 'Taxi line', 'Driver', 'Driver email', 'Passenger', 'Passenger email', 'Pickup', 'Destination', 'Status', 'First time']" filename="rides.csv" ng-csv="vm.exportToCsv()" span>
+        Export to CSV
+      </button>
+    </div>
+  </div>
+  <div block-ui="NotificationsList">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-default panel-rides panel-no-shadow">
+          <div class="panel-heading">
+            <div class="row shape-light-grey">
+              <div class="col-sm-1 text-left">
+                <h5 class="text-left">Ride date</h5>
+              </div>
+              <div class="col-sm-9">
+                <div class="row">
+                  <div class="col-sm-4 pull-left">
+                    <p class="input-group margin-top-input date-box has-feedback">
+                      <input date-range-picker class="form-control date-picker font-11 inside-search-icon" type="text"
+                             ng-model="vm.filter.date" options="vm.filter.date.opts" required/>
+                      <i class="glyphicon glyphicon-calendar form-control-feedback no-zindex"></i>
+                    </p>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="col-sm-4 header-item">
+                      <div class="input-group centered-input">
+                        <select class="form-control font-13" id="field_taxiLine" ng-model="vm.filter.taxiLine">
+                          <option disabled selected value="">Select taxi line</option>
+                          <option value="ALL">All</option>
+                          <option ng-repeat="taxiL in vm.taxiLines" value="{{taxiL.id}}">{{taxiL.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-sm-4 header-item">
+                      <div class="input-group centered-input">
+                        <select class="form-control font-13" id="field_status" ng-model="vm.filter.status">
+                          <option disabled selected value="">Select status</option>
+                          <option value="ALL">All</option>
+                          <option value="PENDING">Pending</option>
+                          <option value="OK">Ok</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-sm-4 header-item">
+                      <div class="input-group centered-input">
+                        <select class="form-control font-13" id="field_type" ng-model="vm.filter.type">
+                          <option disabled selected value="">Select requested by</option>
+                          <option value="ALL">All</option>
+                          <option value="DRIVER_SOS">Driver</option>
+                          <option value="PASSENGER_SOS">Passenger</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-2 text-right">
+                <p class="input-group margin-top-input">
+                  <input class="form-control" placeholder="Search" type="text" ng-model="vm.filter.searchText" ng-keydown="vm.searchDriversOnEnter($event)"/>
+                    <span class="input-group-btn margin-top-input search-btn" ng-click="vm.searchDrivers()">
+                      <button class="btn btn-default" type="button">
+                        <i class="material-icons text-dark-grey">search</i>
+                      </button>
+                    </span>
+                    <span ng-if="vm.filter.searchText && vm.filter.searchText !== ''" class="input-group-btn margin-top-input clear-btn" ng-click="vm.clearSearchField()">
+                      <button class="btn btn-default" type="button">
+                        <i class="material-icons text-dark-grey">close</i>
+                      </button>
+                    </span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="panel-body padding-top-null">
+            <table class="table table-hover table-condensed table-bordered">
+              <thead>
+              <th class="column-header-color">
+                Ride ID
+              </th>
+              <th class="column-header-color"  ng-click="vm.order('createdDate')">
+                Date
+                <span ng-if="!vm.reverse && vm.predicate === 'createdDate'" class="fa fa-sort-down columnSortIcons"></span>
+                <span ng-if="vm.reverse && vm.predicate === 'createdDate'" class="fa fa-sort-up columnSortIcons"></span>
+              </th>
+              <th class="column-header-color">
+                Taxi line
+              </th>
+              <th class="column-header-color">
+                Driver
+              </th>
+              <th class="column-header-color">
+                Passenger
+              </th>
+              <th class="column-header-color">
+                Pick up
+              </th>
+              <th class="column-header-color">
+                Destination
+              </th>
+              <th class="column-header-color">
+                Ride status
+              </th>
+              <th class="column-header-color">
+                Requested by
+              </th>
+              <th class="column-header-color">
+                Contacted
+              </th>
+              </thead>
+              <tbody>
+              <tr ng-repeat="notifications in vm.notifications track by $index">
+                <td>
+                  <strong class="clickeable">
+                    {{notifications.data.currentDriver.id | idlimit:notifications.data.currentDriver.id | uppercase}}
+                  </strong>
+                </td>
+                <td>
+                  {{notifications.createdDate | date:'dd/MM/yyyy hh:mm a'}}
+                </td>
+                <td>
+                  {{notifications.data.currentDriver.controller.name}}
+                </td>
+                <td>
+                  <strong class="clickeable capitalize" ng-click="vm.openDriverProfile(notifications.data.currentDriver, notifications.data.currentDriver.controller)">
+                    {{notifications.data.currentDriver.fullName | lowercase}}
+                  </strong>
+                </td>
+                <td>
+                  <strong class="clickeable capitalize" ng-click="vm.openPassengerProfile(notifications.data.ride.passenger, notifications.data.ride.controller)">
+                    {{notifications.data.ride.passenger.fullName | lowercase}}
+                  </strong>
+                </td>
+                <td>
+                  {{notifications.data.ride.rideInfo.passengerPickupAddress}}
+                </td>
+                <td>
+                  {{notifications.data.ride.rideInfo.passengerDestinationAddress}}
+                </td>
+                <td>
+                  {{notifications.data.ride.status.capitalize(true)}}
+                </td>
+                <td>
+                  {{notifications.data.sendedByRole.capitalize(true)}}
+                </td>
+                <td>
+                  <input type="checkbox" ng-if="!notifications.userContacted" ng-click="vm.editnotificationsNotificationStatus(notifications)">
+                  <label ng-if="notifications.userContacted">Ok</label>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bar-pagination">
+        <div class="row">
+          <div class="col-sm-8 text-left">
+            <pagination boundary-links="true" class="pagination" first-text="&laquo;" items-per-page="vm.controls.numPerPage" last-text="&raquo;" max-size="5" next-text="&rsaquo;" ng-model="vm.controls.currentPage" previous-text="&lsaquo;" rotate="false" total-items="vm.totalRides"></pagination>
+          </div>
+          <div class="col-sm-4 text-right">
+            <div class="btn-group items-per-page">
+              <label btn-radio="10" class="btn btn-default" id="btn_numPerPage10" ng-model="vm.controls.numPerPage">10</label>
+              <label btn-radio="25" class="btn btn-default" id="btn_numPerPage25" ng-model="vm.controls.numPerPage">25</label>
+              <label btn-radio="50" class="btn btn-default" id="btn_numPerPage50" ng-model="vm.controls.numPerPage">50</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

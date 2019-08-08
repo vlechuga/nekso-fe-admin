@@ -1,0 +1,25 @@
+.nekso-form__multiselect {
+  button {
+    border: 1px solid $wild-sand-grey;
+    height: __em(41);
+    span {
+      color: $dusty-gray;
+      font-size: __rem(25);
+      top: __em(7);
+    }
+    div {
+      top: __em(6);
+      right: __em(10);
+    }
+    &.disabled {
+      background: $white;
+      span {
+        color: $iron-grey;
+      }
+      div {
+        color: $iron-grey    ;
+      }
+    }
+  }
+
+}

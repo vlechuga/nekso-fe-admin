@@ -1,0 +1,67 @@
+input[type="checkbox"].nekso-form__checkbox:checked,
+input[type="checkbox"].nekso-form__checkbox:not(:checked) {
+  position: absolute;
+  left: -9999px;
+  box-sizing: border-box;
+}
+
+input[type="checkbox"].nekso-form__checkbox:checked + label,
+input[type="checkbox"].nekso-form__checkbox:not(:checked) + label
+{
+  position: relative;
+  padding-left: 28px;
+  cursor: pointer;
+  line-height: 20px;
+  display: inline-block;
+  color: #666;
+}
+
+input[type="checkbox"].nekso-form__checkbox:checked + label:before,
+input[type="checkbox"].nekso-form__checkbox:not(:checked) + label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #6A809A;
+  border-radius: 3px;
+  background: #fff;
+}
+
+input[type="checkbox"].nekso-form__checkbox:disabled + label:before {
+  border-color: $iron-grey;
+}
+
+input[type="checkbox"].nekso-form__checkbox:checked + label:after,
+input[type="checkbox"].nekso-form__checkbox:not(:checked) + label:after {
+  content: "\f00c";
+  font-family: 'FontAwesome';
+  color: #fff;
+  width: 19px;
+  height: 19px;
+  border-radius: 3px;
+  position: absolute;
+  padding: 0 0 0 3px;
+  top: 0;
+  left: 0;
+  background-color: #6A809A;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+input[type="checkbox"].nekso-form__checkbox:disabled + label:after {
+  background-color: $iron-grey;
+}
+
+input[type="checkbox"].nekso-form__checkbox:not(:checked) + label:after {
+  opacity: 0;
+  -webkit-transform: scale(0);
+  transform: scale(0);
+}
+
+input[type="checkbox"].nekso-form__checkbox:checked + label:after {
+  opacity: 1;
+  -webkit-transform: scale(1);
+  transform: scale(1);
+}

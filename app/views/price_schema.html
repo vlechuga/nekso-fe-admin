@@ -1,0 +1,232 @@
+<div class="container-fluid padding-footer">
+  <div class="row sub-header">
+    <div class="col-sm-9">
+      <h4>Price Schema</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+        <li>
+          <p>Select country and state: </p>
+        </li>
+        <li>
+          <select class="font-13 new-select" id="field_taxiLine" ng-model="vm.selectedCountry">
+            <option disabled selected value="">Country</option>
+            <option ng-repeat="country in vm.countries" value="{{country}}">{{country}}</option>
+          </select>
+        </li>
+        <li>
+          <select class="font-13 new-select" id="field_corporate" ng-model="vm.selectedState">
+            <option disabled selected value="">State</option>
+            <option ng-repeat="state in vm.states" value="{{state}}">{{state}}</option>
+          </select>
+        </li>
+        <li>
+          <select class="font-13 new-select" ng-model="vm.selectedController">
+            <option disabled selected value="">Taxi line</option>
+            <option ng-repeat="controller in vm.controllers track by $index" value="{{controller}}">
+              {{controller.name}}
+            </option>
+          </select>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row" ng-if="vm.currentSchema.schema">
+    <div class="col-sm-6">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="currency-system">
+            <div class="row">
+              <div class="col-xs-6 right-border-grey">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h5 class="margin-top-null margin-bottom-currency">Currency:</h5>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h5 class="margin-top-null margin-bottom-null text-black font-bold">
+                    <img ng-src="{{'images/' + vm.selectedCountry + '-ico.png'}}">
+                    {{vm.currentSchema.schema.currency}}</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h5 class="margin-top-null">Minimum price:</h5>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h5 class="margin-top-null margin-bottom-null text-black font-bold">{{vm.currentSchema.schema.currency}} {{vm.currentSchema.schema.minimumPrice}}</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row margin-top-15">
+        <div class="col-sm-12">
+          <h5>Categories Settings</h5>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="header-title-request">
+                <div class="col-sm-3 text-overflow text-center"
+                ng-class="{'col-sm-2': vm.controllerSchema.variantRatio > 0 || vm.controllerSchema.variantRatio < 0}">
+                  <span class="">Category</span>
+                </div>
+                <div class="col-sm-3 text-overflow text-center"
+                     ng-class="{'col-sm-2': vm.controllerSchema.variantRatio > 0 || vm.controllerSchema.variantRatio < 0}">
+                  <span class="">Price</span>
+                </div>
+                <div class="col-sm-3 text-overflow text-center"
+                     ng-class="{'col-sm-2': vm.controllerSchema.variantRatio > 0 || vm.controllerSchema.variantRatio < 0}">
+                  <span class="">Minimum</span>
+                </div>
+                <div class="col-sm-3 text-overflow text-center"
+                     ng-class="{'col-sm-2': vm.controllerSchema.variantRatio > 0 || vm.controllerSchema.variantRatio < 0}">
+                  <span class="">Maximum</span>
+                </div>
+                <div class="col-sm-4 text-overflow text-center" ng-if="vm.controllerSchema.variantRatio > 0 || vm.controllerSchema.variantRatio < 0">
+                  <span class="">Variant*</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" ng-repeat="category in vm.currentSchema.schema.categories track by $index">
+            <div class="col-sm-12">
+              <div class="container-request">
+                <div class="col-sm-3 text-overflow text-center"
+                     ng-class="{'col-sm-2': vm.controllerSchema.variantRatio > 0 || vm.controllerSchema.variantRatio < 0}">
+                  <span class="font-bold">{{$index + 1}}</span>
+                </div>
+                <div class="col-sm-3 text-overflow text-center"
+                     ng-class="{'col-sm-2': vm.controllerSchema.variantRatio > 0 || vm.controllerSchema.variantRatio < 0}">
+                  <span class="text-black font-size-12">{{vm.currentSchema.schema.currency}}</span> <span class="font-size-14 text-black">{{category.price || 0}}</span>
+                </div>
+                <div class="col-sm-3 text-overflow text-center"
+                     ng-class="{'col-sm-2': vm.controllerSchema.variantRatio > 0 || vm.controllerSchema.variantRatio < 0}">
+                  <span class="text-black font-size-14">{{category.distance.min || 0}}</span> <span class="text-black font-size-12">km</span>
+                </div>
+                <div class="col-sm-3 text-overflow text-center"
+                     ng-class="{'col-sm-2': vm.controllerSchema.variantRatio > 0 || vm.controllerSchema.variantRatio < 0}">
+                  <span ng-if="category.distance.max !== 'Infinity'" class="text-black font-size-14">{{category.distance.max || 0}}</span> <span class="text-black font-size-12" ng-if="category.distance.max !== 'Infinity'">km</span>
+                  <span ng-if="category.distance.max === 'Infinity'" class="text-black font-size-14">{{category.distance.max}}</span>
+                </div>
+                <div class="col-sm-4 text-overflow text-center" ng-if="vm.controllerSchema.variantRatio > 0 || vm.controllerSchema.variantRatio < 0">
+                  <span class="text-success font-size-14" ng-if="vm.controllerSchema.variantRatio > 0">+</span><span class="text-success font-size-12" ng-if="vm.controllerSchema.variantRatio > 0">{{vm.currentSchema.schema.currency}}</span>
+                  <span class="text-success font-size-14" ng-if="vm.controllerSchema.variantRatio > 0">{{category.price * vm.controllerSchema.variantRatio}} ({{vm.controllerSchema.variantRatio * 100}}</span><span class="text-success font-size-12" ng-if="vm.controllerSchema.variantRatio > 0">%</span><span class="text-success font-size-14" ng-if="vm.controllerSchema.variantRatio > 0">)</span>
+                  <span class="text-danger font-size-14" ng-if="vm.controllerSchema.variantRatio < 0">-</span><span class="text-danger font-size-12" ng-if="vm.controllerSchema.variantRatio < 0">{{vm.currentSchema.schema.currency}}</span>
+                  <span class="text-danger font-size-14" ng-if="vm.controllerSchema.variantRatio < 0">{{(category.price * -1) * vm.controllerSchema.variantRatio}} ({{vm.controllerSchema.variantRatio * 100}}</span><span class="text-danger font-size-12" ng-if="vm.controllerSchema.variantRatio < 0">%</span><span class="text-danger font-size-14" ng-if="vm.controllerSchema.variantRatio < 0">)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <span ng-if="vm.controllerSchema.variantRatio > 0 || vm.controllerSchema.variantRatio < 0" class="text-light-grey font-size-12"><span class="font-bold font-size-17">*</span> Custom variation applied by the taxi line.</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="row">
+        <div class="col-sm-12">
+          <h5>Additional settings:</h5>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="div header-title-request">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4 text-overflow text-center">
+                  <span class="">Percentage</span>
+                </div>
+                <div class="col-sm-4 text-overflow text-center">
+                    <span class="">Fixed Amount</span>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="container-request">
+                <div class="col-sm-4">
+                  <span class="font-bold text-bluedark-light text-overflow">Night</span>
+                </div>
+                <div class="col-sm-4 text-overflow text-center">
+                  <span class="font-size-14 text-black" ng-if="vm.controllerSchema">{{vm.controllerSchema.nightRatio * 100 || 0}}</span><span class="font-size-14 text-black" ng-if="!vm.controllerSchema">{{vm.currentSchema.schema.nightRatio * 100 || 0}}</span><span class="font-size-12 text-black">%</span>
+                </div>
+                <div class="col-sm-4 text-overflow text-center">
+                    <span class="font-size-12 text-black">{{vm.currentSchema.schema.currency}}</span>
+                    <span class="font-size-14 text-black" ng-if="vm.controllerSchema">{{vm.controllerSchema.nightFixedAmount || 0}}</span>
+                    <span class="font-size-14 text-black" ng-if="!vm.controllerSchema">{{vm.currentSchema.schema.nightFixedAmount || 0}}</span>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <div class="row ">
+            <div class="col-sm-12">
+              <div class="container-request">
+                <div class="col-sm-4 text-overflow">
+                  <span class="font-bold text-bluedark-light">Weekend</span>
+                </div>
+                <div class="col-sm-4 text-overflow text-center">
+                  <span class="font-size-14 text-black" ng-if="vm.controllerSchema">{{vm.controllerSchema.weekendRatio * 100 || 0}}</span><span class="font-size-14 text-black" ng-if="!vm.controllerSchema">{{vm.currentSchema.schema.weekendRatio * 100 || 0}}</span><span class="font-size-12 text-black">%</span>
+                </div>
+                <div class="col-sm-4 text-overflow text-center">
+                  <span class="font-size-12 text-black">{{vm.currentSchema.schema.currency}}</span>
+                  <span class="font-size-14 text-black" ng-if="vm.controllerSchema">{{vm.controllerSchema.weekendFixedAmount || 0}}</span>
+                  <span class="font-size-14 text-black" ng-if="!vm.controllerSchema">{{vm.currentSchema.schema.weekendFixedAmount || 0}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="container-request">
+                <div class="col-sm-4 text-overflow">
+                  <span class="font-bold text-bluedark-light">Holiday</span>
+                </div>
+                <div class="col-sm-4 text-overflow text-center">
+                  <span class="font-size-14 text-black" ng-if="vm.controllerSchema">{{vm.controllerSchema.holidayRatio * 100 || 0}}</span><span class="font-size-14 text-black" ng-if="!vm.controllerSchema">{{vm.currentSchema.schema.holidayRatio * 100 || 0}}</span><span class="font-size-12 text-black">%</span>
+                </div>
+                <div class="col-sm-4 text-overflow text-center">
+                  <span class="font-size-12 text-black">{{vm.currentSchema.schema.currency}}</span>
+                  <span class="font-size-14 text-black" ng-if="vm.controllerSchema">{{vm.controllerSchema.holidayFixedAmount || 0}}</span>
+                  <span class="font-size-14 text-black" ng-if="!vm.controllerSchema">{{vm.currentSchema.schema.holidayFixedAmount || 0}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="container-request">
+                <div class="col-sm-4">
+                  <span class="font-bold text-overflow text-bluedark-light">Interurban</span>
+                </div>
+                <div class="col-sm-4 text-overflow text-center">
+                  <span class="font-size-14 text-black" ng-if="vm.controllerSchema">{{vm.controllerSchema.interurbanRatio * 100 || 0}}</span>
+                  <span class="font-size-14 text-black" ng-if="!vm.controllerSchema">{{vm.currentSchema.schema.interurbanRatio * 100 || 0}}</span><span class="font-size-12 text-black">%</span>
+                </div>
+                <div class="col-sm-4 text-overflow text-center">
+                  <span class="font-size-12 text-black">{{vm.currentSchema.schema.currency}}</span>
+                  <span class="font-size-14 text-black" ng-if="vm.controllerSchema">{{vm.controllerSchema.interurbanFixedAmount || 0}}</span>
+                  <span class="font-size-14 text-black" ng-if="!vm.controllerSchema">{{vm.currentSchema.schema.interurbanFixedAmount || 0}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" ng-if="vm.controllerSchema.pricingSchemaCommission.additionalTotalRatio > 0">
+        <div class="col-sm-12">
+          <div class="extra-charges">
+            <span class="font-size-14 text-yellow-dark">This taxi line has been set an additional <span class="font-bold font-size-17">{{vm.controllerSchema.pricingSchemaCommission.additionalTotalRatio * 100}}%</span> applied on top of the cost of the ride.</span>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>

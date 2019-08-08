@@ -1,0 +1,142 @@
+<!-- Coupon Code -->
+<div class="row coupon-code" ng-if="vm.isCouponCode">
+  <div class="col-md-12">
+    <h5 class="font-bold">Promotional code</h5>
+    <div class="row" ng-class="{ 'has-error' : edit_promotion.field_couponCodeName.$invalid && !edit_promotion.$pristine}">
+
+      <div class="col-md-9">
+        <div class="form-group">
+          <input name="field_couponCodeName" id="promotional-code" class="nekso-form__input text-uppercase"
+                 ng-model="vm.promotion.code" type="text" minlength="8" maxlength="10"
+                 ng-required="vm.isCouponCode">
+          <label class="nekso-form__control-label" for="promotional-code">
+            Code (Min. 8 char. Max. 10 char.)
+          </label>
+          <h6 class="text-danger"
+              ng-if="edit_promotion.field_couponCodeName.$error.required && !edit_promotion.field_couponCodeName.$pristine">
+            This field is mandatory</h6>
+          <h6 class="text-danger"
+              ng-if="edit_promotion.field_couponCodeName.$error.minlength && !edit_promotion.field_couponCodeName.$pristine">
+            Min. 8 characters</h6>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <button type="button" ng-click="vm.generateCode()" class="btn btn-default">Generate code</button>
+      </div>
+    </div>
+
+    <div class="row" ng-class="{ 'has-error' : edit_promotion.field_limite.$invalid && !edit_promotion.$pristine}">
+      <div class="col-md-9">
+        <div class="form-group">
+          <input type="number" name="field_limite" class="nekso-form__input"
+                 id="code-used-times"
+                 ng-disabled="vm.isRedeemQuantityUnlimited"
+                 ng-model="vm.promotion.criteria.redeemQuantity" min="1" max="99999999"
+                 ng-required="!vm.isRedeemQuantityUnlimited && vm.isCouponCode">
+          <label class="nekso-form__control-label" for="code-used-times">
+            How many times this code can be used
+          </label>
+          <h6 class="text-danger"
+              ng-if="edit_promotion.field_limite.$error.required &&  !edit_promotion.field_limite.$pristine">
+            This field is mandatory</h6>
+          <h6 class="text-danger"
+              ng-if="edit_promotion.field_limite.$error.min &&  !edit_promotion.field_limite.$pristine">
+            Min. 1</h6>
+          <h6 class="text-danger"
+              ng-if="edit_promotion.field_limite.$error.max &&  !edit_promotion.field_limite.$pristine">
+            Max. 99999999</h6>
+          </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox"
+                   class="form-check"
+                   ng-click="vm.cleanFieldCouponCode('redeemQuantity')"
+                   ng-model="vm.isRedeemQuantityUnlimited">
+            Unlimited
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row" ng-class="{ 'has-error' : edit_promotion.field_validity.$invalid && !edit_promotion.$pristine}">
+      <div class="col-sm-9">
+        <div class="form-group">
+          <input type="number" name="field_validity" class="nekso-form__input"
+                 id="code-many-day" 
+                 ng-model="vm.promotion.validity.expireDays" min="1" max="365"
+                 ng-required="vm.isCouponCode">
+          <label class="nekso-form__control-label" for="code-many-day">
+            How many days the code will be available for the user?
+          </label>
+          <h6 class="text-danger"
+              ng-if="edit_promotion.field_validity.$error.required &&  !edit_promotion.field_validity.$pristine">
+            This field is mandatory</h6>
+          <h6 class="text-danger"
+              ng-if="edit_promotion.field_validity.$error.min &&  !edit_promotion.field_validity.$pristine">
+            Min. 1</h6>
+          <h6 class="text-danger"
+              ng-if="edit_promotion.field_validity.$error.max &&  !edit_promotion.field_validity.$pristine">
+            Max. 365</h6>
+          </div>
+      </div>
+    </div>
+
+      <div class="row" ng-if="vm.role !== 'DRIVER'" ng-class="{ 'has-error' : edit_promotion.field_ridesValue.$invalid && !edit_promotion.$pristine}">
+        <div class="col-md-9">
+          <div class="form-group">
+            <input type="number"
+                   id="how-many-rides"
+                   name="field_ridesValue"
+                   class="nekso-form__input"
+                   ng-model="vm.promotion.criteria.ridesDuringValidity"
+                   min="1"
+                   max="10"
+                   ng-required="vm.isCouponCode">
+          <label class="nekso-form__control-label" for="how-many-rides">
+            How many rides?
+          </label>
+            <h6 class="text-danger"
+                ng-if="edit_promotion.field_ridesValue.$error.min &&  !edit_promotion.field_ridesValue.$pristine">
+              Min. 1</h6>
+            <h6 class="text-danger"
+                ng-if="edit_promotion.field_ridesValue.$error.max &&  !edit_promotion.field_ridesValue.$pristine">
+              Max. 10</h6>
+            <h6 class="text-danger"
+                ng-if="edit_promotion.field_ridesValue.$error.required &&  !edit_promotion.field_ridesValue.$pristine">
+              This field is mandatory</h6>
+            </div>
+        </div>
+
+      </div>
+
+
+    <div class="form-group" ng-if="vm.role !== 'DRIVER'">
+      <div class="row">
+
+        <div class="col-md-9">
+          <label for="filed_minimunTarriff">Extra conditions (Optional)</label>
+          <input type="number"
+                 id="filed_minimunTarriff"
+                 name="filed_minimunTarriff"
+                 class="nekso-form__input"
+                 min="1" max="99999999"
+                 placeholder="Minimum Tariff"
+                 ng-model="vm.promotion.criteria.minimumCostOfRide">
+          <h6 class="text-danger"
+              ng-if="edit_promotion.filed_minimunTarriff.$error.min &&  !edit_promotion.filed_minimunTarriff.$pristine">
+            Min. 1</h6>
+          <h6 class="text-danger"
+              ng-if="edit_promotion.filed_minimunTarriff.$error.max &&  !edit_promotion.filed_minimunTarriff.$pristine">
+            Max. 99999999</h6>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>

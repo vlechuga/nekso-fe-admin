@@ -1,0 +1,77 @@
+<div ng-if="vm.notAuthMsg" not-authorized message="vm.notAuthMsg" class="not-authorized"></div>
+<div class="container-fluid padding-footer">
+  <div class="row sub-header">
+    <div class="col-sm-9">
+      <h4>Invoice report</h4>
+    </div>
+  </div>
+  <div block-ui="invoice">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel-default panel panel-drivers panel-no-shadow">
+          <div class="margin-bottom-15">
+            <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+              <li>
+                <filter_country_state multiple="true" country="vm.filter.country" states="vm.filter.states"></filter_country_state>
+              </li>
+              <li style="width: 250px;">
+                <select id="filter_type_report" class="new-select font-13" ng-required="true"
+                        ng-model="vm.filter.type_report"
+                        ng-disabled="vm.filter.states==null || vm.filter.states==undefined">
+                  <option disabled selected value="">Type of report</option>
+                  <option value="REPORT_1">Accumulative rides by driver</option>
+                  <option value="REPORT_2">Accumulative rides by taxi line</option>
+                  <option value="REPORT_3">Corporate rides</option>
+                  <option value="REPORT_4">Earning of Nekso</option>
+                  <option value="REPORT_5">Pending commissions</option>
+                </select>
+              </li>
+            </ul>
+          </div>
+          <div class="margin-bottom-15">
+
+            <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+              <li style="width: 200px;"
+                  ng-hide="!(vm.filter.type_report === 'REPORT_1' || vm.filter.type_report ==='REPORT_2')">
+                <select id="filter_taxi_line" class="new-select font-13" ng-model="vm.filter.controller">
+                  <option disabled selected value="">Taxi line</option>
+                  <option ng-repeat="tl in vm.taxiLines | orderBy: 'name'" value="{{tl.id}}">{{tl.name}}</option>
+                </select>
+              </li>
+              <li style="width: 200px;" ng-hide="!(vm.filter.type_report ==='REPORT_1')">
+                <input id="filter_date" type="date" class="new-select font-13" ng-model="vm.filter.dateDay">
+              </li>
+              <li style="width: 200px;" ng-hide="!(vm.filter.type_report === 'REPORT_3')">
+                <select id="filter_corporation" class="new-select font-13" ng-model="vm.filter.corporation">
+                  <option disabled selected value="">Corporation</option>
+                  <option ng-repeat="corp in vm.corporations | orderBy: 'companyName'" value="{{corp.id}}">
+                    {{corp.name}}
+                  </option>
+                </select>
+              </li>
+              <li style="width: 200px;"
+                  ng-hide="!(vm.filter.type_report ==='REPORT_2' || vm.filter.type_report === 'REPORT_3' || vm.filter.type_report === 'REPORT_4')">
+                <input id="filter_month" type="month" class="new-select font-13" ng-model="vm.filter.dateMonth">
+              </li>
+              <li style="width: 200px;height: 20px;" ng-hide="vm.filter.type_report !=='REPORT_5'">
+                <p class="input-group date-box">
+                  <input date-range-picker class="form-control date-picker font-11 inside-search-icon" type="text"
+                         ng-model="vm.filter.dateRange" options="vm.filter.dateRange.opts" required/>
+                  <i class="glyphicon glyphicon-calendar form-control-feedback no-zindex"></i>
+                </p>
+              </li>
+            </ul>
+          </div>
+          <div class="margin-bottom-15">
+            <a href="{{vm.getCsvUrl()}}">
+              <button class="btn btn-primary" ng-if="vm.getUserPermission('export:invoice')"
+                      ng-disabled="vm.activeButton">
+                Generate report
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

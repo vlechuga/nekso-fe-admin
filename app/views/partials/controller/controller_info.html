@@ -1,0 +1,146 @@
+<article class="card controller_info">
+
+  <header class="card__header">
+    <div class="card__header-title"><strong>Controller information</strong></div>
+  </header>
+
+  <div class="card__content">
+
+    <div class="row">
+      <div class="form-group"
+           ng-class="{ 'has-error' : form_register.field_controllerName.$invalid && (!form_register.field_controllerName.$pristine || !form_register.$pristine) }">
+        <label class="col-sm-3 control-label required" for="field_controllerName">Name:</label>
+        <div class="col-sm-9">
+          <input ng-disabled="!vm.editable"
+                 type="text"
+                 id="field_controllerName"
+                 name="field_controllerName"
+                 class="nekso-form__input"
+                 ng-model="vm.controller.name"
+                 minlength="3"
+                 maxlength="50"
+                 required>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group"
+           ng-class="{ 'has-error' : form_register.field_country.$invalid && (!form_register.field_country.$pristine || !form_register.$pristine) }">
+        <label class="col-sm-3 control-label required">Country:</label>
+        <div class="col-sm-9">
+          <select ng-disabled="!vm.editable"
+                  id="field_country"
+                  class="nekso-form__select"
+                  name="field_country"
+                  required
+                  ng-model="vm.country"
+                  ng-options="country.name for country in vm.countryData | orderBy:'name'">
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label class="col-sm-3 control-label required">{{vm.country.taxId.label}}</label>
+        <div class="col-sm-3" ng-if="vm.country.taxId.types">
+          <select ng-disabled="!vm.editable"
+                  class="nekso-form__select"
+                  ng-model="vm.rif.letter"
+                  ng-options="item for item in vm.country.taxId.types | orderBy">>
+          </select>
+        </div>
+        <div class="col-sm-6" ng-class="{'col-sm-6' : vm.country.taxId.types, 'col-sm-9': !vm.country.taxId.types}"
+          ng-class="{ 'has-error' : form_register.field_controllerRif.$invalid && (!form_register.field_controllerRif.$pristine || !form_register.$pristine) }">
+          <input ng-disabled="!vm.editable"
+                 name="field_controllerRif"
+                 class="nekso-form__input"
+                 ng-model="vm.rif.number"
+                 type="text"
+                 ng-minlength="{{vm.country.taxId.minLength}}"
+                 minlength="{{vm.country.taxId.minLength}}"
+                 ng-maxlength="{{vm.country.taxId.maxLength}}"
+                 maxlength="{{vm.country.taxId.maxLength}}" required>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group"
+           ng-class="{ 'has-error' : form_register.field_masterPhone.$invalid && (!form_register.field_masterPhone.$pristine || !form_register.$pristine) }">
+        <label class="col-sm-3 control-label required">Master phone:</label>
+        <div class="col-sm-3">
+          <input type="text"
+                 class="nekso-form__input"
+                 name="field_masterAreaCode"
+                 disabled
+                 ng-model="vm.country.callingCode">
+        </div>
+        <div class="col-sm-6">
+          <input ng-disabled="!vm.editable"
+                 name="field_masterPhone"
+                 class="nekso-form__input"
+                 ng-model="vm.masterPhone"
+                 ng-pattern="/^[0-9]/"
+                 ng-maxlength="{{vm.country.digits}}"
+                 maxlength="{{vm.country.digits}}"
+                 ng-minlength="{{vm.country.digits}}"
+                 placeholder=""
+                 required
+                 type="text">
+          <span class="help-block"
+                ng-show="form_register.field_masterPhone.$error.pattern && !form_register.field_masterPhone.$pristine">Enter a valid phone number</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group"
+           ng-class="{ 'has-error' : form_register.field_sosPhone.$invalid && (!form_register.field_masterPhone.$pristine || !form_register.$pristine) }">
+        <label class="col-sm-3 control-label required">SOS phone:</label>
+        <div class="col-sm-3">
+          <input type="text"
+                 class="nekso-form__input"
+                 disabled
+                 name="field_sosAreaCode"
+                 ng-model="vm.country.callingCode">
+        </div>
+        <div class="col-sm-6">
+          <input type="text"
+                 ng-disabled="!vm.editable"
+                 name="field_sosPhone"
+                 class="nekso-form__input"
+                 ng-model="vm.sosPhone"
+                 ng-pattern="/^[0-9]/"
+                 ng-maxlength="{{vm.country.digits}}"
+                 maxlength="{{vm.country.digits}}"
+                 ng-minlength="{{vm.country.digits}}"
+                 placeholder="" required>
+          <span class="help-block"
+                ng-show="form_register.field_sosPhone.$error.pattern && !form_register.field_sosPhone.$pristine">Enter a valid phone number</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group"
+           ng-class="{ 'has-error' : form_register.field_email.$invalid && (!form_register.field_email.$pristine || !form_register.$pristine) }">
+        <label class="col-sm-3 control-label required">Email:</label>
+        <div class="col-sm-9">
+          <input type="text"
+                 ng-disabled="!vm.editable"
+                 name="field_email"
+                 class="nekso-form__input"
+                 required
+                 ng-model="vm.controller.email"
+                 ng-pattern="/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i">
+          <span class="help-block"
+                ng-show="form_register.field_email.$error.pattern && !form_register.field_email.$pristine">Enter a valid email</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</article>

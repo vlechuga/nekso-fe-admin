@@ -1,0 +1,51 @@
+<article class="card address_info">
+
+  <header class="card__header">
+    <div class="card__header-title"><strong>Address information</strong></div>
+  </header>
+
+  <div class="card__content">
+
+    <!--Address-->
+    <div class="row">
+      <div class="col-sm-12">
+        <label class="col-sm-1 control-label">Location:</label>
+        <div class="col-sm-11">
+          <input id="field_location"
+                 name="field_location"
+                 type="text"
+                 class="nekso-form__input"
+                 ng-disabled="!vm.editable && !vm.new">
+        </div>
+      </div>
+    </div>
+
+    <!--Location-->
+    <div class="row">
+      <div class="col-sm-11">
+        <div class="form-group" ng-class="{ 'has-error' : form_register.field_address.$invalid && (!form_register.field_address.$pristine || !form_register.$pristine) }">
+          <label class="col-sm-1 control-label required">Address:</label>
+          <div class="col-sm-11">
+            <input id="field_address" name="field_address" type="text" class="nekso-form__input" required
+                   disabled ng-model="vm.address">
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-1">
+        <button ladda="controllerModalVm.loading.getAddress"
+                data-style="slide-left"
+                class="btn btn-primary btn-xs"
+                ng-disabled="!vm.editable && !vm.new"
+                ng-click="vm.getAddress()">Get</button>
+      </div>
+
+      <div class="col-sm-12" style="padding-top: 5px">
+        <div class="form-group">
+          <div class="form-control" id="map_canvas" style="height: 200px; width: 100%"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</article>

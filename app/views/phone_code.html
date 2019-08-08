@@ -1,0 +1,97 @@
+<div ng-if="vm.notAuthMsg" not-authorized message="vm.notAuthMsg" class="not-authorized"></div>
+<div class="container-fluid padding-footer">
+  <div class="row sub-header">
+    <div class="col-sm-9">
+      <h4>Request validation Code</h4>
+    </div>
+  </div>
+  <tabset id="tabs" class="full-height">
+    <tab heading="Validation">
+      <div block-ui="mainList" class="phone-mainList">
+        <h5>Registry Code</h5>
+        <div class="row">
+          <div class="row shape-light-grey">
+            <div class="col-sm-12 margin-bottom-15">
+              <ul class="list-inline margin-bottom-null ul-menu-of-filters text-center">
+                <li>
+                  <select class="nekso-form__select" ng-model="vm.countryCode">
+                    <option selected value="">Select country</option>
+                    <option ng-repeat="country in vm.countryData" value="{{country.callingCode}}">{{country.name}}
+                      {{country.callingCode}}
+                    </option>
+                  </select>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 text-center">
+            <h5>Fill the field with phone number </h5>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 text-center margin-top-15">
+            <label>Number:</label>
+            <input class="m-l-15 text-center" type="text" placeholder="4140001111" ng-model="vm.phoneNumber">
+          </div>
+        </div>
+        <div class="row" ng-if="vm.code">
+          <div class="col-sm-12 text-center margin-top-15">
+            <span>Code:</span>
+            <span class="m-l-15 text-center">{{vm.code}}</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 text-center margin-top-15">
+            <input type="button" class="btn btn-success" ng-click="vm.getCode()" ng-disabled="vm.phoneNumber.length < 3"
+                   value="Get Code!">
+          </div>
+        </div>
+      </div>
+    </tab>
+    <tab heading="Achievement">
+      <div block-ui="mainListAchieve" class="phone-mainList">
+        <h5>Achievement Code</h5>
+        <div class="row">
+          <div class="row shape-light-grey">
+            <div class="col-sm-12 margin-bottom-15">
+              <ul class="list-inline margin-bottom-null ul-menu-of-filters text-center">
+                <li>
+                  <select class="nekso-form__select" ng-model="vm.countryCodeAchieve">
+                    <option selected value="">Select country</option>
+                    <option ng-repeat="country in vm.countryData" value="{{country.callingCode}}">{{country.name}}
+                      {{country.callingCode}}
+                    </option>
+                  </select>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 text-center">
+            <h5>Fill the field with phone number </h5>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 text-center margin-top-15">
+            <label>Number:</label>
+            <input class="m-l-15 text-center" type="text" placeholder="4140001111" ng-model="vm.phoneNumberAchieve">
+          </div>
+        </div>
+        <div class="row" ng-if="vm.codeAchieve">
+          <div class="col-sm-12 text-center margin-top-15">
+            <span>Code:</span>
+            <span class="m-l-15 text-center">{{vm.codeAchieve}}</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 text-center margin-top-15">
+            <input type="button" class="btn btn-success" ng-click="vm.getCodeAchieve()"
+                   ng-disabled="vm.phoneNumberAchieve.length < 9" value="Get Achievement Code!">
+          </div>
+        </div>
+      </div>
+    </tab>
+</div>

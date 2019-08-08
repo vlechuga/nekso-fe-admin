@@ -1,0 +1,41 @@
+<div class="popup-details">
+  <div class="close-modal">
+    <button class="close" id="btn_close" ng-click="rideLiveMonitorVm.close()" type="button">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="">
+    <div class="row">
+      <div class="col-sm-8">
+        <div class="header-item font-normal line-height-span">
+          <span class="font-black font-24">Live ride monitor</span> <span class="font-12 font-lightgrey margin-span"><strong>ID:</strong></span><span class="font-12 font-grey">{{rideLiveMonitorVm.ride.id}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row margin-null margin-top-null">
+      <div class="col-sm-12" style="border-left:1px solid #ddd; border-right:1px solid #ddd;background-color: white">
+        <div class="row ride-map-full" id="map_canvas">
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <label>
+              <i class="fa fa-map-marker fa-lg origin-marker"></i>
+              <span class="text-blue-light">{{rideLiveMonitorVm.ride.pickupAddress}}</span>
+            </label>
+          </div>
+          <div class="col-sm-12">
+            <label>
+              <i class="fa fa-map-marker fa-lg destination-marker"></i>
+              <span class="text-blue-light">{{rideLiveMonitorVm.ride.destinationAddress}}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+  </div>
+</div>

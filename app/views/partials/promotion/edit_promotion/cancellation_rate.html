@@ -1,0 +1,98 @@
+<section ng-if="vm.cancellationRateChecked">
+
+  <article class="row">
+    <div class="col-md-12 col-xs-12"
+         ng-class="{'has-error' : edit_promotion.field_cancellation_rate_type.$invalid &&
+          !edit_promotion.$pristine}">
+      <select class="nekso-form__select"
+              ng-disabled="(!vm.editable) || vm.promotionStatus === 'ACTIVE'"
+              ng-model="vm.cancellationRateOption"
+              name="field_cancellation_rate_type"
+              required>
+        <option value="" disabled selected>Select condition</option>
+        <option value="less-than">Less than</option>
+        <option value="more-than">More than</option>
+      </select>
+      <h6 class="text-danger"
+          ng-if="edit_promotion.field_cancellation_rate_type.$error.required &&
+              !edit_promotion.field_cancellation_rate_type.$pristine">
+        This field is mandatory
+      </h6>
+    </div>
+  </article>
+
+  <article class="row" ng-if="vm.cancellationRateOption !== ''">
+
+    <div class="nekso-form__container-input-label col-md-12 col-xs-12'"
+         ng-if="vm.cancellationRateOption === 'more-than'"
+         ng-class="{'has-error' : edit_promotion.cancellation_rate_from.$invalid &&
+          !edit_promotion.$pristine }">
+      <div class="nekso-form__container-input-label__flex-elements">
+        <input class="nekso-form__input"
+               ng-disabled="(!vm.editable) || vm.promotionStatus === 'ACTIVE'"
+               type="number"
+               placeholder="0"
+               ng-model="vm.cancellationRate.from"
+               name="cancellation_rate_from"
+               required
+               min="0"
+               max="100"/>
+        <label>%</label>
+      </div>
+      <div class="nekso-form__container-input-label__errors">
+        <h6 class="text-danger"
+            ng-if="edit_promotion.cancellation_rate_from.$error.required &&
+              !edit_promotion.cancellation_rate_from.$pristine">
+          This field is mandatory
+        </h6>
+        <h6 class="text-danger"
+            ng-if="edit_promotion.cancellation_rate_from.$error.min &&
+              !edit_promotion.cancellation_rate_from.$pristine">
+          Min. 0
+        </h6>
+        <h6 class="text-danger"
+            ng-if="edit_promotion.cancellation_rate_from.$error.max &&
+              !edit_promotion.cancellation_rate_from.$pristine">
+          Max. 100
+        </h6>
+      </div>
+    </div>
+
+    <div class="nekso-form__container-input-label col-md-12 col-xs-12"
+         ng-if="vm.cancellationRateOption === 'less-than'"
+         ng-class="{ 'has-error' : edit_promotion.cancellation_rate_to.$invalid &&
+          !edit_promotion.$pristine }">
+      <div class="nekso-form__container-input-label__flex-elements">
+        <input class="nekso-form__input"
+               ng-disabled="(!vm.editable) || vm.promotionStatus === 'ACTIVE'"
+               type="number"
+               placeholder="0"
+               name="cancellation_rate_to"
+               ng-model="vm.cancellationRate.to"
+               required
+               max="100"
+               min="0"/>
+        <label>%</label>
+      </div>
+      <div class="nekso-form__container-input-label__errors">
+        <h6 class="text-danger"
+            ng-if="edit_promotion.cancellation_rate_to.$error.required &&
+            !edit_promotion.cancellation_rate_to.$pristine">
+          This field is mandatory
+        </h6>
+        <h6 class="text-danger"
+            ng-if="edit_promotion.cancellation_rate_to.$error.min &&
+            !edit_promotion.cancellation_rate_to.$pristine">
+          Min. 0
+        </h6>
+        <h6 class="text-danger"
+            ng-if="edit_promotion.cancellation_rate_to.$error.max &&
+            !edit_promotion.cancellation_rate_to.$pristine">
+          Max. 100
+        </h6>
+      </div>
+    </div>
+
+  </article>
+
+</section>

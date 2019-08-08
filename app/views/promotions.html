@@ -1,0 +1,236 @@
+<div class="container-fluid padding-footer">
+  <div class="row sub-header">
+    <div class="col-sm-9">
+      <h4>All Promotions ({{vm.totalPromotions}})</h4>
+    </div>
+    <div ng-if="mainVm.getUserPermission('export:promotions')" class="col-sm-3 text-right pull-right">
+      <a ng-href="{{vm.getCsvUrl()}}" target="_blank">
+        <button class="btn btn-sm btn-primary">
+          Export to CSV
+        </button>
+      </a>
+    </div>
+  </div>
+  <div class="row panel-heading">
+    <div class="row shape-light-grey">
+      <div class="col-sm-8">
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="input-group date-box has-feedback">
+              <input date-range-picker class="form-control date-picker font-11 inside-search-icon" type="text"
+                     ng-model="vm.filter.date" options="vm.dateRangePickerOptions" required/>
+              <i class="glyphicon glyphicon-calendar form-control-feedback no-zindex"></i>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 col-sm-offset-1 text-right">
+        <p class="input-group search-box">
+          <input class="form-control" placeholder="Search" type="text" ng-model="vm.filter.searchText"
+                 ng-keydown="vm.searchDriversOnEnter($event)"/>
+          <span class="input-group-btn margin-top-input search-btn" ng-click="vm.searchDrivers()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">search</i>
+              </button>
+            </span>
+          <span ng-if="vm.filter.searchText && vm.filter.searchText !== ''"
+                class="input-group-btn margin-top-input clear-btn" ng-click="vm.clearSearchField()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">close</i>
+              </button>
+            </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div block-ui="promotionsList">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-default panel-rides panel-no-shadow">
+          <div class="row shape-light-grey">
+            <div class="col-sm-12 margin-bottom-15">
+              <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+                <li>
+                  <filter_country_state multiple="true" country="vm.filter.country"
+                                        states="vm.filter.states"></filter_country_state>
+                </li>
+                <li>
+                  <select class="font-13 new-select" ng-model="vm.filter.target">
+                    <option disabled selected value="">Select Target</option>
+                    <option value="ALL">All</option>
+                    <option value="CORPORATE">Corporate</option>
+                    <option value="DRIVER">Driver</option>
+                    <option value="PASSENGER">Passenger</option>
+                  </select>
+                </li>
+                <li>
+                  <select class="font-13 new-select" id="field_taxiLine" ng-model="vm.filter.status">
+                    <option disabled selected value="">Select status</option>
+                    <option value="ALL">All</option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="ARCHIVED">Archived</option>
+                    <option value="COMPLETED">Completed</option>
+                    <option value="CREATED">Created</option>
+                    <option value="NOT_STARTED">Not started</option>
+                    <option value="ON_HOLD">On hold</option>
+                  </select>
+                </li>
+                <li>
+                  <select class="font-13 new-select" id="field_category" ng-model="vm.filter.category">
+                    <option disabled selected value="">Select category</option>
+                    <option value="ALL">All</option>
+                    <option value="COUPON">Coupon</option>
+                    <option value="PROMOTIONAL_CODE">Promotional code</option>
+                  </select>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row panel-body padding-top-null">
+            <table class="table table-hover table-condensed table-bordered">
+              <thead>
+              <tr>
+                <th class="column-header-color" ng-click="vm.order('name')">
+                  Name of the promotion
+                  <span ng-if="!vm.reverse && vm.predicate === 'name'" class="fa fa-sort-down columnSortIcons"></span>
+                  <span ng-if="vm.reverse && vm.predicate === 'name'" class="fa fa-sort-up columnSortIcons"></span>
+                </th>
+                <th class="column-header-color" ng-click="vm.order('validity.from')">
+                  Start date
+                  <span ng-if="!vm.reverse && vm.predicate === 'validity.from'"
+                        class="fa fa-sort-down columnSortIcons"></span>
+                  <span ng-if="vm.reverse && vm.predicate === 'validity.from'"
+                        class="fa fa-sort-up columnSortIcons"></span>
+                </th>
+                <th class="column-header-color" ng-click="vm.order('validity.to')">
+                  End date
+                  <span ng-if="!vm.reverse && vm.predicate === 'validity.to'"
+                        class="fa fa-sort-down columnSortIcons"></span>
+                  <span ng-if="vm.reverse && vm.predicate === 'validity.to'"
+                        class="fa fa-sort-up columnSortIcons"></span>
+                </th>
+                <th class="column-header-color">
+                  Location
+                </th>
+                <th class="column-header-color">
+                  Category
+                </th>
+                <th class="column-header-color" ng-click="vm.order('target')">
+                  Target
+                  <span ng-if="!vm.reverse && vm.predicate === 'target'" class="fa fa-sort-down columnSortIcons"></span>
+                  <span ng-if="vm.reverse && vm.predicate === 'target'" class="fa fa-sort-up columnSortIcons"></span>
+                </th>
+                <th class="column-header-color" ng-click="vm.order('status')">
+                  Status
+                  <span ng-if="!vm.reverse && vm.predicate === 'status'" class="fa fa-sort-down columnSortIcons"></span>
+                  <span ng-if="vm.reverse && vm.predicate === 'status'" class="fa fa-sort-up columnSortIcons"></span>
+                </th>
+                <th class="column-header-color">
+                  Created By
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="promotion in vm.promotions track by $index">
+                <td class="outline-none" ng-click="vm.openPromotion(promotion.id)">
+                  <span>{{promotion.name}}</span>
+                </td>
+                <td class="outline-none" ng-click="vm.openPromotion(promotion.id)">
+                  <span>{{promotion.validity.from | date:'dd/MM/yyyy hh:mm a'}}</span>
+                </td>
+                <td class="outline-none" ng-click="vm.openPromotion(promotion.id)">
+                  <span>{{promotion.validity.to | date:'dd/MM/yyyy hh:mm a'}}</span>
+                </td>
+                <td class="outline-none" ng-click="vm.openPromotion(promotion.id)">
+                  <span>{{promotion.criteria.country.name}}</span>
+                </td>
+                <td class="outline-none" ng-click="vm.openPromotion(promotion.id)">
+                  <span ng-switch="promotion.category">
+                    <span ng-switch-when="ACHIEVEMENT">Achievement</span>
+                    <span ng-switch-when="COUPON">Coupon</span>
+                    <span ng-switch-when="SYSTEM">System</span>
+                    <span ng-switch-when="REFERRAL">Referral</span>
+                    <span ng-switch-when="SALES_PACKAGE">Sales Packege</span>
+                    <span ng-switch-when="PROMOTIONAL_CODE">Promotional Code</span>
+                    <span ng-switch-default></span>
+                  </span>
+                </td>
+                <td class="outline-none" ng-click="vm.openPromotion(promotion.id)">
+                  <div class="promotion-list-icons" ng-repeat="role in promotion.criteria.roles track by $index">
+                      <span ng-if="role === 'ALL'">
+                        <i class="material-icons" title="Corporate">business_center</i>
+                        <i class="material-icons" title="Driver">directions_car</i>
+                        <i class="material-icons" title="Passenger">person</i>
+                      </span>
+                    <i ng-if="role === 'CORPORATE'" title="Corporate" class="material-icons">business_center</i>
+                    <i ng-if="role === 'DRIVER'" title="Driver" class="material-icons">directions_car</i>
+                    <i ng-if="role === 'PASSENGER'" title="Passenger" class="material-icons">person</i>
+                  </div>
+                </td>
+                <td>
+                  <span ng-if="promotion.status === 'ARCHIVED'">Archived</span>
+                  <span ng-if="promotion.status === 'COMPLETED'">Completed</span>
+                  <div
+                    ng-if="vm.getUserPermission('edit:promotions') && (promotion.status !== 'COMPLETED' && promotion.status !== 'ARCHIVED')"
+                    class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                      <span ng-if="promotion.status === 'ACTIVE'">Active</span>
+                      <span ng-if="promotion.status === 'CREATED'">Created</span>
+                      <span ng-if="promotion.status === 'NOT_STARTED'">Not started</span>
+                      <span ng-if="promotion.status === 'ON_HOLD'">On hold</span>
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                      <li ng-if="promotion.status !== 'ON_HOLD'">
+                        <a href="" ng-click="vm.changePromotionStatus(promotion, 'ON_HOLD')">Put on hold</a>
+                      </li>
+                      <li ng-if="promotion.status === 'ON_HOLD'">
+                        <a href="" ng-click="vm.changePromotionStatus(promotion, 'ACTIVE')">Put active</a>
+                      </li>
+                      <li>
+                        <a href="" ng-click="vm.changePromotionStatus(promotion, 'ARCHIVED')">Archive</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <span ng-if="promotion.status === 'ACTIVE' && !vm.getUserPermission('edit:promotions')">Active</span>
+                  <span
+                    ng-if="promotion.status === 'CREATED' && !vm.getUserPermission('edit:promotions')">Created</span>
+                  <span ng-if="promotion.status === 'NOT_STARTED' && !vm.getUserPermission('edit:promotions')">Not started</span>
+                  <span
+                    ng-if="promotion.status === 'ON_HOLD' && !vm.getUserPermission('edit:promotions')">On hold</span>
+                </td>
+                <td class="outline-none" ng-click="vm.openPromotion(promotion.id)">
+                  <span>{{promotion.createdBy.fullName}}</span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bar-pagination">
+        <div class="row">
+          <div class="col-sm-8 text-left">
+            <pagination boundary-links="true" class="pagination" first-text="&laquo;"
+                        items-per-page="vm.filter.controls.numPerPage" last-text="&raquo;" max-size="5" next-text="&rsaquo;"
+                        ng-model="vm.filter.controls.currentPage" previous-text="&lsaquo;" rotate="false"
+                        total-items="vm.totalPromotions"></pagination>
+          </div>
+          <div class="col-sm-4 text-right">
+            <div class="btn-group items-per-page">
+              <label btn-radio="10" class="btn btn-default" id="btn_numPerPage10"
+                     ng-model="vm.filter.controls.numPerPage">10</label>
+              <label btn-radio="25" class="btn btn-default" id="btn_numPerPage25"
+                     ng-model="vm.filter.controls.numPerPage">25</label>
+              <label btn-radio="50" class="btn btn-default" id="btn_numPerPage50"
+                     ng-model="vm.filter.controls.numPerPage">50</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

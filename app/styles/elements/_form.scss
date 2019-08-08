@@ -1,0 +1,26 @@
+.nekso-form, .form-group {
+  margin-bottom: __em(15);
+  margin-top: __em(15);
+}
+
+.nekso-form__flex {
+  @extend %flexbox;
+  @include flex-direction(row);
+  @include align-items(center);
+
+  label {
+    padding: 0 __em(16);
+    margin-bottom: 0;
+  }
+
+}
+
+.has-error {
+  input,
+  select,
+  textarea {
+    border: 1px solid $red-dark !important;
+  }
+}
+
+

@@ -1,0 +1,38 @@
+$border-radius-card: 8;
+%paddig-for-all-elements {
+  padding: __em(15);
+}
+
+.card {
+  width: 100%;
+  margin-bottom: __em(10);
+  background: $white;
+  @include __ui-round($border-radius-card);
+
+  .card__header {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    @extend %paddig-for-all-elements;
+    margin: 0;
+    background: $card__header-background;
+    @include __ui-round--top($border-radius-card);
+    .card__header-title {
+      order: 1;
+      margin-right: __rem(15);
+      color: $card__header-title;
+    }
+    .card__header-subtitle {
+      order: 1;
+      color: $card__header-subtitle;
+    }
+  }
+  .card__content {
+    @extend %paddig-for-all-elements;
+    @extend %clearfix;
+    color: $card__content;
+  }
+  .card__footer {
+    @extend %paddig-for-all-elements;
+  }
+}

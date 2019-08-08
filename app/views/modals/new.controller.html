@@ -1,0 +1,93 @@
+<div class="modal-header">
+  <button class="close" id="btn_close" ng-click="vm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body controller">
+
+  <header class="row">
+
+    <div class="col-sm-6">
+      <div class="input-group header-item">
+        <h4 class="margin-null">{{vm.modalTitle}}</h4>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="row header-item"
+           ng-if="!vm.new && !vm.editable && vm.getUserPermission('update:tl')">
+        <div class="col-sm-12 text-right">
+          <button class="btn btn-primary"
+                  name="button"
+                  ng-click="vm.setEditable()">Edit profile
+          </button>
+        </div>
+      </div>
+      <div class="header-item" ng-if="vm.editable && !vm.new">
+        <ul class="list-inline margin-bottom-null text-right">
+          <li>
+            <button ladda="vm.loading.create" data-style="slide-left" class="btn btn-success"
+                    ng-disabled="form_register.$invalid ||
+                              form_register.$pristine ||
+                              !vm.address ||
+                              !vm.addressObject.provinceName ||
+                              vm.country.iso !== vm.addressObject.countryCode"
+                    ng-click="vm.editController()">Save profile
+            </button>
+          </li>
+          <li>
+            <button class="btn btn-danger" name="button" ng-click="vm.removeEditable()">Cancel</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <form name="form_register" novalidate>
+    <section>
+      <div class="row">
+        <div class="col-sm-6">
+          <!--Controller information-->
+          <ng-include src="'/views/partials/controller/controller_info.html'"></ng-include>
+        </div>
+        <div class="col-sm-6">
+          <!--Contact information-->
+          <ng-include src="'/views/partials/controller/contact_info.html'"></ng-include>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <!--Location-->
+      <ng-include src="'/views/partials/controller/address_info.html'"></ng-include>
+    </section>
+
+    <footer class="row">
+      <div class="col-sm-12 text-center">
+        <button ng-if="vm.new"
+                ladda="vm.loading.create"
+                data-style="slide-left"
+                class="btn btn-success"
+                ng-disabled="form_register.$invalid ||
+                              form_register.$pristine ||
+                              !vm.address ||
+                              !vm.addressObject.provinceName ||
+                              vm.country.iso !== vm.addressObject.countryCode"
+                ng-click="vm.createController()">Create controller
+        </button>
+
+        <button ng-if="vm.editable && !vm.new"
+                ladda="vm.loading.create"
+                data-style="slide-left"
+                class="btn btn-success"
+                ng-disabled="form_register.$invalid ||
+                              form_register.$pristine ||
+                              !vm.address ||
+                              !vm.addressObject.provinceName ||
+                              vm.country.iso !== vm.addressObject.countryCode"
+                ng-click="vm.editController()">Save profile
+        </button>
+      </div>
+    </footer>
+
+  </form>
+</div>

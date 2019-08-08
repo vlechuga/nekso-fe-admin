@@ -1,0 +1,28 @@
+<div>
+  <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+    <li ng-if="vm.loading">
+      <i class="fa fa-spinner fa-spin"></i>
+    </li>
+    <li style="width: 250px;">
+      <select id="field_country" class="nekso-form__select" name="field_country" required
+              ng-model="vm.country"
+              ng-options="country.name for country in vm.dataSourcesCountries | orderBy:'name'">
+        <option disabled selected value="">Select a country</option>
+      </select>
+    </li>
+    <li style="width: 250px;" ng-if="vm.multiple==='true'">
+      <select multiple="multiple" id="filter_states" class="nekso-form__multiselect" required
+              ng-model="vm.states"
+              ng-options="state.name for state in vm.dataSourcesStates track by state.id">
+      </select>
+    </li>
+    <li style="width: 250px;" ng-if="vm.multiple==='false'">
+      <select name="filter_states"
+              class="nekso-form__select"
+              required
+              ng-model="vm.states" ng-options="state.name for state in vm.dataSourcesStates">
+        <option disabled selected value="">Select state</option>
+      </select>
+    </li>
+  </ul>
+</div>

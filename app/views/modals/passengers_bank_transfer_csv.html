@@ -1,0 +1,46 @@
+<div class="modal-header">
+  <button class="close" id="btn_close" ng-click="vm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <h5 class="modal-title">Conciliation</h5>
+</div>
+<div class="modal-body">
+  <div class="row payment-credit-debit-note-panel">
+    <div class="col-sm-12">
+      <form name="transfer_action" novalidate>
+        <div class="row body">
+          <div class="col-sm-12 form-group">
+            <label for="filter_banks" class="font-bold">Bank:</label>
+            <select id="filter_banks" class="nekso-form__select" ng-model="vm.bank" required>
+              <option selected disabled value="">Bank</option>
+              <option ng-repeat="item in vm.banks track by $index" value="{{item.bank.id}}">
+                {{item.bank.name}}
+              </option>
+            </select>
+          </div>
+          <div class="col-sm-12 form-group">
+            <label for="filter_file" class="font-bold">File:</label>
+            <div class="input-group">
+
+              <input type="text" id="filter_file" class="form-control nekso-form__input" ng-model="vm.file.name" placeholder="Seleccione archivo"
+                     disabled>
+              <div class="input-group-btn">
+                <button class="btn btn-primary btn-sm" type="button"
+                        ngf-select ng-model="vm.file" name="file"
+                        ngf-pattern="text/csv"
+                        accept="text/csv">
+                  <i class="material-icons">file_upload</i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" ng-click="vm.send()"
+          ladda="vm.loading" data-style="slide-left">Accept</button>
+  <button class="btn btn-default" ng-click="vm.close()">Cancel</button>
+</div>

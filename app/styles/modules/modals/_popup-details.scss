@@ -1,0 +1,390 @@
+.popup-details {
+  .close-modal {
+    position: absolute;
+    right: 0;
+    z-index: 2;
+    top: 0;
+    padding: 15px;
+  }
+  h3 {
+    font-size: 24px;
+  }
+  h5 {
+    font-size: 16px;
+  }
+  .font-black {
+    color: #414141;
+  }
+  .font-lightgrey {
+    color: #bbb;
+  }
+  .font-grey {
+    color: #666;
+  }
+  .font-red {
+    color: $red;
+  }
+  .font-green {
+    color: $green;
+  }
+  .font-24 {
+    font-size: 24px;
+  }
+  .font-18 {
+    font-size: 18px;
+  }
+  .font-14 {
+    font-size: 14px;
+  }
+  .font-12 {
+    font-size: 12px;
+  }
+  .font-10 {
+    font-size: 10px;
+  }
+  .font-normal {
+    font-weight: 500;
+  }
+  .margin-span {
+    margin-left: 5px;
+  }
+  .margin-top-null {
+    margin-top: 0px;
+  }
+  .line-height-span {
+    line-height: 2em;
+  }
+  .line-height-div-details-rides {
+    line-height: 1.4em;
+  }
+  .line-dividir,
+  .line-dividir-3x {
+    width: 100%;
+    background-color: #f2f2f2;
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+  .line-dividir {
+    height: 1px;
+  }
+  .line-dividir-3x {
+    height: 3px;
+  }
+  .divider-shadow-section {
+    height: 15px;
+    background-image: url("../images/divider-shadow-section.jpg");
+    background-repeat: repeat-x;
+  }
+  .table {
+    margin-bottom: 15px;
+  }
+  .profile-container {
+    width: 100%;
+    display: block;
+    float: left;
+    margin-bottom: 12px;
+  }
+  .profile-container-wide {
+    width: 860px;
+  }
+  .container-driver-wide {
+    float: left;
+    padding: 10px 10px 10px 25px;
+    border-radius: 5px;
+    position: absolute;
+    left: 70px;
+    background-color: white;
+    width: 798px;
+    z-index: 0;
+    top: 10px;
+    height: 100px;
+  }
+  .profile-club-nekso-level {
+    .level {
+      font-weight: bold;
+    }
+  }
+  .route-information-container {
+    padding: 15px 0px;
+    background: $white;
+    margin-bottom: -15px;
+  }
+  .profile-container,
+  .profile-container-wide {
+    .img-profile {
+      width: 85px;
+      float: left;
+      z-index: 1;
+      position: relative;
+      .status-profile {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        .status-box {
+          padding: 2px;
+          border-radius: 3px;
+        }
+        .material-icons {
+          font-size: 18px;
+          color: white;
+        }
+        .bg-review {
+          background-color: $not-response;
+        }
+        .bg-expired {
+          background-color: $rejected;
+        }
+        .bg-ok {
+          background-color: $ok;
+        }
+        .bg-suspended {
+          background-color: $requested;
+        }
+        .bg-rejected {
+          background-color: $danger;
+        }
+        .bg-reasigned {
+          background-color: $closed;
+        }
+      }
+    }
+    .info-profile,
+    .info-profile-empty {
+      max-width: 345px;
+      width: calc(100% - 85px);
+    }
+    .info-profile {
+      background-color: white;
+    }
+    .comments {
+      position: relative;
+      top: 7px;
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      border-radius: 4px;
+      clear: both;
+      padding: 10px;
+      margin-right: 15px;
+      background: #fffef0;
+      line-height: 1.4em;
+      p {
+        font-size: 12px;
+        margin-bottom: 0px;
+      }
+      .star-raiting-icon {
+        width: 14px;
+        margin-bottom: 3px;
+      }
+      .bank-info-container {
+        display: flex;
+        align-items: center;
+        .bank-icon {
+          width: 18px;
+          float: left;
+          display: inline-block;
+          margin-right: 5px;
+        }
+        .bank-info {
+          float: left;
+          width: 322px;
+          display: inline-block;
+        }
+      }
+    }
+    .info-profile,
+    .info-profile-wide,
+    .info-profile-empty {
+      float: left;
+      padding: 10px 10px 10px 25px;
+      border-radius: 5px;
+      position: relative;
+      left: -15px;
+      h5 {
+        margin-top: 0px;
+        margin-bottom: 5px;
+      }
+      .container-raiting-joindate-rides-cancelledrate {
+        width: 310px;
+        display: flex;
+        align-items: center;
+        .raiting {
+          width: 100px;
+          display: inline-block;
+          float: left;
+          .average-rating-container {
+            height: 20px;
+            width: 90px;
+            .rating li {
+              width: 18px;
+              .material-icons {
+                font-size: 16px;
+              }
+            }
+          }
+        }
+        .joindate {
+          width: 210px;
+          display: inline-block;
+          float: left;
+          line-height: 1.4em;
+          span {
+            font-size: 12px;
+          }
+        }
+        .rides,
+        .cancelledrate,
+        .carinfo,
+        .plateinfo {
+          display: inline-block;
+          float: left;
+          .rate-chart {
+            width: 26px;
+          }
+        }
+        .rides,
+        .cancelledrate {
+          line-height: 2.5em;
+        }
+        .carinfo,
+        .plateinfo {
+          line-height: 1.3em;
+        }
+        .rides {
+          .navbar-collapse {
+            padding-right: 10px;
+            padding-left: 0px;
+            .nav .open > a,
+            .nav .open > a:hover,
+            .nav .open > a:focus {
+              background-color: $bluedark-light;
+              border-color: none;
+            }
+            .navbar-nav {
+              li.dropdown {
+                background-color: $bluedark-light;
+                border-radius: 3px;
+                a.dropdown-toggle {
+                  padding: 2px 10px;
+                  color: white;
+                  font-weight: 500;
+                  font-size: 13px;
+                  border-radius: 3px;
+                  &:hover,
+                  &:active,
+                  &:focus {
+                    background-color: $bluedark;
+                  }
+                }
+              }
+            }
+          }
+          .dropdown-menu {
+            padding: 0px;
+            min-width: 310px;
+          }
+          .header-last-ride {
+            background-color: #f5f6fa;
+            padding-left: 10px;
+            padding-right: 10px;
+            width: 100%;
+            span {
+              font-size: 12px;
+            }
+          }
+          .title-last-ride,
+          .last-ride {
+            .col-xs-6 {
+              padding-left: 10px;
+              padding-right: 10px;
+            }
+          }
+          .title-last-ride {
+            line-height: 2em;
+          }
+          .loading-last-ride {
+            text-align: center;
+          }
+        }
+        .plate-box {
+          background-color: #f2f2f2;
+          padding: 5px;
+          margin-left: 10px;
+          display: block;
+          border-radius: 3px;
+          span {
+            margin-bottom: 0px;
+          }
+        }
+      }
+    }
+    .clnekso-section {
+      width: 310px;
+      height: 60px;
+      padding-top: 3px;
+      padding-bottom: 3px;
+      .img-icon {
+        width: 54px;
+        margin-right: 5px;
+        float: left;
+        display: inline-block;
+      }
+      .info-clnekso {
+        width: 251px;
+        float: left;
+        display: inline-block;
+        line-height: 1.2em;
+      }
+      .clnekso-icon {
+        width: 54px;
+        height: 54px;
+      }
+      .level-clnekso {
+        height: 12px;
+      }
+    }
+    .carinfo-container {
+      height: 80px;
+      padding-top: 5px;
+    }
+    .contact-info {
+      line-height: 1.6em;
+      .margin-left {
+        margin-left: 3px;
+      }
+    }
+  }
+  .display-flex{
+    display: flex;
+    align-items:center;
+    line-height: initial;
+  }
+  .balance-details {
+    @extend %flexbox;
+    @include align-items(end);
+    span {
+      color: $popup-details-balance;
+    }
+    img {
+      width: __em(23);
+      margin-right: __em(5);
+    }
+  }
+  @media (max-width: 991px) {
+    .container-driver-wide {
+      width: 510px;
+      height: 205px;
+    }
+    .line-dividir-mobile {
+      width: 100%;
+      height: 1px;
+      background-color: #f2f2f2;
+      margin-top: 3px;
+      margin-bottom: 3px;
+    }
+  }
+  @media (max-width: 767px) {
+    .container-driver-wide {
+      width: 80%;
+    }
+  }
+}

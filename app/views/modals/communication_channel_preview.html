@@ -1,0 +1,52 @@
+<div class="modal-header">
+  <button class="btn btn-primary" ng-click="vm.edit()" ng-if="vm.message.status!='EXPIRED'" type="button">
+    Edit
+  </button>
+  <button class="close" id="btn_close" ng-click="vm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row panel margin-null digital-driver-action-panel">
+    <div class="col-sm-12">
+      <div class="row" ng-if="vm.message.pictureUrl">
+        <div class="col-sm-12">
+          <div class="container-preview">
+            <img ng-src="{{vm.message.pictureUrl}}" class="img-responsive" style="margin: auto;">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <input class="form-control"
+                   ng-model="vm.message.title" type="text" disabled>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <textarea class="form-control" rows="2" style="resize:none;"
+                      disabled ng-model="vm.message.shortDescription"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="row" ng-if="vm.message.longDescription && vm.message.longDescription !== ''">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <textarea class="form-control" rows="2" style="resize:none;"
+                      disabled ng-model="vm.message.longDescription"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="row" ng-if="vm.message.detailUrl && vm.message.detailUrl !== ''">
+        <div class="col-sm-12">
+          <div class="form-group" style="overflow-x: auto;">
+            <a ng-href="{{vm.message.detailUrl}}" target="_blank">{{vm.message.detailUrl}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

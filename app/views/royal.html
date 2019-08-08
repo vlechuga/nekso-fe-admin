@@ -1,0 +1,483 @@
+<div ng-if="vm.notAuthMsg" not-authorized message="vm.notAuthMsg" class="not-authorized"></div>
+<div class="container-fluid padding-footer">
+  <div class="row sub-header">
+    <div class="col-sm-9">
+        <h4>Royal / Drivers</h4>
+    </div>
+  </div>
+
+  <div class="row row-separation">
+    <div class="col-sm-12">
+      <tabset id="tabs" class="full-height">
+        <tab heading="General payments" ng-click="vm.refreshView(1)">
+          <div block-ui="passengersList" ng-if="vm.type==1">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="panel panel-passengers">
+                  <div class="row sub-header">
+                    <div class="col-xs-12 col-sm-5 col-md-7 col-lg-8">
+                      <h5>Drivers ({{vm.total}})</h5>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 col-md-5 col-lg-4 text-right pull-right">
+                      <a href="{{vm.getCsvUrl()}}" style="text-decoration: none;">
+                        <button class="btn btn-sm btn-primary">
+                          Export to CSV
+                        </button>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="panel-heading">
+                    <div class="row shape-light-grey">
+                      <div class="col-sm-1 text-left">
+                        <h5 class="text-left">Date</h5>
+                      </div>
+                      <div class="col-sm-8">
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <p class="input-group date-box has-feedback">
+                              <input date-range-picker class="form-control date-picker font-11 inside-search-icon" type="text"
+                                     ng-model="vm.filter.date" options="vm.filter.date.opts" required/>
+                              <i class="glyphicon glyphicon-calendar form-control-feedback no-zindex"></i>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-3 text-right">
+                        <p class="input-group search-box">
+                          <input class="form-control" placeholder="Search" type="text" ng-model="vm.filter.searchText" ng-keydown="vm.searchDriversOnEnter($event)"/>
+                            <span class="input-group-btn margin-top-input search-btn" ng-click="vm.search()">
+                              <button class="btn btn-default" type="button">
+                                <i class="material-icons text-dark-grey">search</i>
+                              </button>
+                            </span>
+                            <span ng-if="vm.filter.searchText && vm.filter.searchText !== ''" class="input-group-btn margin-top-input clear-btn" ng-click="vm.clearSearchField()">
+                              <button class="btn btn-default" type="button">
+                                <i class="material-icons text-dark-grey">close</i>
+                              </button>
+                            </span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row shape-light-grey">
+                    <div class="col-sm-12 margin-bottom-15">
+                      <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+                        <li>
+                          <filter_country_state multiple="true" country="vm.filter.country"
+                                                states="vm.filter.states"></filter_country_state>
+                        </li>
+                        <li style="width: 175px;">
+                          <select class="font-13 new-select" ng-model="vm.filter.royal_status">
+                            <option value="" disabled="">Status</option>
+                            <option value="ALL">All</option>
+                            <option value="APPROVED">Approved</option>
+                            <option value="CANCELLED">Cancelled</option>
+                            <option value="SUSPENDED">Suspended</option>
+                          </select>
+                        </li>
+                        <li>
+                          <select class="new-select font-13" ng-model="vm.filter.notification">
+                            <option disabled selected value="">Notification</option>
+                            <option value="ALL">All</option>
+                            <option value="CAR_CHANGED">Car changed</option>
+                            <option value="SUSPENDED_BY_CONTROLLER">Suspended by controller</option>
+                            <option value="INVITATION_REJECTED">Invitation rejected</option>
+                          </select>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="padding-top-null">
+                    <table class="table table-hover table-condensed table-bordered">
+                      <thead>
+                        <th class="column-header-color"  ng-click="vm.order('firstName')">
+                          Name
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'firstName'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'firstName'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                        <th class="column-header-color">
+                          Date Request
+                        </th>
+                        <th class="column-header-color"  ng-click="vm.order('createdDate')">
+                          Email
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'createdDate'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'createdDate'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                        <th class="column-header-color"  ng-click="vm.order('ridesCount')">
+                          Mobile
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'ridesCount'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'ridesCount'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                        <th class="column-header-color"  ng-click="vm.order('ridesCount')">
+                          Status
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'ridesCount'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'ridesCount'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                        <th class="column-header-color"  ng-click="vm.order('rating')">
+                          Reviewed by
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                        <th class="column-header-color"  ng-click="vm.order('rating')">
+                          Reviewed date
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                        <th class="column-header-color"  ng-click="vm.order('rating')">
+                          Comment
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                        <th class="column-header-color"  ng-click="vm.order('rating')">
+                          Notification
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                        <th class="column-header-color"  ng-click="vm.order('rating')">
+                          Country - state
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="driver in vm.drivers track by $index">
+                          <td class="capitalize">
+                            <span ng-click="vm.openCarInformation(driver.id)"><strong>{{driver.firstName}}</strong></span>
+                          </td>
+                          <td>
+                            <span>{{driver.royalInfo.createdAt | date:'dd/MM/yyyy hh:mm a'}}</span>
+                          </td>
+                          <td>
+                            <span>{{driver.email}}</span>
+                          </td>
+                          <td>
+                            <span>{{driver.phone}}</span>
+                          </td>
+                          <td ng-click="vm.openStatusModal(driver)">
+                            <strong><span ng-switch="driver.royalInfo.status">
+                              <span ng-switch-when="APPROVED">Approved</span>
+                              <span ng-switch-when="CANCELLED">Cancelled</span>
+                              <span ng-switch-when="SUSPENDED">Suspended</span>
+                              <span ng-switch-default></span>
+                            </span></strong>
+                          </td>
+                          <td>
+                            <span>{{driver.royalInfo.updatedBy}}</span><span ng-if="!driver.royalInfo.updatedBy">{{driver.royalInfo.updatedByRole}}</span>
+                          </td>
+                          <td>
+                            <span>{{driver.royalInfo.updatedAt | date:'dd/MM/yyyy hh:mm a'}}</span>
+                          </td>
+                          <td>
+                            <span>{{driver.royalInfo.comment}}</span>
+                          </td>
+                          <td>
+                            <span nn-if="driver.royalInfo.notificationRead">{{driver.royalInfo.notification}}</span>
+                          </td>
+                          <td>
+                            <span>{{driver.country}} - {{driver.state}}</span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="bar-pagination">
+                <div class="row">
+                  <div class="col-sm-8 text-left">
+                    <pagination boundary-links="true"
+                                class="pagination"
+                                first-text="&laquo;"
+                                items-per-page="vm.controls.numPerPage"
+                                last-text="&raquo;"
+                                max-size="5"
+                                next-text="&rsaquo;"
+                                ng-model="vm.controls.currentPage"
+                                previous-text="&lsaquo;"
+                                rotate="false"
+                                total-items="vm.totalPayments"></pagination>
+                  </div>
+                  <div class="col-sm-4 text-right">
+                    <div class="btn-group items-per-page">
+                      <label btn-radio="10" class="btn btn-default" id="btn_numPerPage10" ng-model="vm.controls.numPerPage">10</label>
+                      <label btn-radio="25" class="btn btn-default" id="btn_numPerPage25" ng-model="vm.controls.numPerPage">25</label>
+                      <label btn-radio="50" class="btn btn-default" id="btn_numPerPage50" ng-model="vm.controls.numPerPage">50</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </tab>
+        <tab heading="Referral payments" ng-click="vm.refreshView(2)">
+          <div block-ui="passengersList" ng-if="vm.type==2">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="panel panel-passengers">
+                  <div class="row sub-header">
+                    <div class="col-xs-12 col-sm-5 col-md-7 col-lg-8">
+                      <h5>Payments({{vm.totalPayments}})</h5>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 col-md-5 col-lg-4 text-right pull-right">
+                      <a href="{{vm.getTxtUrl()}}" style="text-decoration: none;">
+                        <button
+                                ladda="vm.loading.exportToTxt" data-style="slide-left" class="btn btn-sm btn-primary"
+                                ng-click="vm.exportToTxt()">
+                          Bank Report
+                        </button>
+                      </a>
+                      <span>&nbsp;</span>
+                      <a href="{{vm.getCsvUrl()}}" style="text-decoration: none;">
+                        <button
+                                ladda="vm.loading.export" data-style="slide-left" class="btn btn-sm btn-primary"
+                                ng-click="vm.exportToCsv()">
+                          Export to CSV
+                        </button>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="panel-heading">
+                    <div class="row shape-light-grey">
+                      <div class="col-sm-1 text-left">
+                        <h5 class="text-left">Date</h5>
+                      </div>
+                      <div class="col-sm-8">
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <p class="input-group date-box has-feedback">
+                              <input date-range-picker class="form-control date-picker font-11 inside-search-icon" type="text"
+                                     ng-model="vm.filter.date" options="vm.filter.date.opts" required/>
+                              <i class="glyphicon glyphicon-calendar form-control-feedback no-zindex"></i>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-3 text-right">
+                        <p class="input-group search-box">
+                          <input class="form-control" placeholder="Search" type="text" ng-model="vm.filter.searchText" ng-keydown="vm.searchDriversOnEnter($event)"/>
+                            <span class="input-group-btn margin-top-input search-btn" ng-click="vm.search()">
+                              <button class="btn btn-default" type="button">
+                                <i class="material-icons text-dark-grey">search</i>
+                              </button>
+                            </span>
+                            <span ng-if="vm.filter.searchText && vm.filter.searchText !== ''" class="input-group-btn margin-top-input clear-btn" ng-click="vm.clearSearchField()">
+                              <button class="btn btn-default" type="button">
+                                <i class="material-icons text-dark-grey">close</i>
+                              </button>
+                            </span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row shape-light-grey">
+                    <div class="col-sm-12 margin-bottom-15">
+                      <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+                        <li>
+                          <select class="font-13 new-select" ng-model="vm.filter.country">
+                            <option selected value="">Select country</option>
+                            <option ng-repeat="country in vm.states.country" value="{{country}}">{{country}}</option>
+                          </select>
+                        </li>
+                        <li style="width: 200px;">
+                          <md-select class="font-13 new-select md-no-underline" placeholder="Select state" ng-model="vm.filter.state" multiple="">
+                            <md-option ng-repeat="obj in vm.statesArr | orderBy: 'name'" ng-if="obj.country == vm.filter.country && vm.filter.country" value="{{obj.id}}">{{obj.name}}</md-option>
+                            <md-option ng-repeat="obj in vm.statesArr" ng-if="!obj.country && !vm.filter.country" value="{{obj.id}}">{{obj.name}}</md-option>
+                          </md-select>
+                          <!-- <select multiple="multiple" id="filter_states1" class="multiple-state font-13" ng-model="vm.filter.state" ng-hide="vm.loadingMultiSelect">
+                            <option ng-repeat="obj in vm.statesArr | orderBy: 'name'" ng-if="obj.country == vm.filter.country && vm.filter.country" value="{{obj.name}}">{{obj.name}}</option>
+                            <option ng-repeat="obj in vm.statesArr" ng-if="!obj.country && !vm.filter.country" value="{{obj.name}}">{{obj.name}}</option>
+                          </select> -->
+                        </li>
+                        <li style="width: 175px;">
+                          <select multiple="multiple" id="filter_status1" class="font-13 multiple-state" ng-model="vm.filter.status">
+                            <option value="IN_PROCESS">In process</option>
+                            <option value="IN_REVIEW">In review</option>
+                            <option value="INVALID">Not valid</option>
+                            <option value="PAID">Paid</option>
+                            <option value="PENDING_TO_PAY">Pending to pay</option>
+                            <option value="PENDING_INFORMATION">Pending for info</option>
+                          </select>
+                        </li>
+                        <li>
+                          <select class="new-select font-13" ng-model="vm.filter.method">
+                            <option disabled selected value="">Method</option>
+                            <option value="ALL">All</option>
+                            <option value="MERCADOPAGO">Mercadopago</option>
+                            <option value="BANK_ACCOUNT">Bank account</option>
+                          </select>
+                        </li>
+                        <li>
+                          <select class="new-select font-13" ng-model="vm.filter.payment_reason">
+                            <option disabled selected value="">Payment reason</option>
+                            <option value="ALL">All</option>
+                            <option value="REFERRAL_NEW_DRIVER">Referral new driver</option>
+                            <option value="REFERRAL_DISCOUNT">Referral discount</option>
+                            <option value="REFERRAL_DRIVER_BONUS">Referral driver bonus</option>
+                          </select>
+                        </li>
+                        <li>
+                          <select class="new-select font-13" ng-model="vm.filter.with_suspicious">
+                            <option disabled selected value="">Suspicious</option>
+                            <option value="ALL">All</option>
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                          </select>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="padding-top-null">
+                    <table class="table table-hover table-condensed table-bordered">
+                      <thead>
+                        <th>
+                          <input type="checkbox" ng-model="vm.selectAll" ng-if="vm.payments.length > 0">
+                        </th>
+                        <th class="column-header-color"  ng-click="vm.order('firstName')">
+                          Date
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'firstName'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'firstName'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                        <th class="column-header-color">
+                          Driver
+                        </th>
+                        <th class="column-header-color"  ng-click="vm.order('createdDate')">
+                          Reference
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'createdDate'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'createdDate'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                        <th class="column-header-color"  ng-click="vm.order('ridesCount')">
+                          Type
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'ridesCount'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'ridesCount'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                        <th class="column-header-color"  ng-click="vm.order('rating')">
+                          Amount
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                        <th class="column-header-color"  ng-click="vm.order('rating')">
+                          Suspicious
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                        <th class="column-header-color"  ng-click="vm.order('rating')">
+                          Status
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                        <th class="column-header-color"  ng-click="vm.order('rating')">
+                          Payment date
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                        <th class="column-header-color"  ng-click="vm.order('rating')">
+                          Payment method
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                        <th class="column-header-color"  ng-click="vm.order('rating')">
+                          Country - state
+                          <!--<span ng-if="!vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-down columnSortIcons"></span>-->
+                          <!--<span ng-if="vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-up columnSortIcons"></span>-->
+                        </th>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="payment in vm.payments track by $index">
+                          <td>
+                            <input type="checkbox" ng-click="vm.addOrRemovePayment(payment,$event)"
+                              ng-checked="vm.selectedPayments.indexOf(payment) > -1" ng-if="payment.status !== 'PENDING_INFORMATION'">
+                          </td>
+                          <td class="capitalize">
+                            <span>{{payment.createdAt | date:'dd/MM/yyyy hh:mm a'}}</span>
+                          </td>
+                          <td>
+                            <span ng-click="vm.openDriverProfile(payment.driver, payment.driver.controller)"><strong>{{payment.driver.fullName}}</strong></span>
+                          </td>
+                          <td>
+                            <span>{{payment.referralUser.fullName}}</span>
+                          </td>
+                          <td>
+                            <span ng-switch="payment.paymentReason">
+                              <span ng-switch-when="SYSTEM">System</span>
+                              <span ng-switch-when="ACHIEVEMENT">Achievement</span>
+                              <span ng-switch-when="CREDIT_CARD">Credit card</span>
+                              <span ng-switch-when="CORPORATE">Corporate</span>
+                              <span ng-switch-when="REFERRAL_NEW_DRIVER">Referral new driver</span>
+                              <span ng-switch-when="REFERRAL_DISCOUNT">Referral discount</span>
+                              <span ng-switch-when="REFERRAL_DRIVER_BONUS">Referral driver bonus</span>
+                              <span ng-switch-default></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span>{{payment.ride.pricingInfo.currency}} {{payment.amount}}</span>
+                          </td>
+                          <td>
+                            <span>{{payment.suspiciousReasons}}</span>
+                          </td>
+                          <td>
+                            <span ng-switch="payment.status" ng-click="vm.openHistory(payment)">
+                              <strong>
+                                <span ng-switch-when="INVALID">Not valid</span>
+                                <span ng-switch-when="IN_PROCESS">In process</span>
+                                <span ng-switch-when="IN_REVIEW">In review</span>
+                                <span ng-switch-when="PAID">Paid</span>
+                                <span ng-switch-when="PENDING_TO_PAY">Pending to pay</span>
+                                <span ng-switch-when="PENDING_INFORMATION">Pending for info</span>
+                                <span ng-switch-default></span>
+                              </strong>
+                            </span>
+                          </td>
+                          <td>
+                            <span ng-if="payment.status === 'PAID'">{{payment.updatedAt | date:'dd/MM/yyyy hh:mm a'}}</span>
+                          </td>
+                          <td>
+                            <span ng-switch="payment.method">
+                              <span ng-switch-when="MERCADOPAGO">MercadoPago</span>
+                              <span ng-switch-when="BANK_ACCOUNT">Bank account</span>
+                              <span ng-switch-default></span>
+                            </span>
+                          </td>
+                          <td>
+                            <span>{{payment.country}} - {{payment.state}}</span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="bar-pagination">
+                <div class="row">
+                  <div class="col-sm-8 text-left">
+                    <pagination boundary-links="true"
+                                class="pagination"
+                                first-text="&laquo;"
+                                items-per-page="vm.controls.numPerPage"
+                                last-text="&raquo;"
+                                max-size="5"
+                                next-text="&rsaquo;"
+                                ng-model="vm.controls.currentPage"
+                                previous-text="&lsaquo;"
+                                rotate="false"
+                                total-items="vm.totalPayments"></pagination>
+                  </div>
+                  <div class="col-sm-4 text-right">
+                    <div class="btn-group items-per-page">
+                      <label btn-radio="10" class="btn btn-default" id="btn_numPerPage10" ng-model="vm.controls.numPerPage">10</label>
+                      <label btn-radio="25" class="btn btn-default" id="btn_numPerPage25" ng-model="vm.controls.numPerPage">25</label>
+                      <label btn-radio="50" class="btn btn-default" id="btn_numPerPage50" ng-model="vm.controls.numPerPage">50</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </tab>
+      </tabset>
+    </div>
+  </div>
+</div>

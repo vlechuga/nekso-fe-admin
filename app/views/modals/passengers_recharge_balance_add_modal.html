@@ -1,0 +1,72 @@
+<div class="modal-header">
+  <button class="close" id="btn_close" ng-click="vm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <h4 class="modal-title">Add Balance</h4>
+</div>
+<div class="modal-body" block-ui="paymentList">
+  <div class="row payment-credit-debit-note-panel">
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-12 header">
+          <div class="col-sm-12 form-group">
+            <label for="filter_passenger" class="font-bold">Search:</label>
+            <div class="input-group">
+              <input type="text" id="filter_passenger"
+                     class="form-control nekso-form__input"
+                     ng-model="vm.search"
+                     placeholder="Enter email, phone or name">
+              <div class="input-group-btn">
+                <button class="btn btn-primary btn-sm" type="button"
+                        ng-model="vm.file" name="btn_search" ng-click="vm.findPassenger()">
+                  <i class="material-icons">search</i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <form name="payment_action" novalidate>
+        <div class="row body">
+          <div class="col-sm-12">
+            <label for="filter_passengers" class="font-bold">Passenger:</label>
+            <select id="filter_passengers" class="nekso-form__select" ng-model="vm.passenger">
+              <option selected value="" disabled>Passenger</option>
+              <option ng-repeat="item in vm.passengers track by $index" value="{{item.id}}">
+                {{item.fullName + ' / ' + item.email}}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-sm-12">
+            <label for="field_source" class="font-bold">Provider:</label>
+            <select class="nekso-form__select" id="field_source" ng-model="vm.source">
+              <option selected value="" disabled>Source</option>
+              <option value="MPANDCO">MPANDCO</option>
+              <option value="MULTIPAGO_BANESCO">MULTIPAGO BANESCO</option>
+            </select>
+          </div>
+          <div class="col-sm-12">
+            <label for="field_amount" class="font-bold">Amount:</label>
+            <input id="field_amount" name="field_amount" type="text" class="form-control"
+                   ui-maskmoney data-decimal="," data-thousands="." data-prefix=""
+                   maxlength="13"
+                   ng-model="vm.amount"
+                   required />
+          </div>
+          <div class="col-sm-12">
+            <label for="comment" class="font-bold">Comment:</label>
+            <textarea id="comment" name="field_comment" class="form-control new-select" ng-model="vm.comment"
+                      maxlength="150" minlength="1" required></textarea>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" ng-click="vm.createPayment()" ng-disabled="!(vm.passenger && vm.source && vm.amount && vm.comment)"
+          ladda="vm.loading" data-style="slide-left">Confirm
+  </button>
+  <button class="btn btn-default" ng-click="vm.close()">Cancel</button>
+</div>

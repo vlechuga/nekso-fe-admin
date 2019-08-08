@@ -1,0 +1,146 @@
+<div class="modal-header" ng-cloak>
+  <button ng-hide="vm.loading.payment" class="close" id="btn_close" ng-click="vm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row sub-header">
+    <div class="col-sm-12">
+      <div class="input-group header-item">
+        <h4 class="margin-null">Corporation - Sales Package - History</h4>
+      </div>
+    </div>
+  </div>
+  <div block-ui="corporatesSalesPackageHistoryList">
+    <div class="row row-separation">
+      <div class="col-sm-12">
+        <div class="panel form-corporates-sales-package-detail">
+          <div class="row">
+            <div class="col-sm-12">
+              <span style="font-weight: bold;">Corporate: </span> {{vm.corporation.companyName}}
+            </div>
+            <div class="col-sm-12">
+              <span style="font-weight: bold;">Corporate needs:</span> {{vm.corporation.salesInfo.transportationNeed}}
+            </div>
+            <div class="col-sm-12" ng-if="vm.history && vm.history.length > 0">
+              <span style="font-weight: bold;">Cycle date:</span> {{vm.history[0].assignedAt | date: 'dd/MM/yyyy'}}
+            </div>
+            <div class="col-sm-12">
+              <p class="text-light-grey">
+                <span><i class="material-icons" style="font-size: 16px;">phone</i>
+                  {{vm.corporation.phone}}
+                </span>
+                <br/>
+                <span><i class="material-icons" style="font-size: 16px;">mail</i>
+                  {{vm.corporation.email}}
+                </span>
+              </p>
+            </div>
+          </div>
+          <div>
+            <div class="row">
+              <div class="col-sm-12">
+                <h5 class="" style="font-weight: bold;">Transactions: ({{vm.totalHistories}})</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="panel-corporates-sales-package-detail">
+                  <div class="padding-top-null">
+                    <table class="table table-hover table-condensed table-bordered">
+                      <thead>
+                      <tr>
+                        <th class="column-header-color" ng-click="vm.order('assignedAt')">
+                          Bonus Date
+                        </th>
+                        <th class="column-header-color">
+                          Bonus
+                        </th>
+                        <th class="column-header-color">
+                          Benefit Date
+                        </th>
+                        <th class="column-header-color">
+                          Benefit
+                        </th>
+                        <th class="column-header-color">
+                          Reference
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr ng-repeat="transaction in vm.history track by $index"
+
+                          ng-click="vm.openEditDialog(transaction)">
+                        <td>
+                          <span> {{transaction.assignedAt | date: 'dd/MM/yyyy hh:mm a'}} </span>
+                        </td>
+                        <td>
+                          <span> {{transaction.bonus}} </span>
+                        </td>
+                        <td>
+                          <span> {{transaction.benefitsDeliveredAt | date: 'dd/MM/yyyy hh:mm a'}} </span>
+                        </td>
+                        <td>
+                          <span> {{transaction.benefits}} </span>
+                        </td>
+                        <td>
+                          <span> {{transaction.benefitsReference}} </span>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="bar-pagination">
+                <div class="row">
+                  <div class="col-sm-12 text-center">
+                    <pagination boundary-links="true"
+                                class="pagination"
+                                first-text="&laquo;"
+                                items-per-page="vm.controls.numPerPage"
+                                last-text="&raquo;"
+                                max-size="5"
+                                next-text="&rsaquo;"
+                                ng-model="vm.controls.currentPage"
+                                previous-text="&lsaquo;"
+                                rotate="false"
+                                total-items="vm.totalHistories"></pagination>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="divider"></div>
+
+          <div class="row">
+            <div class="col-sm-12">
+              <form name="form_comment" novalidate>
+                <label class="font-bold" for="comment_field">Comment:</label>
+                <textarea ng-disabled="!vm.getUserPermission('update:corporate')"
+                          id="comment_field"
+                          name="comment_field"
+                          class="full-width"
+                          ng-model="vm.notes"
+                          placeholder="Comment..."
+                          required
+                          minlength="1"
+                          maxlength="200"></textarea>
+              </form>
+              <button ng-if="vm.getUserPermission('update:corporate')"
+                      class="btn btn-success margin-top-5"
+                      ladda="vm.loading" data-style="expand-left"
+                      ng-click="vm.addComment()"
+                      ng-disabled="form_comment.comment_field.$pristine || form_comment.$invalid">Update comment</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-danger" ng-click="vm.close()">Close</button>
+</div>

@@ -1,0 +1,184 @@
+<div class="container-payments-corporate container-fluid padding-footer">
+  <div class="row sub-header">
+    <div class="col-xs-12 col-sm-5 col-md-7 col-lg-8">
+        <h4>Payments Corporate ({{vm.total}})</h4>
+    </div>
+    <div class="col-xs-12 col-sm-7 col-md-5 col-lg-4 text-right pull-right">
+      <a href="{{vm.getCsvUrl()}}">
+        <button ng-if="vm.getUserPermission('export:payments')" class="btn btn-sm btn-primary" >
+          Export to CSV
+        </button>
+      </a>
+    </div>
+  </div>
+
+  <div class="panel-heading">
+    <div class="row shape-light-grey">
+      <div class="col-sm-1 text-left">
+        <h5 class="text-left">Join date</h5>
+      </div>
+      <div class="col-sm-8">
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="input-group date-box has-feedback">
+              <input date-range-picker class="form-control date-picker font-11 inside-search-icon" type="text"
+                     ng-model="vm.filter.date" options="vm.filter.date.opts" required/>
+              <i class="glyphicon glyphicon-calendar form-control-feedback no-zindex"></i>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 text-right">
+        <p class="input-group search-box">
+          <input class="form-control" placeholder="Search" type="text" ng-model="vm.filter.searchText" ng-keydown="vm.searchOnEnter($event)"/>
+            <span class="input-group-btn margin-top-input search-btn" ng-click="vm.searchCorporates()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">search</i>
+              </button>
+            </span>
+            <span ng-if="vm.filter.searchText && vm.filter.searchText !== ''" class="input-group-btn margin-top-input clear-btn" ng-click="vm.clearSearchField()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">close</i>
+              </button>
+            </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div block-ui="corporatesList">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-default panel-no-shadow panel-corporates">
+          <div class="shape-light-grey">
+            <div class="col-sm-12 margin-bottom-15">
+              <ul class="list-inline margin-bottom-null margin-top-15">
+                <!-- <li>
+                  <span>Filters</span>
+                </li> -->
+                <li>
+                  <select class="font-13 new-select" id="field_status" ng-model="vm.filter.status">
+                    <option disabled selected value="">Select status</option>
+                    <option value="ALL">All</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="APPROVED">Approved</option>
+                    <option value="REJECTED">Rejected</option>
+                  </select>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="panel-body padding-top-null">
+            <table class="table table-hover table-condensed table-bordered">
+              <thead>
+              <tr>
+              <th class="column-header-color" ng-click="vm.order('companyName')">
+                  Reported date
+                  <span ng-if="!vm.reverse && vm.predicate === 'companyName'" class="fa fa-sort-down columnSortIcons"></span>
+                  <span ng-if="vm.reverse && vm.predicate === 'companyName'" class="fa fa-sort-up columnSortIcons"></span>
+                </th>
+                <th class="column-header-color" ng-click="vm.order('status')">
+                  Status
+                </th>
+                <th class="column-header-color">
+                  Update Date
+                </th>
+                <th class="column-header-color">
+                  Corporate
+                </th>
+                <th class="column-header-color">
+                  Operation
+                </th>
+                <th class="column-header-color">
+                  Amount
+                </th>
+                <th class="column-header-color">
+                  Bank
+                </th>
+                <th class="column-header-color" ng-click="vm.order('ridesCount')">
+                  Attachment
+                  <span ng-if="!vm.reverse && vm.predicate === 'ridesCount'" class="fa fa-sort-down columnSortIcons" ></span>
+                  <span ng-if="vm.reverse && vm.predicate === 'ridesCount'" class="fa fa-sort-up columnSortIcons"></span>
+                </th>
+                <!--th class="column-header-color">
+                  Rate
+                  <span class="fa fa-sort-down columnSortIcons" ng-click="vm.order('rating')"></span>
+                </th-->
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="corporate in vm.corporates track by $index">
+                <td>
+                  <span> {{corporate.createdAt | date:'dd/MM/yyyy hh:mm a'}} </span>
+                </td>
+                <td>
+                  <div class="column-status-style" ng-switch="corporate.status">
+                    <i ng-switch-when="REJECTED" class="material-icons status-box bg-rejected" tooltip="Rejected" tooltip-placement="right">cancel</i>
+                    <i ng-switch-when="COMPLETED" class="material-icons status-box bg-ok" tooltip="Completed" tooltip-placement="right">check_circle</i>
+                    <i ng-switch-when="IN_PROCESS" class="material-icons status-box bg-review" tooltip="In process" tooltip-placement="right">loop</i>
+                    <i ng-switch-when="PENDING" class="material-icons status-box bg-review" tooltip="Pending" tooltip-placement="right">query_builder</i>
+                    <i ng-switch-when="INVALID" class="material-icons status-box bg-review" tooltip="Pending" tooltip-placement="right">error</i>
+                  </div>
+                </td>
+                <td>
+                   <span> {{corporate.updatedAt | date:'dd/MM/yyyy hh:mm a'}} </span>
+                </td>
+                <td>
+                  <strong ng-if="corporate.status === 'PENDING'" ng-click="vm.openCorporateProfileDialog(corporate)">
+                    <span ng-if="corporate.user.fullName.length >= vm.configurations.sizeDisplayText" title="{{corporate.user.fullName}}">{{corporate.user.fullName | cut:true:vm.configurations.sizeDisplayText:'...'}}</span>
+                    <span ng-if="corporate.user.fullName.length < vm.configurations.sizeDisplayText">{{corporate.user.fullName}}</span>
+                  </strong>
+                  <div ng-if="corporate.status !== 'PENDING'">
+                    <span ng-if="corporate.user.fullName.length >= vm.configurations.sizeDisplayText" title="{{corporate.user.fullName}}">{{corporate.user.fullName | cut:true:vm.configurations.sizeDisplayText:'...'}}</span>
+                    <span ng-if="corporate.user.fullName.length < vm.configurations.sizeDisplayText">{{corporate.user.fullName}}</span>
+                  </div>
+                </td>
+                <td>
+                  <span> {{corporate.bankTransactionNumber}} </span>
+                </td>
+                <td>
+                  <span class="text-right">{{corporate.currency}} {{corporate.amount | number:2}} </span>
+                </td>
+                <td>
+                  <span> {{corporate.paidTo.bank.name}} </span>
+                </td>
+                <td class="text-center">
+                  <a target="_blank" href="{{corporate.pictureUrl}}"><i class="material-icons text-dark-grey">file_download</i></a>
+                </td>
+                <!--td class="rating-column">
+                  <average-star-rating average="corporate.rating"></average-star-rating>
+                </td-->
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bar-pagination">
+        <div class="row">
+          <div class="col-sm-8 text-left">
+            <pagination boundary-links="true"
+                        class="pagination"
+                        first-text="&laquo;"
+                        items-per-page="vm.controls.numPerPage"
+                        last-text="&raquo;"
+                        max-size="5"
+                        next-text="&rsaquo;"
+                        ng-model="vm.controls.currentPage"
+                        previous-text="&lsaquo;"
+                        rotate="false"
+                        total-items="vm.totalCorporates"></pagination>
+          </div>
+          <div class="col-sm-4 text-right">
+            <div class="btn-group items-per-page">
+              <label btn-radio="10" class="btn btn-default" id="btn_numPerPage10" ng-model="vm.controls.numPerPage">10</label>
+              <label btn-radio="25" class="btn btn-default" id="btn_numPerPage25" ng-model="vm.controls.numPerPage">25</label>
+              <label btn-radio="50" class="btn btn-default" id="btn_numPerPage50" ng-model="vm.controls.numPerPage">50</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

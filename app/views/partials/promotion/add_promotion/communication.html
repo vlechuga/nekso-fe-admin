@@ -1,0 +1,486 @@
+<article class="card communication">
+
+  <header class="card__header">
+    <div class="card__header-title"><strong>Communication</strong></div>
+    <div class="card__header-subtitle">
+      Describe the promotion to your target including the content
+      and image to share.
+    </div>
+  </header>
+
+  <div class="card__content">
+
+    <section class="row description-of-promotion">
+
+      <div class="col-md-2 col-xs-12">
+        <strong>DESCRIPTION OF PROMOTION</strong>
+      </div>
+
+      <div class="col-md-10 col-xs-12">
+
+        <article class="row">
+
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group"
+               ng-class="{'has-error' : vm.submitted && new_promotion.field_promotionName.$invalid &&  !new_promotion.$pristine}">
+              <input name="field_promotionName"
+                     id="promotion-name-input"
+                     class="nekso-form__input"
+                     ng-model="vm.promotion.english.name"
+                     type="text"
+                     ng-maxlength="30"
+                     maxlength="30"
+                     required>
+              <label class="nekso-form__control-label" for="promotion-name-input">
+                Name of the Promotion (Max. 30 char.)
+              </label>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_promotionName.$error.max &&  !new_promotion.field_promotionName.$pristine">
+                Max. 20 characters</h6>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_promotionName.$error.required &&  !new_promotion.field_promotionName.$pristine">
+                This field is mandatory</h6>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group"
+                 ng-class="{'has-error' : vm.submitted && new_promotion.field_promotionNameEs.$invalid &&  !new_promotion.$pristine}">
+              <input name="field_promotionNameEs"
+                     id="promotion-name-spanish-input"
+                     class="nekso-form__input"
+                     ng-model="vm.promotion.spanish.name"
+                     type="text"
+                     ng-maxlength="30"
+                     maxlength="30"
+                     required>
+              <label class="nekso-form__control-label" for="promotion-name-spanish-input">
+                Nombre de la promoci&oacute;n (Max. 30 car.)
+              </label>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_promotionNameEs.$error.max &&  !new_promotion.field_promotionNameEs.$pristine">
+                Max. 20 characters</h6>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_promotionNameEs.$error.required &&  !new_promotion.field_promotionNameEs.$pristine">
+                This field is mandatory</h6>
+            </div>
+          </div>
+
+        </article>
+
+        <article class="row">
+
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group"
+                 ng-class="{'has-error' : vm.submitted && new_promotion.field_shortDescription.$invalid &&  !new_promotion.$pristine}">
+                <textarea class="nekso-form__input"
+                          id="short-description-textarea"
+                          rows="2"
+                          name="field_shortDescription"
+                          ng-maxlength="60"
+                          maxlength="60"
+                          required
+                          ng-model="vm.promotion.english.shortDescription">
+                </textarea>
+                <label class="nekso-form__control-label" for="short-description-textarea">
+                  Short Description (Max. 60 char.)
+                </label>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_shortDescription.$error.max &&  !new_promotion.field_shortDescription.$pristine">
+                Max. 60 characters</h6>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_shortDescription.$error.required &&  !new_promotion.field_shortDescription.$pristine">
+                This field is mandatory</h6>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group"
+                 ng-class="{ 'has-error' : vm.submitted && new_promotion.field_shortDescriptionEs.$invalid &&  !new_promotion.$pristine}">
+                <textarea class="nekso-form__input" rows="2"
+                          id="short-description-spanish-textarea"
+                          name="field_shortDescriptionEs"
+                          ng-maxlength="60"
+                          maxlength="60"
+                          required
+                          ng-model="vm.promotion.spanish.shortDescription">
+                </textarea>
+                <label class="nekso-form__control-label" for="short-description-spanish-textarea">
+                  Descripci&oacute;n corta (Max. 60 car.)
+                </label>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_shortDescriptionEs.$error.max &&  !new_promotion.field_shortDescriptionEs.$pristine">
+                Max. 60 characters</h6>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_shortDescriptionEs.$error.required &&  !new_promotion.field_shortDescriptionEs.$pristine">
+                This field is mandatory</h6>
+            </div>
+          </div>
+
+        </article>
+
+        <article class="row">
+
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group"
+                 ng-class="{ 'has-error' : vm.submitted && new_promotion.field_longDescription.$invalid &&  !new_promotion.$pristine}">
+                <textarea class="nekso-form__input"
+                          rows="3"
+                          id="long-desfription-textarea"
+                          name="field_longDescription"
+                          ng-maxlength="450"
+                          maxlength="450"
+                          required
+                          ng-model="vm.promotion.english.description">
+                </textarea>
+                <label class="nekso-form__control-label" for="long-desfription-textarea">
+                  Long Description (Max. 450 char.)
+                </label>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_longDescription.$error.max &&  !new_promotion.field_longDescription.$pristine">
+                Max. 300 characters</h6>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_longDescription.$error.required &&  !new_promotion.field_longDescription.$pristine">
+                This field is mandatory</h6>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group"
+                 ng-class="{'has-error' : vm.submitted && new_promotion.field_longDescriptionEs.$invalid &&  !new_promotion.$pristine}">
+                <textarea class="nekso-form__input"
+                          rows="3"
+                          id="long-description-spanish-textarea"
+                          name="field_longDescriptionEs"
+                          ng-maxlength="450"
+                          maxlength="450"
+                          required
+                          ng-model="vm.promotion.spanish.description">
+                </textarea>
+                <label class="nekso-form__control-label" for="long-description-spanish-textarea">
+                  Descripci&oacute;n larga (Max. 450 car.)
+                </label>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_longDescriptionEs.$error.max &&  !new_promotion.field_longDescriptionEs.$pristine">
+                Max. 300 characters</h6>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_longDescriptionEs.$error.required &&  !new_promotion.field_longDescriptionEs.$pristine">
+                This field is mandatory</h6>
+            </div>
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+    <section class="row share-content">
+
+      <div class="col-md-2 col-xs-12">
+        <strong>SHARE CONTENT</strong>
+      </div>
+
+      <div class="col-md-10 col-xs-12">
+
+        <article class="row">
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group"
+                 ng-class="{ 'has-error' : vm.submitted && new_promotion.field_shareTitle.$invalid &&  !new_promotion.$pristine}">
+              <input name="field_shareTitle"
+                     class="nekso-form__input"
+                     id="share-title-input"
+                     ng-model="vm.promotion.english.share.title"
+                     type="text"
+                     ng-maxlength="30"
+                     maxlength="30"
+                     required>
+               <label class="nekso-form__control-label" for="share-title-input">
+                  Title (Max. 30 char.)
+                </label>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_shareTitle.$error.max &&  !new_promotion.field_shareTitle.$pristine">
+                Max. 30 characters</h6>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_shareTitle.$error.required &&  !new_promotion.field_shareTitle.$pristine">
+                This field is mandatory</h6>
+            </div>
+          </div>
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group"
+                 ng-class="{ 'has-error' : vm.submitted && new_promotion.field_shareTitleEs.$invalid &&  !new_promotion.$pristine}">
+              <input name="field_shareTitleEs"
+                     class="nekso-form__input"
+                     id="share-title-spanish-input"
+                     ng-model="vm.promotion.spanish.share.title"
+                     type="text"
+                     ng-maxlength="30"
+                     maxlength="30"
+                     required>
+              <label class="nekso-form__control-label" for="share-title-spanish-input">
+                  T&iacute;tulo (Max. 30 car.)
+              </label>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_shareTitleEs.$error.max &&  !new_promotion.field_shareTitleEs.$pristine">
+                Max. 30 characters</h6>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_shareTitleEs.$error.required &&  !new_promotion.field_shareTitleEs.$pristine">
+                This field is mandatory</h6>
+            </div>
+          </div>
+        </article>
+
+        <article class="row">
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group"
+                 ng-class="{ 'has-error' : vm.submitted && new_promotion.field_shareContent.$invalid &&  !new_promotion.$pristine}">
+                <textarea class="nekso-form__input"
+                          rows="2"
+                          id="share-content-textarea"
+                          name="field_shareContent"
+                          ng-maxlength="120"
+                          maxlength="120"
+                          required
+                          ng-model="vm.promotion.english.share.content">
+                </textarea>
+                <label class="nekso-form__control-label" for="share-content-textarea">
+                  Content (Max. 120 char.)
+                </label>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_shareContent.$error.max &&  !new_promotion.field_shareContent.$pristine">
+                Max. 120 characters</h6>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_shareContent.$error.required &&  !new_promotion.field_shareContent.$pristine">
+                This field is mandatory</h6>
+            </div>
+          </div>
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group"
+                 ng-class="{ 'has-error' : vm.submitted && new_promotion.field_shareContentEs.$invalid &&  !new_promotion.$pristine}">
+                  <textarea class="nekso-form__input"
+                            rows="2"
+                            id="share-content-spanish-textarea"
+                            name="field_shareContentEs"
+                            ng-maxlength="120"
+                            maxlength="120"
+                            required
+                            ng-model="vm.promotion.spanish.share.content">
+                  </textarea>
+                  <label class="nekso-form__control-label" for="share-content-spanish-textarea">
+                  Contenido (Max. 120 car.)
+                  </label>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_shareContentEs.$error.max &&  !new_promotion.field_shareContentEs.$pristine">
+                Max. 120 characters</h6>
+              <h6 class="text-danger"
+                  ng-if="new_promotion.field_shareContentEs.$error.required &&  !new_promotion.field_shareContentEs.$pristine">
+                This field is mandatory</h6>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+    </section>
+
+    <section class="row upload-promotion-images">
+
+      <div class="col-md-2 col-xs-12">
+        <strong>UPLOAD PROMOTION IMAGES</strong>
+      </div>
+
+      <div class="col-md-10 col-xs-12">
+
+        <article class="row">
+
+          <div class="col-md-6 col-xs-12">
+
+            <div class="row">
+
+              <div class="col-md-7 col-xs-12">
+                <div class="container-preview">
+                  <div ng-if="!vm.file" class="preview-label">Preview</div>
+                  <img ngf-thumbnail="vm.file || '/images/frame_image_promotion_default.png'" class="img-responsive">
+                </div>
+                <span ng-if="vm.file" class="secundary-text margin-left image-name"><strong>Original file name:</strong> {{vm.file.name}}</span>
+              </div>
+
+              <div class="col-md-5 col-xs-12 specification-of-images">
+                <div class="details">
+                  <h6><strong>Specification of images:</strong></h6>
+                  <h6
+                    ng-class="{'text-danger': (new_promotion.file.$error.maxHeight ||
+                    new_promotion.file.$error.maxWidth ||
+                    new_promotion.file.$error.minHeight ||
+                    new_promotion.file.$error.minWidth) &&
+                    !new_promotion.file.$pristine,
+                    'text-success': (!new_promotion.file.$error.maxHeight &&
+                    !new_promotion.file.$error.maxWidth &&
+                    !new_promotion.file.$error.minHeight &&
+                    !new_promotion.file.$error.minWidth) &&
+                    !new_promotion.file.$pristine}">
+                    Dimension: 1280 x 680
+                  </h6>
+                  <h6
+                    ng-class="{'text-danger': new_promotion.file.$error.pattern &&
+                    !new_promotion.file.$pristine,
+                    'text-success': !new_promotion.file.$error.pattern &&
+                    !new_promotion.file.$pristine}">
+                    Format: Only JPG
+                  </h6>
+                  <h6
+                    ng-class="{'text-danger': vm.submitted && new_promotion.file.$error.maxSize &&
+                    !new_promotion.file.$pristine,
+                    'text-success': !new_promotion.file.$error.maxSize &&
+                    !new_promotion.file.$pristine}">
+                    Max-size: 600 KB
+                  </h6>
+                </div>
+
+                <div class="btn btn-default btn-sm"
+                     ngf-select
+                     ng-model="vm.file"
+                     name="file"
+                     ngf-pattern="'.jpg, .jpeg'"
+                     ngf-accept="'.jpg, .jpeg'"
+                     ngf-max-size="600KB"
+                     ngf-max-height="680"
+                     ngf-max-width="1280"
+                     ngf-min-height="680"
+                     ngf-min-width="1280"
+                     ngf-resize="{width: 1280, height: 680, centerCorp: true}"
+                     ngf-resize-if="$width > 1280 || $height > 680">
+                  Search image
+                </div>
+                <h6 class="text-danger has-error"
+                    ng-if="vm.submitted && !vm.file && !new_promotion.$pristine">
+                  Select promotion image
+                </h6>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="col-md-6 col-xs-12">
+            <div>
+              <input class="nekso-form__checkbox"
+                       id="notifications-activation-option"
+                       type="checkbox"
+                       ng-checked="vm.sendActivationNotificacion"
+                       ng-model="vm.sendActivationNotificacion">
+              <label for="notifications-activation-option">Push notifications (Activation)</label>
+              <div class="row" ng-if="vm.sendActivationNotificacion">
+                <div class="col-sm-6 col-xs-12">
+                  <div class="form-group"
+                       ng-class="{ 'has-error' : vm.submitted && new_promotion.field_pushActivation.$invalid && !new_promotion.$pristine}">
+                    <label class="padding-left-null title-items-promotion">English content:</label>
+                    <textarea class="nekso-form__input"
+                              id="push-activation-textarea"
+                              rows="2" cols="10"
+                              name="field_pushActivation"
+                              ng-maxlength="95"
+                              maxlength="95"
+                              required
+                              ng-model="vm.promotion.english.notification.activation">
+                    </textarea>
+                    <h6 class="text-danger"
+                        ng-if="new_promotion.field_pushActivation.$error.max && !new_promotion.field_pushActivation.$pristine">
+                      Max. 95 characters</h6>
+                    <h6 class="text-danger"
+                        ng-if="new_promotion.field_pushActivation.$error.required && !new_promotion.field_pushActivation.$pristine">
+                      This field is mandatory</h6>
+                  </div>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                  <div class="form-group"
+                       ng-class="{ 'has-error' : vm.submitted && new_promotion.field_pushActivationEs.$invalid && !new_promotion.$pristine}">
+                    <label class="padding-left-null title-items-promotion">Spanish content:</label>
+                    <textarea class="nekso-form__input"
+                              id="push-activation-spanish-textarea"
+                              rows="2"
+                              cols="10"
+                              name="field_pushActivationEs"
+                              ng-maxlength="95"
+                              maxlength="95"
+                              required
+                              ng-model="vm.promotion.spanish.notification.activation">
+                    </textarea>
+                    <h6 class="text-danger"
+                        ng-if="new_promotion.field_pushActivationEs.$error.max && !new_promotion.field_pushActivationEs.$pristine">
+                      Max. 95 characters</h6>
+                    <h6 class="text-danger"
+                        ng-if="new_promotion.field_pushActivationEs.$error.required && !new_promotion.field_pushActivationEs.$pristine">
+                      This field is mandatory</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <input class="nekso-form__checkbox"
+                     id="notifications-announce-option"
+                     type="checkbox"
+                     ng-checked="vm.sendAnnounceNotificacion"
+                     ng-model="vm.sendAnnounceNotificacion">
+              <label for="notifications-announce-option">Push notifications (Announce)</label>
+              <div class="row" ng-if="vm.sendAnnounceNotificacion">
+                <div class="col-md-6 col-xs-12">
+                  <div class="form-group"
+                       ng-class="{ 'has-error' : vm.submitted && new_promotion.field_pushAnnounce.$invalid && !new_promotion.$pristine}">
+                    <label class="padding-left-null title-items-promotion">English content:</label>
+                    <textarea class="nekso-form__input"
+                              id="push-announce-textarea"
+                              rows="2"
+                              cols="10"
+                              placeholder=""
+                              name="field_pushAnnounce"
+                              ng-maxlength="95"
+                              maxlength="95"
+                              required
+                              ng-model="vm.promotion.english.notification.announce">
+                    </textarea>
+                    <h6 class="text-danger"
+                        ng-if="new_promotion.field_pushAnnounce.$error.max &&  !new_promotion.field_pushAnnounce.$pristine">
+                      Max. 95 characters</h6>
+                    <h6 class="text-danger"
+                        ng-if="new_promotion.field_pushAnnounce.$error.required &&  !new_promotion.field_pushAnnounce.$pristine">
+                      This field is mandatory</h6>
+                  </div>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                  <div class="form-group"
+                       ng-class="{ 'has-error' : vm.submitted && new_promotion.field_pushAnnounceEs.$invalid &&  !new_promotion.$pristine}">
+                    <label class="padding-left-null title-items-promotion">Spanish content:</label>
+                    <textarea class="nekso-form__input"
+                              id="push-announce-spanish-textarea"
+                              rows="2"
+                              cols="10"
+                              placeholder=""
+                              name="field_pushAnnounceEs"
+                              ng-maxlength="95"
+                              maxlength="95"
+                              required
+                              ng-model="vm.promotion.spanish.notification.announce">
+                    </textarea>
+                    <h6 class="text-danger"
+                        ng-if="new_promotion.field_pushAnnounceEs.$error.max &&  !new_promotion.field_pushAnnounceEs.$pristine">
+                      Max. 95 characters</h6>
+                    <h6 class="text-danger"
+                        ng-if="new_promotion.field_pushAnnounceEs.$error.required &&  !new_promotion.field_pushAnnounceEs.$pristine">
+                      This field is mandatory</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</article>

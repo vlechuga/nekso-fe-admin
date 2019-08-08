@@ -1,0 +1,154 @@
+<div ng-if="vm.notAuthMsg" not-authorized message="vm.notAuthMsg" class="not-authorized"></div>
+
+<div class="container-fluid padding-footer">
+  <div class="row sub-header">
+    <div class="col-sm-9">
+      <h4>Digital Drivers ({{vm.totalDrivers}})</h4>
+    </div>
+    <div class="col-sm-3 text-right pull-right">
+      <button ng-if="vm.getUserPermission('export:drivers')" ladda="vm.loading.export" data-style="slide-left"
+              class="btn btn-primary" csv-header="['Name', 'Email', 'Email mercadoPago', 'Phone', 'Join date', 'Taxi line', 'Rides', 'Rating', 'Status']"
+              filename="drivers.csv"
+              ng-csv="vm.exportToCsv()">
+        Export to CSV
+      </button>
+    </div>
+  </div>
+  <div class="row panel-heading">
+    <div class="row shape-light-grey">
+      <div class="col-sm-2 text-left">
+        <h5 class="text-left">Registration date</h5>
+      </div>
+      <div class="col-sm-7">
+        <div class="row">
+          <div class="col-sm-6">
+            <p class="input-group date-box has-feedback">
+              <input date-range-picker class="form-control date-picker font-11 inside-search-icon" type="text"
+                     ng-model="vm.filter.date" options="vm.filter.date.opts" required/>
+              <i class="glyphicon glyphicon-calendar form-control-feedback no-zindex"></i>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 text-right">
+        <p class="input-group search-box">
+          <input class="form-control" placeholder="Search" type="text" ng-model="vm.filter.searchText"/>
+            <span class="input-group-btn margin-top-input search-btn" ng-click="vm.searchDrivers()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">search</i>
+              </button>
+            </span>
+            <span ng-if="vm.filter.searchText && vm.filter.searchText !== ''" class="input-group-btn margin-top-input clear-btn" ng-click="vm.clearSearchField()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">close</i>
+              </button>
+            </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div block-ui="driversList">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel-default panel panel-drivers panel-no-shadow">
+          <div class="row shape-light-grey">
+            <div class="col-sm-12 margin-bottom-15">
+              <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+                <li>
+                  <filter_country_state multiple="true" country="vm.filter.country"
+                                        states="vm.filter.states"></filter_country_state>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row panel-body padding-top-null">
+            <table class="table table-hover table-condensed table-bordered margin-bottom-null">
+              <thead>
+                <tr>
+                  <th class="column-header-color"  ng-click="vm.order('createdDate')">
+                    Registration date
+                    <span ng-if="!vm.reverse && vm.predicate === 'createdDate'" class="fa fa-sort-down columnSortIcons"></span>
+                    <span ng-if="vm.reverse && vm.predicate === 'createdDate'" class="fa fa-sort-up columnSortIcons"></span>
+                  </th>
+                  <th class="column-header-color"  ng-click="vm.order('firstName')">
+                    Name
+                    <span ng-if="!vm.reverse && vm.predicate === 'firstName'" class="fa fa-sort-down columnSortIcons"></span>
+                    <span ng-if="vm.reverse && vm.predicate === 'firstName'" class="fa fa-sort-down columnSortIcons"></span>
+                  </th>
+                  <th class="column-header-color">
+                    Email
+                  </th>
+                  <th class="column-header-color">
+                    Mobile
+                  </th>
+                  <th class="column-header-color">
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="driver in vm.drivers track by $index">
+                  <td>
+                    <span>{{driver.createdDate | date:'dd/MM/yyyy hh:mm a'}}</span>
+                  </td>
+                  <td>
+                    <span>
+                      <strong class="clickeable capitalize" ng-click="vm.openDriverProfile(driver)">
+                        {{driver.firstName | capitalize}} {{driver.lastName | capitalize}}
+                      </strong>
+                    </span>
+                  </td>
+                  <td>
+                    <span ng-if="driver.emailVerified">
+                      <i class="fa fa-check-square-o text-success fa-lg"></i>
+                    </span>
+                    <span ng-if="!driver.emailVerified">
+                      <i class="fa fa-minus-square-o text-danger fa-lg"></i>
+                    </span>
+                    <span class="cell-email">{{driver.email}}</span>
+                  </td>
+                  <td>
+                    <span>{{driver.phone}}</span>
+                  </td>
+                  <td>
+                    <button ng-if="driver.status === 'IN_REVIEW'" type="button" class="btn btn-default" ng-click="vm.openActionModal(driver)">Pending for assignation</button>
+                    <span ng-if="driver.status === 'OK'">Assigned to: {{driver.controller.name}}</span>
+                    <span ng-if="driver.status === 'APPROVAL_EXPIRED'">Approval time expired</span>
+                    <span ng-if="driver.status === 'REJECTED'">Rejected</span>
+                    <span ng-if="driver.status === 'SUSPENDED'">Suspended</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bar-pagination">
+        <div class="row">
+          <div class="col-sm-8 text-left">
+            <pagination boundary-links="true"
+                        class="pagination"
+                        first-text="&laquo;"
+                        items-per-page="vm.controls.numPerPage"
+                        last-text="&raquo;"
+                        max-size="5"
+                        next-text="&rsaquo;"
+                        ng-model="vm.controls.currentPage"
+                        previous-text="&lsaquo;"
+                        rotate="false"
+                        total-items="vm.totalDrivers"></pagination>
+          </div>
+          <div class="col-sm-4 text-right">
+            <div class="btn-group items-per-page">
+              <label btn-radio="10" class="btn btn-default" id="btn_numPerPage10" ng-model="vm.controls.numPerPage">10</label>
+              <label btn-radio="25" class="btn btn-default" id="btn_numPerPage25" ng-model="vm.controls.numPerPage">25</label>
+              <label btn-radio="50" class="btn btn-default" id="btn_numPerPage50" ng-model="vm.controls.numPerPage">50</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

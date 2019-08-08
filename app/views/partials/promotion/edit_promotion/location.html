@@ -1,0 +1,233 @@
+<article class="card location">
+
+  <header class="card__header">
+    <div class="card__header-title"><strong>Location</strong></div>
+    <div class="card__header-subtitle">
+      <span ng-if="vm.featureToggle.isFeatureEnabled('excludeArea')">
+        Select the areas valid for the promotion and, also, exclude the
+        areas where the promotions will not be active.
+      </span>
+      <span ng-if="!vm.featureToggle.isFeatureEnabled('excludeArea')">
+        The admin user will select the areas valid for the promotion.
+      </span>
+    </div>
+  </header>
+
+  <div class="card__content">
+
+    <div class="row first-row">
+
+      <div class="col-md-4 col-xs-12">
+
+        <div class="form-group"
+             ng-class="{ 'has-error' : edit_promotion.field_country.$invalid &&  !edit_promotion.$pristine}">
+          <select class="nekso-form__select"
+                  ng-model="vm.promotion.criteria.country"
+                  required
+                  name="field_country"
+                  ng-disabled="(!vm.editable) ||
+                  (vm.promotionStatus === 'ACTIVE' ||
+                  vm.promotionStatus === 'COMPLETED' ||
+                  vm.promotionStatus === 'ARCHIVED') ||
+                  (vm.promotionStatus === 'ON_HOLD' &&
+                  vm.now > vm.promotion.validity.from)  ||
+                  vm.published"
+                  ng-options="country.name for country in vm.countries track by country.id">
+          </select>
+        </div>
+
+      </div>
+
+      <div class="col-md-4 col-xs-12" ng-if="vm.promotion.criteria.country">
+
+        <div class="form-group multiselect"
+             ng-class="{ 'has-error' : edit_promotion.field_states.$invalid &&  !edit_promotion.$pristine}">
+
+          <select class="nekso-form__select"
+                  multiple="multiple"
+                  id="field_states"
+                  ng-model="vm.promotion.criteria.states"
+                  name="field_states"
+                  ng-options="state.name for state in vm.countryStates track by state.id">
+          </select>
+          <h6 class="text-danger" ng-if="vm.locationType && vm.promotion.criteria.states.length == 0">
+            Select a or more states
+          </h6>
+
+        </div>
+
+      </div>
+
+      <div class="col-md-4 col-xs-12" ng-hide="!vm.promotion.criteria.country">
+
+        <div class="nekso-form__container-radio">
+          <input type="radio"
+                 class="nekso-form__radio"
+                 id="location-anywhere-option"
+                 name="optionsRadios2"
+                 value="ANYWHERE"
+                 ng-checked="vm.locationType === 'ANYWHERE'"
+                 ng-model="vm.locationType"
+                 ng-disabled="(!vm.editable) ||
+                 (vm.promotionStatus === 'ACTIVE' ||
+                 vm.promotionStatus === 'COMPLETED' ||
+                 vm.promotionStatus === 'ARCHIVED') ||
+                 (vm.promotionStatus === 'ON_HOLD' &&
+                 vm.now > vm.promotion.validity.from)">
+          <label for="location-anywhere-option">Anywhere</label>
+
+          <input type="radio"
+                 class="nekso-form__radio"
+                 id="location-area-option"
+                 name="optionsRadios2"
+                 value="AREA"
+                 ng-model="vm.locationType"
+                 ng-disabled="(!vm.editable) ||
+                 (vm.promotionStatus === 'ACTIVE' ||
+                 vm.promotionStatus === 'COMPLETED' ||
+                 vm.promotionStatus === 'ARCHIVED') ||
+                 (vm.promotionStatus === 'ON_HOLD' &&
+                 vm.now > vm.promotion.validity.from)">
+          <label for="location-area-option">Draw Area</label>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div ng-if="vm.locationType === 'AREA'" class="row">
+
+      <div class="col-sm-4">
+
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <div class="col-sm-12.container-fluid">
+                <div class="nekso-form__container-radio">
+
+                  <input type="radio"
+                         id="location-type-pickup-option"
+                         class="nekso-form__radio"
+                         name="optionsRadios3"
+                         value="PICKUP"
+                         ng-model="vm.promotion.criteria.locationType"
+                         ng-disabled="(!vm.editable) ||
+                         (vm.promotionStatus === 'ACTIVE' ||
+                         vm.promotionStatus === 'COMPLETED'  ||
+                         vm.promotionStatus === 'ARCHIVED') ||
+                         (vm.promotionStatus === 'ON_HOLD' &&
+                         vm.now > vm.promotion.validity.from)">
+                  <label for="location-type-pickup-option">Pickup</label>
+
+                  <input type="radio"
+                         id="location-type-destination-option"
+                         class="nekso-form__radio"
+                         name="optionsRadios3"
+                         value="DESTINATION"
+                         ng-model="vm.promotion.criteria.locationType"
+                         ng-disabled="(!vm.editable) ||
+                         (vm.promotionStatus === 'ACTIVE' ||
+                         vm.promotionStatus === 'COMPLETED'  ||
+                         vm.promotionStatus === 'ARCHIVED') ||
+                         (vm.promotionStatus === 'ON_HOLD' &&
+                         vm.now > vm.promotion.validity.from)">
+                  <label for="location-type-destination-option">Destination</label>
+
+                  <input type="radio"
+                         id="location-type-both-option"
+                         class="nekso-form__radio"
+                         name="optionsRadios3"
+                         value="BOTH"
+                         ng-model="vm.promotion.criteria.locationType"
+                         ng-disabled="(!vm.editable) ||
+                         (vm.promotionStatus === 'ACTIVE' ||
+                         vm.promotionStatus === 'COMPLETED' ||
+                         vm.promotionStatus === 'ARCHIVED') ||
+                         (vm.promotionStatus === 'ON_HOLD' &&
+                         vm.now > vm.promotion.validity.from)">
+                  <label for="location-type-both-option">Both</label>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group"
+                 ng-hide="(!vm.editable) ||
+                 (vm.promotionStatus === 'ACTIVE' ||
+                 vm.promotionStatus === 'COMPLETED' ||
+                 vm.promotionStatus === 'ARCHIVED') ||
+                 (vm.promotionStatus === 'ON_HOLD' &&
+                 vm.now > vm.promotion.validity.from)">
+              <input id="promotion-location-input"
+                     name="pickup"
+                     placeholder="Search Location"
+                     type="text"
+                     class="nekso-form__input promotion-location-input">
+              <i class="glyphicon glyphicon-search"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="row"
+             ng-hide="(!vm.editable) ||
+             (vm.promotionStatus === 'ACTIVE' ||
+             vm.promotionStatus === 'COMPLETED' ||
+             vm.promotionStatus === 'ARCHIVED') ||
+             (vm.promotionStatus === 'ON_HOLD' &&
+             vm.now > vm.promotion.validity.from)">
+          <div class="col-sm-12">
+            <button ng-click="vm.addPolygon()"
+                    class="btn btn-success"
+                    type="button">Add polygon</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <ul class="polygon-list">
+              <li ng-repeat="polygon in vm.polygons track by $index">
+                <div ng-if="polygon">
+                  <span class="indicator" style="background-color: {{polygon.fillColor}};"></span>
+                  <span class="text">Area {{$index}} </span>
+                  <i ng-click="vm.removePolygon(polygon)"
+                     ng-hide="(!vm.editable) ||
+                     (vm.promotionStatus === 'ACTIVE' ||
+                     vm.promotionStatus === 'COMPLETED' ||
+                     vm.promotionStatus === 'ARCHIVED') ||
+                     (vm.promotionStatus === 'ON_HOLD' &&
+                     vm.now > vm.promotion.validity.from)"
+                     class="glyphicon glyphicon-remove"></i>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-md-8">
+        <div class="map-container">
+          <div class="reset-container"
+               ng-hide="(!vm.editable) ||
+               (vm.promotionStatus === 'ACTIVE' ||
+               vm.promotionStatus === 'COMPLETED' ||
+               vm.promotionStatus === 'ARCHIVED') ||
+               (vm.promotionStatus === 'ON_HOLD' &&
+               vm.now > vm.promotion.validity.from)">
+            <button type="button"
+                    ng-click="vm.resetPolygon()"
+                    class="btn btn-default">Reset</button>
+          </div>
+          <div class="promotion-map-container" id="promotion-map-edit"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</article>

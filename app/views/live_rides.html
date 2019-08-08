@@ -1,0 +1,200 @@
+<div ng-if="vm.notAuthMsg" not-authorized message="vm.notAuthMsg" class="not-authorized"></div>
+<div class="container-fluid padding-footer container-livedashboard ">
+  <div class="row sub-header">
+    <div class="col-sm-9">
+        <h4>Rides ({{vm.totalRides}})</h4>
+    </div>
+  </div>
+  <div class="row panel-heading">
+    <div class="row shape-light-grey">
+      <div class="col-sm-8">
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="input-group date-box has-feedback">
+              <input date-range-picker class="form-control date-picker font-11 inside-search-icon" type="text"
+                     ng-model="vm.filter.date" options="vm.filter.date.opts" required/>
+              <i class="glyphicon glyphicon-calendar form-control-feedback no-zindex"></i>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 col-sm-offset-1 text-right">
+        <p class="input-group search-box">
+          <input class="form-control" placeholder="Search" type="text" ng-model="vm.filter.searchText" ng-keydown="vm.searchDriversOnEnter($event)"/>
+            <span class="input-group-btn margin-top-input search-btn" ng-click="vm.searchDrivers()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">search</i>
+              </button>
+            </span>
+            <span ng-if="vm.filter.searchText && vm.filter.searchText !== ''" class="input-group-btn margin-top-input clear-btn" ng-click="vm.clearSearchField()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">close</i>
+              </button>
+            </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div block-ui="ridesList">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-default panel-rides panel-no-shadow">
+          <div class="row shape-light-grey">
+            <div class="col-sm-11 margin-bottom-15">
+              <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+                <li>
+                  <filter_country_state multiple="true" country="vm.filter.country"
+                                        states="vm.filter.states"></filter_country_state>
+                </li>
+                <li>
+                  <select class="font-13 new-select" id="filter_broadcast_type" ng-model="vm.filter.broadcast">
+                    <option selected disabled value="">Request type</option>
+                    <option value="all">All</option>
+                    <option value="true">Broadcast</option>
+                    <option value="false">Driver Selection</option>
+                  </select>
+                </li>
+                <li ng-show="vm.filter.corporate == 'CORPORATE'">
+                  <select id="filter_corporate_id" class="font-13 new-select" ng-model="vm.filter.corporate_id">
+                    <option selected disabled value="">Corporate All</option>
+                    <option ng-repeat="corporate in vm.corporates track by $index" value="{{corporate.id}}">{{corporate.name}}</option>
+                  </select>
+                </li>
+                <li class="custom">
+                  <select multiple="multiple" id="filter_status" class="font-13 multiple-state" ng-model="vm.filter.status">
+                    <option value="REQUESTED">Requested</option>
+                    <option value="NO_RESPONSE">No response</option>
+                    <option value="REJECTED">Rejected</option>
+                    <option value="ONGOING">Ongoing</option>
+                    <option value="COMPLETED">Completed</option>
+                    <option value="CANCELLED">Cancelled</option>
+                    <option value="CANCELLED_BY_DRIVER">Cancelled by driver</option>
+                    <option value="CANCELLED_BY_PASSENGER">Cancelled by passenger</option>
+                    <option value="CANCELLED_BY_SYSTEM">Cancelled by system</option>
+                    <option value="CLOSED">Closed</option>
+                    <option value="CLOSED_BY_PASSENGER">Closed by passenger</option>
+                    <option value="CLOSED_BY_SYSTEM">Closed by system</option>
+                  </select>
+                </li>
+                <li class="custom">
+                  <select multiple="multiple" id="filter_tags" class="font-13 multiple-state" ng-model="vm.filter.tags">
+                    <option value="FIRST_COMPLETED_PASSENGER">Passenger's first ride</option>
+                    <option value="FIRST_COMPLETED_DRIVER">Driver's first ride</option>
+                    <option value="CLUB_NEKSO_PASSENGER">Club Nekso Passenger</option>
+                    <option value="LOW_RATE_PASSENGER">Passenger's low rate</option>
+                    <option value="LOW_RATE_DRIVER">Driver's low rate</option>
+                    <option value="FIRST_CANCELLED_PASSENGER">Passenger's first cancel</option>
+                    <option value="FIRST_NO_RESPONSE_PASSENGER">Passenger's first No response</option>
+                    <option value="FIRST_CANCELLED_DRIVER">Driver's first cancel</option>
+                    <option value="FIRST_CREDIT_CARD_DRIVER">Driver's first electronic payment</option>
+                    <option value="FIRST_CORPORATE_DRIVER">Driver's first corporate ride</option>
+                  </select>
+                </li>
+
+              </ul>
+            </div>
+            <div class="col-sm-1">
+              <i ng-if="vm.loading.refresh" class="fa fa-spinner fa-spin fa-2x" title="refresh" aria-hidden="true"></i>
+            </div>
+          </div>
+          <div class="row panel-body padding-top-null">
+            <table class="table table-hover table-condensed table-bordered">
+              <thead>
+              <tr>
+                <th class="column-header-color">
+                  Tag
+                </th>
+                <th class="column-header-color">
+                  Request type
+                </th>
+                <th class="column-header-color"  ng-click="vm.order('createdDate')">
+                  Date
+                  <span ng-if="!vm.reverse && vm.predicate === 'createdDate'" class="fa fa-sort-down columnSortIcons"></span>
+                  <span ng-if="vm.reverse && vm.predicate === 'createdDate'" class="fa fa-sort-up columnSortIcons"></span>
+                </th>
+                <th class="column-header-color">
+                  Driver
+                </th>
+                <th class="column-header-color">
+                  Passenger
+                </th>
+                <th class="column-header-color">
+                  Pick up
+                </th>
+                <th class="column-header-color">
+                  Destination
+                </th>
+                <th class="column-header-color">
+                  Audience
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="ride in vm.rides track by $index" ng-class="vm.rideColor(ride)">
+                <td class="text-center main-td-of-tag-svg" ng-click="vm.openRideDetail(ride)">
+                  <div ng-if="ride.tags && ride.tags.length > 0">
+                    <img class="tagImg" src="images/icon-firstride-driver.svg" ng-if="ride.tags.indexOf('FIRST_COMPLETED_DRIVER') !== -1" tooltip="Driver's first ride" tooltip-placement="right">
+                    <img class="tagImg" src="images/icon-lessraiting-driver.svg" ng-if="ride.tags.indexOf('LOW_RATE_DRIVER') !== -1" tooltip="Driver's low rate" tooltip-placement="right">
+                    <img class="tagImg" src="images/icon-firstride-passenger.svg" ng-if="ride.tags.indexOf('FIRST_COMPLETED_PASSENGER') !== -1" tooltip="Passenger's first ride" tooltip-placement="right">
+                    <img class="tagImg" src="images/icon-lessraiting-passenger.svg" ng-if="ride.tags.indexOf('LOW_RATE_PASSENGER') !== -1" tooltip="Passenger's low rate" tooltip-placement="right">
+                    <img class="tagImg" src="images/icon-clubnekso-passenger.svg" ng-if="ride.tags.indexOf('CLUB_NEKSO_PASSENGER') !== -1" tooltip="Club Nekso Passenger" tooltip-placement="right">
+                    <img class="tagImg" src="images/icon-tradicional-driver.svg" ng-if="ride.tags.indexOf('DIGITAL_DRIVER') === -1 && ride.driver" tooltip="Traditional driver" tooltip-placement="right">
+                    <img class="tagImg" src="images/icon-digital-driver.svg" ng-if="ride.tags.indexOf('DIGITAL_DRIVER') !== -1" tooltip="Digital driver" tooltip-placement="right">
+                    <img class="tagImg" src="images/icon-first-payment-electronic-driver.svg" ng-if="ride.tags.indexOf('FIRST_CREDIT_CARD_DRIVER') !== -1" tooltip="Driver's first electronic payment" tooltip-placement="right">
+                    <img class="tagImg" src="images/icon-first-cancellation-driver.svg" ng-if="ride.tags.indexOf('FIRST_CANCELLED_DRIVER') !== -1" tooltip="Driver's first cancel" tooltip-placement="right">
+                    <img class="tagImg" src="images/icon-first-noresponse-passenger.svg" ng-if="ride.tags.indexOf('FIRST_NO_RESPONSE_PASSENGER') !== -1" tooltip="Passenger's first No response" tooltip-placement="right">
+                    <img class="tagImg" src="images/icon-first-cancellation-passenger.svg" ng-if="ride.tags.indexOf('FIRST_CANCELLED_PASSENGER') !== -1" tooltip="Passenger's first cancel" tooltip-placement="right">
+                    <img class="tagImg" src="images/icon-first-corporate-driver.svg" ng-if="ride.tags.indexOf('FIRST_CORPORATE_DRIVER') !== -1" tooltip="Driver's first corporate ride" tooltip-placement="right">
+                  </div>
+                </td>
+                <td ng-click="vm.openRideDetail(ride)">
+                  <span ng-if="!ride.broadCast">Driver selection</span>
+                  <span ng-if="ride.broadCast">Broadcast</span>
+                </td>
+                <td ng-click="vm.openRideDetail(ride)">
+                  <span>{{ride.createdDate | date:'dd/MM/yyyy hh:mm a'}}</span>
+                </td>
+                <td ng-click="vm.openDriverProfile(ride)">
+                  <span><strong class="clickeable capitalize">
+                    {{ride.driver.firstName | lowercase}} {{ride.driver.lastName | lowercase}}
+                  </strong></span>
+                </td>
+                <td ng-click="vm.openPassengerProfile(ride)">
+                  <span><strong class="clickeable capitalize">
+                    <span ng-if="ride.corporationId">{{ride.passenger.corporation.companyName | lowercase}} / </span>{{ride.passenger.firstName | lowercase}} {{ride.passenger.lastName | lowercase}}
+                  </strong></span>
+                </td>
+                <td ng-click="vm.openRouteDetail(ride)">
+                  <span>{{ride.pickupAddress}}</span>
+                </td>
+                <td ng-click="vm.openRouteDetail(ride)">
+                  <span>{{ride.destinationAddress}}</span>
+                </td>
+                <td ng-click="vm.openRideMonitor(ride)">
+                  <span>{{ride.audienceSize}}</span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bar-pagination">
+        <div class="row">
+          <div class="col-sm-8 text-left">
+            <pagination boundary-links="true" class="pagination" first-text="&laquo;" items-per-page="vm.controls.numPerPage" last-text="&raquo;" max-size="5" next-text="&rsaquo;" ng-model="vm.controls.currentPage" previous-text="&lsaquo;" rotate="false" total-items="vm.totalRides"></pagination>
+          </div>
+          <div class="col-sm-4 text-right">
+            <div class="btn-group items-per-page">
+              <label btn-radio="20" class="btn btn-default" id="btn_numPerPage10" ng-model="vm.controls.numPerPage">20</label>
+              <label btn-radio="35" class="btn btn-default" id="btn_numPerPage25" ng-model="vm.controls.numPerPage">35</label>
+              <label btn-radio="50" class="btn btn-default" id="btn_numPerPage50" ng-model="vm.controls.numPerPage">50</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,100 @@
+<div ng-if="vm.notAuthMsg" not-authorized message="vm.notAuthMsg" class="not-authorized"></div>
+<div class="container-fluid padding-footer">
+  <div class="row sub-header">
+    <div class="col-sm-9">
+        <h4>Royal settings</h4>
+    </div>
+    <div class="col-sm-3 text-right pull-right">
+      <button class="btn btn-primary" ng-click="vm.editConfig()">Edit</button>
+    </div>
+  </div>
+  <div block-ui="list">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-passengers">
+          <div class="row shape-light-grey">
+            <div class="col-sm-12 margin-bottom-15">
+              <span>Set Location</span>
+            </div>
+            <div class="col-sm-12 margin-bottom-15">
+              <select style="width: 400px;" ng-model="vm.selectCountry">
+                <option value="" disabled="" selected="">Country</option>
+                <option ng-repeat="country in vm.countries" value="{{country.iso}}">{{country.name}}</option>
+              </select>
+            </div>
+            <div class="col-sm-12 margin-bottom-15">
+              <select style="width: 400px;" class="form-control" ng-model="vm.selectState" ng-disabled="vm.selectStateDisable">
+                <option value="" disabled="" selected="">States</option>
+                <option ng-repeat="state in vm.countriesStates | unique:'name'" value="{{state.id}}">{{state.name}}</option>
+              </select>
+            </div>
+            <div ng-if="vm.showData">
+            <div class="col-sm-12 margin-bottom-15">
+              <span>Driver Profile</span>
+            </div>
+            <div class="col-sm-12 margin-bottom-15">
+              <select style="width: 400px;" ng-model="vm.driverType">
+                <option value="" disabled="">Type of drivers</option>
+                <option value="ALL">All</option>
+                <option value="STANDARD">Standard</option>
+                <option value="DIGITAL">Digital</option>
+              </select>
+            </div>
+            <div class="col-sm-12 margin-bottom-15">
+              <select style="width: 400px;" ng-model="vm.driverStatus">
+                <option value="" disabled="">Status</option>
+                <option value="OK">Approved</option>
+                <option value="APPROVAL_EXPIRED">Approval expired</option>
+                <option value="IN_REVIEW">In review</option>
+                <option value="PENDING_RESIGNATION">Pending resignation</option>
+                <option value="REJECTED">Rejected</option>
+                <option value="SUSPENDED">Suspended</option>
+              </select>
+            </div>
+            <div class="col-sm-12 margin-bottom-15">
+              <input type="checkbox" name="" ng-model="vm.bankAccountRequired"><span>Bank Account Information</span>
+            </div>
+              <div class="col-sm-12  margin-bottom-15">
+                <span>Vehicles preference</span>
+              </div>
+              <div class="col-sm-12 margin-bottom-15">
+                <span style="margin-right: 25px;">Year</span>
+                <select ng-model="vm.from" style="margin-right: 25px; width: 60px;">
+                  <option value="" selected="">Any</option>
+                  <option ng-repeat="year in vm.getYear() | reverse" value="{{year}}">{{year}}</option>
+                </select>
+                <span style="margin-right: 25px;">to</span>
+                <select ng-model="vm.to" style="margin-right: 25px; width: 60px;">
+                  <option value="" selected="">Any</option>
+                  <option ng-repeat="year in vm.getYear() | reverse" value="{{year}}">{{year}}</option>
+                </select>
+              </div>
+              <div class="col-sm-12 margin-bottom-15">
+                <span>Cars Selected: </span>
+                <strong><span ng-repeat="car in vm.tagsLoaded">{{car.make}} - {{car.model}}{{($index < vm.tagsLoaded.length -1) ? ',' : ''}} </span></strong>
+              </div>
+              <div class="col-sm-12 margin-bottom-15">
+                <select ng-model="vm.selectedMake">
+                  <option value="" disabled="">Make</option>
+                  <option ng-repeat="make in vm.make" value="{{make}}">{{make}}</option>
+                </select>
+              </div>
+              <div class="col-sm-12 margin-bottom-15">
+              <!-- on-tag-added="vm.addedTag($tag)" -->
+                <tags-input ng-model="vm.tags" add-from-autocomplete-only="true" >
+                  <auto-complete source="vm.searchCars($query)"></auto-complete>
+                </tags-input>
+              </div>
+              <div class="col-sm-12 margin-bottom-15">
+                <md-select ng-model="vm.selectedColors" multiple placeholder='Color'>
+                  <md-button layout-fill ng-click="vm.selectAllTest()">Select all</md-button>
+                  <md-option ng-repeat="color in vm.colors" value="{{color.hex}}">{{color.colorEn}}</md-option>
+                </md-select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

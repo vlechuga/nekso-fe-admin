@@ -1,0 +1,73 @@
+<div class="row">
+  <div class="col-md-12 col-xs-12" ng-show="vm.addCorporation">
+  <div class="form-group nekso-form__multiselect"
+       ng-class="{ 'has-error' : edit_promotion.field_corporation.$invalid && !edit_promotion.$pristine}">
+    <select multiple="multiple"
+            class="nekso-form__select"
+            id="field_corporation"
+            name="field_corporation"
+            ng-model="vm.promotion.alliedCorporation"
+            ng-required="vm.addCorporation">
+      <option ng-if="corporate.companyName !== ''" ng-repeat="corporate in vm.corporates track by $index" value="{{corporate.id}}">
+        {{corporate.companyName}}
+      </option>
+    </select>
+    <h6 class="text-danger"
+        ng-if="edit_promotion.field_corporation.$error.required && !edit_promotion.field_corporation.$pristine">
+      This field is mandatory</h6>
+  </div>
+</div>
+</div>
+
+<div class="row"
+     ng-if="vm.addCorporation && vm.promotion.alliedCorporation.length > 0">
+  <div class="col-sm-12">
+    <h5><strong>Coupon validity</strong></h5>
+  </div>
+</div>
+
+<div class="row"
+     ng-if="vm.addCorporation && vm.promotion.alliedCorporation.length > 0">
+  <div class="col-md-12 col-xs-12 checkbox-list">
+    <div class="radio">
+
+      <input type="radio"
+             id="promotion-validity-promotion-end-option"
+             class="nekso-form__radio"
+             name="optionsRadiosCorporateValidityPromotionCopy"
+             value="PROMOTION_END"
+             ng-model="vm.promotionValidity"
+             required>
+      <label for="promotion-validity-promotion-end-option">
+        Promotion end date
+      </label>
+
+      <input type="radio"
+             id="promotion-validity-given-days-option"
+             class="nekso-form__radio"
+             name="optionsRadiosCorporateValidityPromotionCopy"
+             value="GIVEN_DAYS"
+             ng-model="vm.promotionValidity"
+             required>
+      <label for="promotion-validity-given-days-option">
+        Given days
+      </label>
+    </div>
+  </div>
+  <div class="col-md-12 col-xs-12" ng-if="vm.promotionValidity === 'GIVEN_DAYS'">
+    <div class="form-group"
+         ng-class="{ 'has-error' : edit_promotion.field_validityDays.$invalid &&  !edit_promotion.$pristine}">
+      <input class="nekso-form__input"
+             id="set-validity-days"
+             type="number"
+             placeholder="Set validity days"
+             ng-model="vm.promotion.validity.expireDays"
+             required
+             name="field_validityDays"
+             min="0"/>
+      <label class="nekso-form__control-label" for="set-validity-days">
+        Set validity days
+      </label>
+    </div>
+  </div>
+</div>

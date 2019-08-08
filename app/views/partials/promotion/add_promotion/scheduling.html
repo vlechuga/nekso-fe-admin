@@ -1,0 +1,138 @@
+<article class="card scheduling">
+
+  <header class="card__header">
+    <div class="card__header-title"><strong>Scheduling</strong></div>
+    <div class="card__header-subtitle">
+      Set date, time and duration of the promotion.
+    </div>
+  </header>
+
+  <div class="card__content">
+
+    <div class="row publishing-date">
+
+      <section class="col-md-6">
+
+        <div class="row container-date">
+
+          <div class="col-md-4 col-xs-12 label-date">
+            <strong>PUBLISHING DATE</strong>
+          </div>
+
+          <div class="col-md-8 col-xs-12 element-date">
+            <p class="form-group"
+               ng-class="{ 'has-error' : vm.submitted && new_promotion.field_publishAt.$invalid && !new_promotion.$pristine}">
+              <input date-range-picker
+                     type="text"
+                     ng-readonly="true"
+                     class="nekso-form__input"
+                     options="vm.dateTimeforPublishAtInput"
+                     ng-model="vm.promotion.validity.publishAt"
+                     required
+                     name="field_publishAt" />
+              <i class="glyphicon glyphicon-calendar"></i>
+            </p>
+
+            <h6 class="text-danger"
+                ng-if="new_promotion.field_publishAt.$error.required && !new_promotion.field_publishAt.$pristine">
+              This field is mandatory
+            </h6>
+
+            <h6 class="text-danger"
+                ng-if="new_promotion.field_publishAt.$error.endBeforeStart">
+              Publish date can't be less than Today.
+            </h6>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+    <div class="row start-and-end-date">
+
+      <section class="col-md-6">
+
+        <div class="row container-date">
+
+          <div class="col-md-4 col-xs-12 label-date">
+            <strong>START DATE</strong>
+          </div>
+
+          <div class="col-md-8 col-xs-12 element-date">
+
+            <p class="form-group"
+               ng-class="{ 'has-error' : vm.submitted && new_promotion.field_from.$invalid &&  !new_promotion.$pristine}">
+              <input date-range-picker
+                     type="text"
+                     ng-readonly="true"
+                     class="nekso-form__input"
+                     options="vm.dateTimeforFromInput"
+                     ng-model="vm.promotion.validity.from"
+                     required
+                     name="field_from"/>
+              <i class="glyphicon glyphicon-calendar"></i>
+            </p>
+            <h6 class="text-danger"
+                ng-if="new_promotion.field_from.$error.required &&
+                          !new_promotion.field_from.$pristine">
+              This field is mandatory
+            </h6>
+            <h6 class="text-danger" ng-if="new_promotion.field_from.$error.endBeforeStart">
+              Start date can't be less than Publish date.
+            </h6>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <section class="col-md-6">
+
+        <div class="row container-date">
+
+          <div class="col-md-4 col-xs-12 label-date">
+            <strong>END DATE</strong>
+          </div>
+
+          <div class="col-md-8 col-xs-12 element-date">
+
+            <p class="form-group"
+               ng-class="{'has-error' : vm.submitted && new_promotion.field_to.$invalid &&
+                         !new_promotion.$pristine}">
+              <input date-range-picker
+                     type="text"
+                     ng-readonly="true"
+                     class="nekso-form__input"
+                     options="vm.dateTimeforToInput"
+                     ng-model="vm.promotion.validity.to"
+                     required
+                     name="field_to"/>
+              <i class="glyphicon glyphicon-calendar"></i>
+            </p>
+            <h6 class="text-danger"
+                ng-if="new_promotion.field_to.$error.required &&
+                          !new_promotion.field_to.$pristine">
+              This field is mandatory
+            </h6>
+            <h6 class="text-danger"
+                ng-if="new_promotion.field_to.$error.endBeforeStart">
+              End date can't be less than Start date.
+            </h6>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+    <ng-include src="'/views/partials/promotion/add_promotion/specific_schedule.html'"></ng-include>
+
+  </div>
+
+</article>

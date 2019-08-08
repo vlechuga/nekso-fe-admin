@@ -1,0 +1,12 @@
+button.nekso-button {
+  box-shadow: none;
+  &:hover {
+    box-shadow: 1px 1px 4px $black-4;
+    transition: all .4s;
+  }
+  &:focus, &:active {
+    outline-style: none;
+    outline: none;
+    border: none;
+  }
+}

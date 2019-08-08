@@ -1,0 +1,140 @@
+<div ng-if="vm.notAuthMsg" not-authorized message="vm.notAuthMsg" class="not-authorized"></div>
+<div class="container-fluid padding-footer">
+  <div class="row sub-header">
+    <div class="col-sm-9">
+        <h4>Invoice settings</h4>
+    </div>
+  </div>
+  <div block-ui="list">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-passengers margin-bottom-15">
+          <div class="row shape-light-grey">
+            <div class="col-sm-6">
+              <span>Adjusment</span>
+            </div>
+            <div class="col-sm-6 text-right pull-right">
+              <button class="btn btn-default" ng-click="vm.setEdit()" ng-if="vm.edit">Cancel</button>
+              <button class="btn btn-success" ng-click="vm.editConfig()" ng-if="vm.edit">Update</button>
+              <button class="btn btn-primary" ng-click="vm.setEdit()" ng-if="!vm.edit">Edit Adjusment</button>
+            </div>
+            <div class="col-sm-12 margin-top-15">
+              <table class="table table-condensed table-bordered">
+                <thead>
+                  <tr>
+                    <th class="column-header-color">
+                      Type of ride
+                    </th>
+                    <th class="column-header-color">
+                      Payment method
+                    </th>
+                    <th class="column-header-color">
+                      Controller
+                    </th>
+                    <th class="column-header-color"  ng-click="vm.order('firstName')">
+                      % of Nekso
+                      <span ng-if="!vm.reverse && vm.predicate === 'firstName'" class="fa fa-sort-down columnSortIcons"></span>
+                      <span ng-if="vm.reverse && vm.predicate === 'firstName'" class="fa fa-sort-down columnSortIcons"></span>
+                    </th>
+                    <th class="column-header-color">
+                      % of taxiline
+                    </th>
+                    <th class="column-header-color">
+                      % of adjusment
+                    </th>
+                    <th class="column-header-color text-center" ng-if="vm.edit">
+                      <button class="btn btn-primary" ng-click="vm.addRow()">Add Adjusment</button>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="row in vm.settings track by $index" ng-if="!row.delete">
+                    <td>
+                      <select ng-disabled="!vm.edit" class="form-control" ng-model="row.rideType">
+                        <option disabled="" value="">Select type</option>
+                        <option value="STANDARD">Standard</option>
+                        <option value="ROYAL">Royal</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select ng-disabled="!vm.edit"
+                              id="filter_payment"
+                              class="form-control"
+                              ng-model="row.paymentType">
+                        <option selected disabled value="">All Payment</option>
+                        <option ng-repeat="method in vm.paymentMethods track by $index" value="{{method.key}}">
+                          {{method.name | capitalize}}
+                        </option>
+                      </select>
+                    </td>
+                    <td>
+                        <md-autocomplete ng-disabled="!vm.edit"
+                          md-no-cache="false"
+                          md-selected-item="row.controller"
+                          md-search-text="row.searchText"
+                          md-items="item in vm.querySearch(row.searchText)"
+                          md-item-text="item.name"
+                          md-min-length="0"
+                          placeholder="Controller">
+                          <md-item-template>
+                            <span md-highlight-text="row.searchText" md-highlight-flags="^i">{{item.name}}</span>
+                          </md-item-template>
+                          <md-not-found>
+                            No controller matching "{{row.searchText}}" were found.
+                          </md-not-found>
+                        </md-autocomplete>
+                    </td>
+                    <td>
+                      <input ng-disabled="!vm.edit" type="number" min="0" step="0.01" class="form-control" ng-model="row.neksoCommission">
+                    </td>
+                    <td>
+                      <input ng-disabled="!vm.edit" type="number" min="0" step="0.01" class="form-control" ng-model="row.controllerCommission">
+                    </td>
+                    <td>
+                      <span>{{row.commission = row.neksoCommission + row.controllerCommission}}</span>
+                    </td>
+                    <td ng-if="vm.edit" class="text-center">
+                      <button class="btn btn-sm btn-default" ng-click="vm.deleteItem(row)">Delete</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-passengers">
+          <div class="row shape-light-grey">
+            <div class="col-sm-6">
+              <span>Electronic Payments</span>
+            </div>
+            <div class="col-sm-6 text-right pull-right">
+              <!-- <button class="btn btn-primary" ng-click="vm.editConfig()">Edit information</button> -->
+            </div>
+            <div class="col-sm-12" style="margin-top: 15px;">
+              <div class="col-sm-6 margin-bottom-15">
+                <div class="col-sm-12 margin-bottom-15">
+                  <span>Platform cost:</span>
+                </div>
+                <div class="col-sm-12 margin-bottom-15">
+                  <input type="number" min="0" step="0.01" ng-model="vm.merchantCommissions[0].commission" class="form-control" ng-disabled="!vm.edit">
+                </div>
+              </div>
+              <div class="col-sm-6 margin-bottom-15">
+                <div class="col-sm-12 margin-bottom-15">
+                  <span>Select the user who will be charge of the platform cost</span>
+                </div>
+                <div class="col-sm-12 margin-bottom-15">
+                  <select ng-model="vm.merchantCommissions[0].assumedBy" class="form-control" ng-disabled="!vm.edit">
+                    <option value="PASSENGER">Passenger</option>
+                    <!-- <option value="DRIVER">Driver</option> -->
+                    <!-- <option value="SYSTEM">Nekso</option> -->
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

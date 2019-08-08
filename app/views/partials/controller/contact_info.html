@@ -1,0 +1,79 @@
+<article class="card contact_info">
+
+  <header class="card__header">
+    <div class="card__header-title"><strong>Contact information</strong></div>
+  </header>
+
+  <div class="card__content">
+
+    <div class="row">
+      <div class="form-group"
+           ng-class="{ 'has-error' : form_register.field_firstName.$invalid && (!form_register.field_firstName.$pristine || !form_register.$pristine) }">
+        <label class="col-sm-3 control-label required">First name:</label>
+        <div class="col-sm-9">
+          <input type="text"
+                 ng-disabled="!vm.editable"
+                 name="field_firstName"
+                 class="nekso-form__input"
+                 ng-model="vm.controller.firstName"
+                 maxlength="20"
+                 required>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group"
+           ng-class="{ 'has-error' : form_register.field_lastName.$invalid && (!form_register.field_lastName.$pristine || !form_register.$pristine) }">
+        <label class="col-sm-3 control-label required">Last name:</label>
+        <div class="col-sm-9">
+          <input type="text"
+                 ng-disabled="!vm.editable"
+                 name="field_lastName"
+                 class="nekso-form__input"
+                 ng-model="vm.controller.lastName"
+                 maxlength="20"
+                 required>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group"
+           ng-class="{ 'has-error' : form_register.field_contactPhone.$invalid && (!form_register.field_contactPhone.$pristine || !form_register.$pristine) }">
+        <label class="col-sm-3 control-label required">Phone:</label>
+        <div class="col-sm-3">
+          <input class="nekso-form__input" disabled
+                 id="field_areaCode"
+                 name="areaCode_field"
+                 ng-model="vm.country.callingCode" type="text">
+        </div>
+        <div class="col-sm-6">
+          <input name="field_contactPhone"
+                 class="nekso-form__input"
+                 ng-model="vm.ownerPhone"
+                 ng-pattern="/^[0-9]/"
+                 ng-maxlength="{{vm.country.digits}}"
+                 maxlength="{{vm.country.digits}}"
+                 ng-minlength="{{vm.country.digits}}"
+                 required
+                 type="text"
+                 ng-disabled="!vm.editable">
+          <span class="help-block"
+                ng-show="form_register.field_contactPhone.$error.pattern && !form_register.field_contactPhone.$pristine">Enter a valid phone number</span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group">
+        <label class="col-sm-3 control-label">Only Royal:</label>
+        <div class="col-sm-9">
+          <input type="checkbox" name="onlyRoyal"
+
+                 ng-model="vm.controller.onlyRoyalServiceSupported"
+                 ng-disabled="!vm.editable">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</article>

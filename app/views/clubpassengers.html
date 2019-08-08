@@ -1,0 +1,401 @@
+<div ng-if="vm.notAuthMsg" not-authorized message="vm.notAuthMsg" class="not-authorized"></div>
+<div class="container-fluid padding-footer">
+  <div class="row sub-header">
+    <div class="col-sm-9">
+        <h4>Club Nekso / Passengers ({{vm.totalPassengers}})</h4>
+    </div>
+    <div class="col-sm-3 text-right pull-right">
+      <button ng-if="vm.getUserPermission('export:communication')" ladda="vm.loading.export" data-style="slide-left"
+              class="btn btn-primary" csv-header="['Name', 'Email', 'Phone', 'Join date', 'Taxi line', 'Rides', 'Rating', 'Total Call', 'Total Email', 'Total Sms', 'Total Training', 'Frequency App', 'Status']"
+              filename="drivers.csv"
+              ng-csv="vm.exportToCsv()">
+        Export to CSV
+      </button>
+    </div>
+  </div>
+  <div block-ui="driversList">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel-default panel panel-commdrivers panel-no-shadow">
+          <div class="panel-heading">
+            <div class="row shape-light-grey">
+              <div class="col-sm-10">
+                <div class="row">
+                  <div class="col-sm-4 input-header">
+                    <label for="datePicker" class="col-sm-2 control-label">Join date</label>
+                    <div class="col-sm-10">
+                      <p class="input-group margin-top-input date-box has-feedback">
+                        <input date-range-picker class="form-control date-picker font-11 inside-search-icon" type="text"
+                               ng-model="vm.filter.date" options="vm.filter.date.opts" required name="datePicker"/>
+                        <i class="glyphicon glyphicon-calendar form-control-feedback no-zindex"></i>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-sm-8">
+                    <div class="row">
+                      <div class="col-sm-2 header-item">
+                        <div class="input-group centered-input">
+                          <select class="form-control font-13" ng-model="vm.filter.tag">
+                            <option disabled selected value="">Select Tag</option>
+                            <option value="ALL">All</option>
+                            <option value="DIGITAL">Digital Driver</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-sm-2 header-item">
+                        <div class="input-group centered-input">
+                          <select class="form-control font-13" ng-model="vm.filter.action">
+                            <option disabled selected value="">Select Action</option>
+                            <option value="ALL">All</option>
+                            <option value="CALL">Call</option>
+                            <option value="SMS">Sms</option>
+                            <option value="EMAIL">Email</option>
+                            <option value="TRAINING">Training</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-sm-3 header-item">
+                        <div class="input-group centered-input">
+                          <select class="form-control font-13" id="field_taxiLine" ng-model="vm.filter.taxiLine">
+                            <option disabled selected value="">Select taxi line</option>
+                            <option value="ALL">All</option>
+                            <option ng-repeat="taxiL in vm.taxiLines" value="{{taxiL.id}}">{{taxiL.name}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-sm-2 header-item">
+                        <div class="input-group centered-input">
+                          <select class="form-control font-13" ng-model="vm.filter.status">
+                            <option disabled selected value="">Select status</option>
+                            <option value="ALL">All</option>
+                            <option value="IN_REVIEW">In review</option>
+                            <option value="APPROVAL_EXPIRED">Approval expired</option>
+                            <option value="OK">Approved</option>
+                            <option value="SUSPENDED">Suspended</option>
+                            <option value="REJECTED">Rejected</option>
+                            <option value="PENDING_RESIGNATION">Pending resignation</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-sm-3 header-item">
+                        <div class="input-group centered-input">
+                          <select class="form-control font-11" ng-model="vm.filter.emailVerified">
+                            <option disabled selected value="">Select user email status</option>
+                            <option value="ALL">All</option>
+                            <option value="true">Verified</option>
+                            <option value="false">Not verified</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-2 text-right">
+                <p class="input-group margin-top-input">
+                  <input class="form-control" placeholder="Search" type="text" ng-model="vm.filter.searchText" ng-keydown="vm.searchDriversOnEnter($event)"/>
+                    <span class="input-group-btn margin-top-input search-btn" ng-click="vm.searchDrivers()">
+                      <button class="btn btn-default" type="button">
+                        <i class="material-icons text-dark-grey">search</i>
+                      </button>
+                    </span>
+                    <span ng-if="vm.filter.searchText && vm.filter.searchText !== ''" class="input-group-btn margin-top-input clear-btn" ng-click="vm.clearSearchField()">
+                      <button class="btn btn-default" type="button">
+                        <i class="material-icons text-dark-grey">close</i>
+                      </button>
+                    </span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="panel-body padding-top-null">
+            <table class="table table-hover table-condensed table-bordered">
+              <thead>
+              <tr>
+                <th class="column-header-color"  ng-click="vm.order('firstName')">
+                  Name
+                  <span ng-if="!vm.reverse && vm.predicate === 'firstName'" class="fa fa-sort-down columnSortIcons"></span>
+                  <span ng-if="vm.reverse && vm.predicate === 'firstName'" class="fa fa-sort-down columnSortIcons"></span>
+                </th>
+                <th class="column-header-color">
+                  Email
+                </th>
+                <th class="column-header-color">
+                  Mobile
+                </th>
+                <th class="column-header-color"  ng-click="vm.order('createdDate')">
+                  Join date
+                  <span ng-if="!vm.reverse && vm.predicate === 'createdDate'" class="fa fa-sort-down columnSortIcons"></span>
+                  <span ng-if="vm.reverse && vm.predicate === 'createdDate'" class="fa fa-sort-up columnSortIcons"></span>
+                </th>
+                <th class="column-header-color">
+                  Taxi line
+                </th>
+                <th class="column-header-color"  ng-click="vm.order('ridesCount')">
+                  Completed<br>rides
+                  <span ng-if="!vm.reverse && vm.predicate === 'ridesCount'" class="fa fa-sort-down columnSortIcons"></span>
+                  <span ng-if="vm.reverse && vm.predicate === 'ridesCount'" class="fa fa-sort-up columnSortIcons"></span>
+                </th>
+                <th class="column-header-color">
+                  Channel
+                </th>
+                <th class="column-header-color">
+                  Status
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="driver in vm.drivers track by $index" ng-click="vm.openDriverDetail(driver)">
+                <td>
+                  <strong class="clickeable capitalize" ng-click="vm.openCarInformation(driver)">
+                    <img ng-if="driver.tags && driver.tags.indexOf('DIGITAL') > -1" ng-src="/images/icon-digital-user.png" alt="Digital driver" title="Digital driver">
+                    <i class="{{driver.tagUrbe}}"></i>
+                    {{driver.fullName | lowercase}}
+                  </strong>
+                </td>
+                <td>
+                  <span ng-if="driver.emailVerified">
+                    <i class="fa fa-check-square-o text-success fa-lg"></i>
+                  </span>
+                  <span ng-if="!driver.emailVerified">
+                    <i class="fa fa-minus-square-o text-danger fa-lg"></i>
+                  </span>
+                  <span class="cell-email">{{driver.email}}</span>
+                </td>
+                <td>
+                  <span>{{driver.phone}}</span>
+                </td>
+                <td>
+                  <span>{{driver.createdDate | date:'dd/MM/yyyy'}}</span>
+                </td>
+                <td>
+                  <span>{{driver.controller.name}}</span>
+                </td>
+                <td>
+                  <span>{{driver.ridesCount}}</span>
+                </td>
+                <td class="cell-split-4 text-right">
+                  <span class="cell-split-4-span">{{driver.memberSupport.totalCall}}<i class="material-icons">phone</i>&nbsp;</span><span class="cell-split-4-span">{{driver.memberSupport.totalSms}}<i class="material-icons">sms</i>&nbsp;</span><span class="cell-split-4-span">{{driver.memberSupport.totalEmail}}<i class="material-icons">email</i>&nbsp;</span><span class="cell-split-4-span">{{driver.memberSupport.totalTraining}}<i class="material-icons">group</i>&nbsp;</span>
+                </td>
+                <td>
+                  <span>{{vm.getDriverStatus(driver.status)}}</span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bar-pagination">
+        <div class="row">
+          <div class="col-sm-8 text-left">
+            <pagination boundary-links="true"
+                        class="pagination"
+                        first-text="&laquo;"
+                        items-per-page="vm.controls.numPerPage"
+                        last-text="&raquo;"
+                        max-size="5"
+                        next-text="&rsaquo;"
+                        ng-model="vm.controls.currentPage"
+                        previous-text="&lsaquo;"
+                        rotate="false"
+                        total-items="vm.totalDrivers"></pagination>
+          </div>
+          <div class="col-sm-4 text-right">
+            <div class="btn-group items-per-page">
+              <label btn-radio="10" class="btn btn-default" id="btn_numPerPage10" ng-model="vm.controls.numPerPage">10</label>
+              <label btn-radio="25" class="btn btn-default" id="btn_numPerPage25" ng-model="vm.controls.numPerPage">25</label>
+              <label btn-radio="50" class="btn btn-default" id="btn_numPerPage50" ng-model="vm.controls.numPerPage">50</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <div id="details-view" class="panel panel-default panel-drivers panel-no-shadow hidden" >
+    <div class="col-sm-12 padding-null margin-bottom-15" id="user-selected">
+      <div>
+        <h5 class="text-left col-sm-12">
+          {{vm.currentDriver.fullName}}&nbsp;&nbsp;&nbsp;{{vm.currentDriver.email}}
+        </h5>
+      </div>
+    </div>
+    <div class="row" ng-if="vm.getUserPermission('create:communication')">
+      <div class="col-sm-6">
+        <div class="col-sm-12" id="add-task-view">
+          <div class="row">
+            <div class="col-sm-6 text-left">
+              <h5 class="text-left">
+                Add New Task
+              </h5>
+            </div>
+          </div>
+          <div class="row">
+            <form id="formAction">
+              <div class="row">
+                <div class="col-sm-3" id="actionContainer">
+                  <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle font-13" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                      Action
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                      <li><span ng-click="vm.selectAction('CALL', 'phone')"><i class="material-icons">phone</i>phone</span></li>
+                      <li><span ng-click="vm.selectAction('SMS', 'sms')"><i class="material-icons">sms</i>sms</span></li>
+                      <li><span ng-click="vm.selectAction('EMAIL', 'email')"><i class="material-icons">email</i>email</span></li>
+                      <li><span ng-click="vm.selectAction('TRAINING', 'group')"><i class="material-icons">group</i>training</span></li>
+                    </ul>
+                    <input type="hidden" id="action" ng-model="vm.newtask.type">
+                  </div>
+                  <div id="task-result" class="hidden">
+                     <select class="form-control font-13" ng-model="vm.newtask.result" required>
+                        <option disabled selected value="">Select result</option>
+                        <option value="COMPLETED">Completed</option>
+                        <option value="NOT_COMPLETED">Not Completed</option>
+                     </select>
+                  </div>
+                </div>
+                <div class="col-sm-8" id="commentContainer">
+                  <textarea class="form-control" placeholder="Comment" type="text" ng-model="vm.newtask.comment" required rows="5" style="resize:none;"></textarea>
+                </div>
+              </div>
+              <div class="row margin-top-input">
+                <div class="col-xs-6 text-right">
+                  <button class="btn btn-success m-t-10" type="button" id="saveAction" ng-click="vm.addTask()">Save</button>
+                </div>
+                <div class="col-xs-6">
+                  <button class="btn btn-danger m-t-10" type="button" id="cancelAction" ng-click="vm.cancelTask()">Cancel</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="col-sm-12" id="add-frequency-view">
+          <form id="formFrequency" class="font-13">
+            <div class="row" ng-if="vm.getUserPermission('update:communication')">
+                <div class="col-sm-3 pull-right text-right" id="edit-frequency">
+                  <button class="btn btn-primary m-t-10" type="button" id="editFrequency" ng-click="vm.editFrequency()">Edit</button>
+                </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-5">
+                <div class="checkbox">
+                  <span>
+                    Frequency app  usage?
+                  </span>
+                </div>
+              </div>
+              <div class="col-sm-7">
+                <div class="col-sm-6 padding-null">
+                  <select class="form-control font-13 col-sm-6" ng-model="vm.newMoreInfo.frequencyApp" required id="frequencyApp">
+                    <option disabled selected value="">Select Frequency</option>
+                    <option value="DAILY">Daily</option>
+                    <option value="WEEKLY">Weekly</option>
+                    <option value="MONTHLY">Monthly</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-5">
+                <span>Data inconsistency?</span>
+              </div>
+              <div class="col-sm-7">
+                <label>
+                  <input type="checkbox" ng-model="vm.newMoreInfo.inconsistentDataName" id="inconsistentData-name">Name
+                </label>
+                <label>
+                  <input type="checkbox" ng-model="vm.newMoreInfo.inconsistentDataEmail" id="inconsistentData-email">Email
+                </label>
+                <label>
+                  <input type="checkbox" ng-model="vm.newMoreInfo.inconsistentDataPhone" id="inconsistentData-phone">Phone
+                </label>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="checkbox col-sm-5">
+                <span>Role in taxi line</span>
+              </div>
+              <div class="col-sm-7">
+                <div class="col-sm-6 padding-null">
+                  <select multiple class="form-control font-13 col-sm-6" ng-model="vm.newMoreInfo.tag" required id="tagSelect">
+                    <option value="DIGITAL">Digital</option>
+                    <option value="DISPATCHER">Dispatcher</option>
+                    <option value="EXECUTIVE">Executive</option>
+                    <option value="PRESIDENT">President</option>
+                    <option value="SECRETARY">Secretary</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row margin-top-input" id="frequency-buttons">
+                <div class="col-xs-6 text-right">
+                  <button class="btn btn-success m-t-10" type="button" id="saveFrequency" ng-click="vm.addFrequency()" ng-if="vm.getUserPermission('export:communication')">Save</button>
+                </div>
+                <div class="col-xs-6">
+                  <button class="btn btn-danger m-t-10" type="button" id="cancelFrequency" ng-click="vm.cancelFrequency()">Cancel</button>
+                </div>
+                <div class="col-xs-6">
+                  <button class="btn btn-danger m-t-10 hidden" type="button" id="cancelEditFrequency" ng-click="vm.cancelEditFrequency()">Cancel</button>
+                </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div block-ui="detailDriversList" id="block-ui-task">
+      <div>
+            <div class="row">
+              <div class="col-sm-2 text-left">
+                <h5 class="text-left">{{vm.totalTasks}}
+                  Task(s)
+                </h5>
+              </div>
+            </div>
+            <table class="table table-hover">
+              <thead>
+                <th class="column-header-color">
+                  Action
+                </th>
+                <th class="column-header-color">
+                  Created  By
+                </th>
+                <th class="column-header-color">
+                  Created Date
+                </th>
+                <th class="column-header-color">
+                  Result
+                </th>
+                <th class="column-header-color">
+                  Observations
+                </th>
+              </thead>
+              <tbody>
+                <tr ng-repeat="task in vm.tasks track by $index">
+                  <td>
+                    <i class="material-icons">{{task.action}}</i>
+                  </td>
+                  <td>
+                    {{task.requestUpdatedBy.firstName}} {{task.requestUpdatedBy.lastName}}
+                  </td>
+                  <td>
+                    {{task.dateFormatted}}
+                  </td>
+                  <td>
+                    {{task.resultFormatted}}
+                  </td>
+                  <td>
+                    <span class="corporate-cell comm-cell">{{task.comment}}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+  </div>

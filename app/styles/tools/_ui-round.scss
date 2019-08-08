@@ -1,0 +1,24 @@
+@mixin __ui-round($radius: $border-radius) {
+  @include __prefix(border-radius, __px($radius));
+  @include __prefix(background-clip, padding-box);
+}
+
+@mixin __ui-round--top($radius: $border-radius) {
+  border-top-right-radius: __px($radius);
+  border-top-left-radius: __px($radius);
+}
+
+@mixin __ui-round--right($radius: $border-radius) {
+  border-bottom-right-radius: __px($radius);
+  border-top-right-radius: __px($radius);
+}
+
+@mixin __ui-round--bottom($radius: $border-radius) {
+  border-bottom-right-radius: __px($radius);
+  border-bottom-left-radius: __px($radius);
+}
+
+@mixin __ui-round--left($radius: $border-radius) {
+  border-bottom-left-radius: __px($radius);
+  border-top-left-radius: __px($radius);
+}

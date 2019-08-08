@@ -1,0 +1,56 @@
+<div class="modal-header">
+  <button class="close" id="btn_close" ng-click="vm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row sub-header">
+    <div class="col-xs-6">
+      <div class="input-group header-item">
+        <h4 class="margin-null font-dark-blue">{{vm.modalTitle}}</h4>
+      </div>
+    </div>
+  </div>
+  <form id="form_add_balance_corporate" name="form_add_balance_corporate">
+    <div block-ui="blockAddBalance" class="row panel margin-null">
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <label for="field_corporate" class="font-bold">Type of Balance</label>
+              <select ng-model="vm.operation" id="field_operation" class="form-control new-select">
+                <option value="" disabled="">Select</option>
+                <option value="DEPOSIT">Recarga</option>
+                <option value="ISRL_RETENTION">Retención ISRL</option>
+              </select>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <label for="field_corporate" class="font-bold">Corporate</label>
+            <select multiple="multiple" id="field_corporate" class="font-13 multiple-state" required
+                    ng-model="vm.corporate">
+              <option ng-repeat="item in vm.corporates track by $index"
+                      ng-value="item.id">
+                {{item.name}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <label for="amount" class="font-bold">Amount</label>
+            <input type="number" id="amount" ng-model="vm.amount" class="form-control">
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default" type="button" ng-click="vm.close()">Cancel</button>
+  <button ladda="vm.loading" data-style="expand-left" class="btn btn-primary" type="button"
+          ng-click="vm.makeRecharge()"
+          ng-disabled="!vm.corporate || !vm.operation || !vm.checkPositive(vm.amount)">Confirm
+  </button>
+</div>

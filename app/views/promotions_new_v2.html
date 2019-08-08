@@ -1,0 +1,39 @@
+<article class="add-promotion">
+
+    <header class="row promoition-header">
+      <h4 class="col-md-6 col-xs-12">Create promotion</h4>
+      <div class="col-md-6 col-xs-12 text-right container-action-buttons">
+          <button class="btn btn-default"
+          ng-click="vm.clear()">
+            Clear
+          </button>
+          <button ladda="vm.loading"
+                  data-style="slide-left"
+                  class="btn btn-success"
+                  ng-click="vm.createPromotion(new_promotion.$invalid || !vm.file || (vm.locationType &&
+                  vm.promotion.criteria.states.length == 0) || vm.promotionService.existErrorsInSpecificSchedule(vm.isSpecificScheduleChecked))">
+            Create promotion
+          </button>
+      </div>
+    </header>
+
+    <section>
+        <form name="new_promotion" novalidate>
+
+          <div class="separator"></div>
+          <!-- Conditions -->
+          <ng-include src="'/views/partials/promotion/add_promotion/conditions.html'"></ng-include>
+          <!-- Aditional parameters  -->
+          <ng-include src="'/views/partials/promotion/add_promotion/additional_parameters.html'"></ng-include>
+          <!-- Scheduling -->
+          <ng-include src="'/views/partials/promotion/add_promotion/scheduling.html'"></ng-include>
+          <!-- Location -->
+          <ng-include src="'/views/partials/promotion/add_promotion/location.html'"></ng-include>
+          <!-- Comunication -->
+          <ng-include src="'/views/partials/promotion/add_promotion/communication.html'"></ng-include>
+          <br/><br/>
+
+        </form>
+    </section>
+
+</article>

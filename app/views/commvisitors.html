@@ -1,0 +1,338 @@
+<div ng-if="vm.notAuthMsg" not-authorized message="vm.notAuthMsg" class="not-authorized"></div>
+<div class="container-fluid padding-footer">
+  <div class="row sub-header">
+    <div class="col-sm-6">
+      <!-- <h4 ng-if="vm.registerNew === false && vm.editVisitorRecord === false">Visitors <span ng-if="vm.totalVisitors!=0">({{vm.totalVisitors}} Total)</span></h4> -->
+      <h4 ng-if="vm.registerNew === false && vm.editVisitorRecord === false">Visitors <span>({{vm.totalVisitors}} Total)</span></h4>
+      <h4 ng-if="vm.registerNew === true">New Visit</h4>
+      <h4 ng-if="vm.editVisitorRecord === true">Edit Visitor</h4>
+    </div>
+    <!-- <div class="col-sm-6 text-right" ng-if="vm.totalVisitors!=0 && (vm.registerNew === false && vm.editVisitorRecord === false)"> -->
+    <div class="col-sm-6 text-right" ng-if="(vm.registerNew === false && vm.editVisitorRecord === false)">
+      <button  ladda="vm.loading.export" data-style="slide-left" class="btn btn-primary"
+               csv-header="['Fecha', 'Nombre y Apellido', 'Cedula', 'Correo', 'Fecha de Primera Visita', 'Correo MP', 'Como supo de Nekso', 'Telefono', 'Direccion', 'Modelo de telefono', 'IMEI', 'Tipo de atencion', 'Registrado Por', 'Atendido por', 'Observaciones']"
+               filename="visitors.csv" ng-csv="vm.exportToCsv()">
+        Export to CSV
+      </button>
+    </div>
+    <div class="col-sm-6 text-right" ng-if="vm.registerNew === true">
+      <button  class="btn btn-default" ng-click="vm.cancelNewVisit()">
+        Cancel
+      </button>
+      <button class="btn btn-success" ng-click="vm.saveVisit()" ladda="vm.loading.new" data-style="slide-left">
+        Save
+      </button>
+    </div>
+    <div class="col-sm-6 text-right" ng-if="vm.editVisitorRecord === true && vm.isEditable === false">
+      <button  class="btn btn-default" ng-click="vm.returnToList()">
+        Back
+      </button>
+      <button class="btn btn-primary" ng-click="vm.setEditable()">
+        Edit
+      </button>
+    </div>
+    <div class="col-sm-6 text-right" ng-if="vm.editVisitorRecord === true && vm.isEditable === true">
+      <button  class="btn btn-default" ng-click="vm.setEditable()">
+        Cancel
+      </button>
+      <button class="btn btn-success" ng-click="vm.saveEditVisitor()" ladda="vm.loading.edit" data-style="slide-left">
+        Save
+      </button>
+    </div>
+  </div>
+  <div class="row" ng-if="vm.registerNew === true || vm.editVisitorRecord === true">
+    <div block-ui="PermissionsList">
+      <div class="col-sm-12">
+        <div class="panel panel-default panel-commstatistics panel-no-shadow col-xs-12">
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="row padding-10-0">
+                <div class="col-xs-12">
+                  <select ng-disabled="vm.editVisitorRecord === true && vm.isEditable === false" class="form-control" ng-model="vm.visitor.hdyhau">
+                    <option value="0" disabled="">How did you hear of Nekso</option>
+                    <option ng-repeat="opt in vm.hdyhau | orderBy" value="{{opt}}">{{opt.capitalize(this).replace(vm.reg,' ')}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row padding-10-0">
+                <div class="col-xs-12">
+                  <input ng-disabled="vm.editVisitorRecord === true && vm.isEditable === false" class="form-control" placeholder="First name" type="text" ng-model="vm.visitor.firstname" maxlength="20"/>
+                </div>
+              </div>
+              <div class="row padding-10-0">
+                <div class="col-xs-12">
+                  <input ng-disabled="vm.editVisitorRecord === true && vm.isEditable === false" class="form-control" placeholder="Last name" type="text" ng-model="vm.visitor.lastname" maxlength="20"/>
+                </div>
+              </div>
+              <div class="row padding-10-0">
+                <div class="col-xs-2">
+                  <label class="label-form-color">ID</label>
+                </div>
+                <div class="col-xs-2">
+                  <select ng-disabled="vm.editVisitorRecord === true && vm.isEditable === false" class="form-control" ng-model="vm.visitor.idType">
+                    <option value="V">V</option>
+                    <option value="E">E</option>
+                    <option value="J">J</option>
+                  </select>
+                </div>
+                <div class="col-xs-8">
+                  <input ng-disabled="vm.editVisitorRecord === true && vm.isEditable === false" class="form-control" placeholder="" type="number" ng-model="vm.visitor.id"/>
+                </div>
+              </div>
+              <div class="row padding-10-0">
+                <div class="col-xs-12">
+                  <input ng-disabled="vm.editVisitorRecord === true && vm.isEditable === false" class="form-control" placeholder="Personal email" type="text" ng-model="vm.visitor.email"/>
+                  <h6 class="text-danger" ng-if="vm.errors.email">Email format is not correct!. Ex: sample@sample.com</h6>
+                </div>
+              </div>
+              <div class="row padding-10-0">
+                <div class="col-xs-12">
+                  <input ng-disabled="vm.editVisitorRecord === true && vm.isEditable === false" class="form-control" placeholder="Phone number" type="text" ng-model="vm.visitor.phoneNumber" maxlength="11"/>
+                  <h6 class="text-danger" ng-if="vm.errors.phone">Phone number format is not correct!. Ex: 04141234567</h6>
+                </div>
+              </div>
+              <div class="row padding-10-0">
+                <div class="col-xs-12">
+                  <textarea ng-disabled="vm.editVisitorRecord === true && vm.isEditable === false" class="form-control" placeholder="Address" ng-model="vm.visitor.address" maxlength="256"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="row padding-10-0">
+                <div class="col-xs-12">
+                  <input ng-disabled="vm.editVisitorRecord === true && vm.isEditable === false" class="form-control" placeholder="Phone model" type="text" ng-model="vm.visitor.phoneModel"/>
+                </div>
+              </div>
+              <div class="row padding-10-0">
+                <div class="col-xs-12">
+                  <input ng-disabled="vm.editVisitorRecord === true && vm.isEditable === false" class="form-control" placeholder="IMEI" type="text" ng-model="vm.visitor.imei" maxlength="15" minlength="14"/>
+                  <h6 class="text-danger" ng-if="vm.errors.imei">IMEI format is not correct!. Lenght: 15 chars.</h6>
+                </div>
+              </div>
+              <div class="row padding-10-0">
+                <div class="col-xs-12">
+                  <input ng-disabled="vm.editVisitorRecord === true && vm.isEditable === false" class="form-control" placeholder="MP email" type="text" ng-model="vm.visitor.mpEmail"/>
+                  <h6 class="text-danger" ng-if="vm.errors.mpEmail">Email format is not correct!. Ex: sample@sample.com</h6>
+                </div>
+              </div>
+              <div class="row padding-10-0" ng-if="vm.visitor.hdyhau === 'REFERRED'">
+                <div class="col-xs-12">
+                  <input ng-disabled="vm.editVisitorRecord === true && vm.isEditable === false" class="form-control" placeholder="Referred by" type="text" ng-model="vm.visitor.referred"/>
+                </div>
+              </div>
+              <!--<div class="row padding-10-0">-->
+                <!--<div class="col-xs-12">-->
+                  <!--&lt;!&ndash;<input ng-disabled="vm.editVisitorRecord === true && vm.isEditable === false" class="form-control" placeholder="Affiliated by" type="text" ng-model="vm.visitor.affiliated"/>&ndash;&gt;-->
+                  <!--<select ng-disabled="vm.editVisitorRecord === true && vm.isEditable === false" class="form-control" ng-model="vm.visitor.affiliated">-->
+                    <!--<option value="" disabled>Affiliated by</option>-->
+                    <!--<option ng-repeat="promoter in vm.promoters track by $index" value="{{promoter}}">{{promoter}}</option>-->
+                  <!--</select>-->
+                <!--</div>-->
+              <!--</div>-->
+              <div class="row padding-10-0">
+                <div class="col-xs-12">
+                  <textarea ng-disabled="vm.editVisitorRecord === true && vm.isEditable === false" class="form-control" placeholder="Observations" ng-model="vm.visitor.observations" maxlength="256"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="row" ng-if="vm.totalVisitors < 1 && (vm.registerNew === false && vm.editVisitorRecord === false)">
+    <div block-ui="PermissionsList">
+      <div class="col-sm-12">
+        <div class="panel panel-default panel-commstatistics panel-no-shadow single-msg">
+          <p>At this moment, you don't have registered visits, press the button to add a record</p>
+          <button class="btn btn-primary" ng-click="vm.registerVisit()">
+            REGISTER VISIT
+          </button>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <!-- <div class="row" ng-if="vm.totalVisitors > 0 && (vm.registerNew === false && vm.editVisitorRecord === false)"> -->
+  <div class="row" ng-if="(vm.registerNew === false && vm.editVisitorRecord === false)">
+  <div class="panel-heading">
+    <div class="row shape-light-grey">
+      <div class="col-sm-8">
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="input-group date-box has-feedback">
+              <input date-range-picker class="form-control date-picker font-11 inside-search-icon" type="text"
+                     ng-model="vm.filter.date" options="vm.filter.date.opts" required/>
+              <i class="glyphicon glyphicon-calendar form-control-feedback no-zindex"></i>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 col-sm-offset-1 text-right">
+        <p class="input-group search-box">
+          <input class="form-control" placeholder="Search" type="text" ng-model="vm.filter.searchText" ng-keydown="vm.searchVisitsOnEnter($event)"/>
+            <span class="input-group-btn margin-top-input search-btn" ng-click="vm.searchVisits()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">search</i>
+              </button>
+            </span>
+            <span ng-if="vm.filter.searchText && vm.filter.searchText !== ''" class="input-group-btn margin-top-input clear-btn" ng-click="vm.clearSearchField()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">close</i>
+              </button>
+            </span>
+        </p>
+      </div>
+    </div>
+  </div>
+    <div block-ui="PermissionsList">
+      <div class="col-sm-12">
+        <div class="panel panel-default panel-commstatistics panel-no-shadow">
+          <div class="shape-light-grey">
+            <div class="col-sm-12 margin-bottom-15 margin-top-15">
+              <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+                <!--
+                <li>
+                  <filter_country_state multiple="true" country="vm.filter.country" states="vm.filter.states"></filter_country_state>
+                </li>
+                -->
+                <li>
+                  <button class="btn btn-success margin-top-input" ng-click="vm.registerVisit()">REGISTER VISIT</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="panel-body padding-top-null">
+            <table class="table table-hover table-condensed table-bordered">
+              <thead>
+                <th class="column-header-color">
+                  Name
+                </th>
+                <th class="column-header-color">
+                  Email
+                </th>
+                <th class="column-header-color">
+                  Mobile
+                </th>
+                <th class="column-header-color">
+                  ID
+                </th>
+                <th class="column-header-color">
+                  Join Date
+                </th>
+              </thead>
+              <tbody>
+              <tr ng-repeat="visitor in vm.visitors track by $index" ng-click="vm.editVisitor(visitor);">
+                <td>
+                  <strong><span>{{visitor.name}}</span></strong>
+                </td>
+                <td>
+                  <span>{{visitor.email}}</span>
+                </td>
+                <td>
+                  <span>{{visitor.phone}}</span>
+                </td>
+                <td>
+                  <span>{{visitor.nationalId}}</span>
+                </td>
+                <td>
+                  <span>{{visitor.createdDate | date:'dd/MM/yyyy'}}</span>
+                </td>
+              </tr><!--
+              <tr class="hidden-xs">
+                <td>
+                <span></span>
+                </td>
+                <td class="text-right">
+                  <span>TOTAL</span>
+                </td>
+                <td>
+                  <span>{{vm.administrators.totalCall}}</span>
+                </td>
+                <td>
+                  <span>{{vm.administrators.totalSms}}</span>
+                </td>
+                <td>
+                  <span>{{vm.administrators.totalEmail}}</span>
+                </td>
+                <td>
+                  <span>{{vm.administrators.totalTraining}}</span>
+                </td>
+              </tr> -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bar-pagination">
+        <div class="row">
+          <div class="col-sm-8 text-left">
+            <pagination boundary-links="true" class="pagination" first-text="&laquo;" items-per-page="vm.controls.numPerPage" last-text="&raquo;" max-size="5" next-text="&rsaquo;" ng-model="vm.controls.currentPage" previous-text="&lsaquo;" rotate="false" total-items="vm.totalAdministrator"></pagination>
+          </div>
+          <div class="col-sm-4 text-right">
+            <div class="btn-group items-per-page">
+              <label btn-radio="10" class="btn btn-default" id="btn_numPerPage10" ng-model="vm.controls.numPerPage">10</label>
+              <label btn-radio="25" class="btn btn-default" id="btn_numPerPage25" ng-model="vm.controls.numPerPage">25</label>
+              <label btn-radio="50" class="btn btn-default" id="btn_numPerPage50" ng-model="vm.controls.numPerPage">50</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div block-ui="ActionsList" ng-if="vm.selectedUser">
+      <div class="col-sm-12">
+        <div class="panel panel-default panel-commstatistics panel-no-shadow">
+          <div class="panel-heading">
+            <div class="col-sm-6">
+              <h4>{{vm.visitorActionsTotal}} <span ng-if="vm.visitorActionsTotal == 1">Entry</span><span ng-if="vm.visitorActionsTotal != 1">Entries</span></h4>
+            </div>
+            <div class="col-sm-6 text-right">
+              <button class="btn btn-disabled margin-top-input" ng-click="vm.openVisitorNewAction()">CALL NEW ACTION</button>
+            </div>
+          </div>
+          <div class="panel-body padding-top-null">
+            <div class="row">
+              <div class="col-sm-12" ng-if="vm.totalVisitors != 0">
+                <table class="table table-hover table-condensed table-bordered">
+                  <thead>
+                  <th class="column-header-color">
+                    Created by
+                  </th>
+                  <th class="column-header-color">
+                    Date
+                  </th>
+                  <th class="column-header-color">
+                    Action
+                  </th>
+                  <th class="column-header-color">
+                    Observations
+                  </th>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="action in vm.visitorActions track by $index" ng-click="">
+                    <td>
+                      <span>{{action.attendedBy || action.createdBy}}</span>
+                    </td>
+                    <td>
+                      <span>{{action.createdDate | date:'dd/MM/yyyy'}}</span>
+                    </td>
+                    <td>
+                      <span>{{action.type.capitalize(this).replace(vm.reg,' ')}}</span>
+                    </td>
+                    <td>
+                      <span>{{action.comments}}</span>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

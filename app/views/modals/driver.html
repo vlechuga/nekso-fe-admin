@@ -1,0 +1,204 @@
+<div class="popup-details" block-ui="liveDriver">
+
+  <div class="close-modal">
+    <button class="close" id="btn_close" ng-click="vm.close()" type="button">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="header-item font-normal line-height-span">
+        <span class="font-black font-24">Driver</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="profile-container">
+        <div class="img-profile">
+          <profile-img img-src="{{vm.driver.profileImg}}" img-vertical-size="85" img-size="85"></profile-img>
+          <div class="status-profile">
+            <i ng-if="vm.driver.status=='IN_REVIEW'" class="material-icons status-box bg-review" data-toggle="tooltip"
+               data-placement="right" title="In review">access_time</i>
+            <i ng-if="vm.driver.status=='APPROVAL_EXPIRED'" class="material-icons status-box bg-expired"
+               data-toggle="tooltip" data-placement="right" title="Approval expired">timelapse</i>
+            <i ng-if="vm.driver.status=='OK'" class="material-icons status-box bg-ok" data-toggle="tooltip"
+               data-placement="right" title="Approved">check_circle</i>
+            <i ng-if="vm.driver.status=='SUSPENDED'" class="material-icons status-box bg-suspended"
+               data-toggle="tooltip" data-placement="right" title="Suspended">remove_circle_outline</i>
+            <i ng-if="vm.driver.status=='REJECTED'" class="material-icons status-box bg-rejected" data-toggle="tooltip"
+               data-placement="right" title="Rejected">cancel</i>
+            <i ng-if="vm.driver.status=='PENDING_RESIGNATION'" class="material-icons status-box bg-reasigned"
+               data-toggle="tooltip" data-placement="right" title="Pending resignation">call_split</i>
+          </div>
+          <profile-img ng-if="vm.driver && vm.driver.carInfo" img-src="{{vm.driver.carInfo.carPictureUrl}}"
+                       img-vertical-size=" 85"
+                       img-size="85"></profile-img>
+        </div>
+        <div class="info-profile">
+          <span ng-if="!vm.driver" class="font-14 font-bold font-grey margin-left">Driver not response</span>
+          <h5 ng-if="vm.driver" class="text-bluedark font-bold">{{vm.driver.firstName | capitalize}}
+            {{vm.driver.lastName | capitalize}}</h5>
+          <div ng-if="vm.driver && vm.driver.createdDate" class="container-raiting-joindate-rides-cancelledrate">
+            <div class="raiting">
+              <average-star-rating average="vm.driver.rating"></average-star-rating>
+            </div>
+            <div class="joindate">
+              <span class="text-light-grey margin-top">Join date: {{vm.driver.createdDate | date:'dd/MM/yyyy'}}</span>
+            </div>
+          </div>
+          <div ng-if="vm.driver" class="container-raiting-joindate-rides-cancelledrate">
+            <div class="rides">
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                  <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{vm.driver.ridesCount}}
+                      Rides <span class="caret"></span></a>
+                    <div class="dropdown-menu" role="menu">
+                      <div class="header-last-ride">
+                        <span class="text-blue-light font-bold">Driver's last ride</span>
+                      </div>
+                      <div class="title-last-ride">
+                        <div class="col-xs-6">
+                          <span class="font-10 text-light-grey font-bold">Date</span>
+                        </div>
+                        <div class="col-xs-6">
+                          <span class="font-10 text-light-grey font-bold">Status</span>
+                        </div>
+                      </div>
+                      <div ng-if="!vm.lastRide" class="loading-last-ride">
+                        <i class="fa fa-spinner fa-spin"></i>
+                      </div>
+                      <div ng-if="vm.lastRide" class="last-ride">
+                        <div class="col-xs-6">
+                          <span
+                            class="font-12 text-light-grey">{{vm.lastRide.createdDate | date:'dd/MM/yyyy hh:mm a'}}</span>
+                        </div>
+                        <div class="col-xs-6">
+                          <span class="font-12 text-light-grey">{{vm.lastRide.status | capitalize}} by {{vm.lastRide.statusUpdatedBy | capitalize}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="cancelledrate">
+              <img class="rate-chart" ng-src="{{vm.pathSourceImageForCancelledPercent}}">
+              <span class="font-18 text-light-grey"><strong>{{vm.driver.cancelledPercentage}}</strong></span>
+              <span class="font-lightgrey font-12">Cancelled</span>
+            </div>
+          </div>
+          <div ng-if="vm.driver" class="line-dividir"></div>
+          <div ng-if="vm.driver && vm.driver.carInfo" class="carinfo-container">
+            <div class="container-raiting-joindate-rides-cancelledrate">
+              <div class="carinfo">
+                <h5 class="text-bluedark font-bold">{{vm.driver.carInfo.car.make}} -
+                  {{vm.driver.carInfo.car.model}}</h5>
+                <span
+                  class="font-14 text-light-grey">{{vm.driver.carInfo.colorName}} - {{vm.driver.carInfo.year}}</span>
+              </div>
+              <div class="plateinfo">
+                <div class="plate-box">
+                  <h5 class="text-bluedark font-bold">{{vm.driver.carInfo.plate}}</h5>
+                </div>
+              </div>
+            </div>
+            <div ng-if="vm.driver.controllerName" class="container-raiting-joindate-rides-cancelledrate margin-top-5">
+              <i class="material-icons font-18 text-light-grey">local_taxi</i> <span
+              class="font-14 text-light-grey font-bold">{{vm.driver.controllerName}}</span>
+            </div>
+          </div>
+          <div ng-if="vm.driver" class="line-dividir"></div>
+          <div ng-if="vm.driver" class="clnekso-section">
+            <div class="img-icon">
+              <img class="clnekso-icon" ng-src="{{vm.driver.clubNeksoImg}}">
+            </div>
+            <div class="info-clnekso">
+              <div><span class="font-12 font-lightgrey">Club Nekso Level</span></div>
+              <div><span
+                class="font-12 text-bluedark font-bold">{{vm.driver.currentAchievementName || 'Opening paths'}}</span></div>
+              <img class="level-clnekso" ng-src="{{vm.pathSourceImageForClubNeksoStar}}">
+            </div>
+          </div>
+          <div ng-if="vm.driver" class="line-dividir"></div>
+          <div ng-if="vm.driver" class="contact-info">
+            <div ng-if="vm.driver.identityCard" class="display-flex"><i class="material-icons font-18 text-light-grey">perm_identity</i><span
+              class="font-14 font-bold font-grey margin-left">{{vm.driver.identityCard.type + '-' + vm.driver.identityCard.number}}</span></div>
+            <div ng-if="vm.driver.phone" class="display-flex"><i class="material-icons font-18 text-light-grey">smartphone</i><span
+              class="font-14 font-bold font-grey margin-left">{{vm.driver.phone}}</span></div>
+            <div ng-if="vm.driver.email" class="display-flex"><i class="material-icons font-18 text-light-grey">mail</i><span
+              class="font-14 font-bold font-grey margin-left">{{vm.driver.email}}</span></div>
+            <div><span class="font-12 font-grey">{{vm.driver.location.country + ' - ' + vm.driver.location.state}}</span></div>
+          </div>
+        </div>
+        <div ng-if="vm.driver && vm.driver.bankAccountInfo" class="comments">
+          <div class="row">
+            <div class="col-xs-12">
+              <span class="font-12 font-lightgrey font-bold">Bank Account Information</span>
+            </div>
+          </div>
+          <div class="bank-info-container">
+            <div class="bank-icon">
+              <i class="material-icons text-bluedark-light font-18">account_balance</i>
+            </div>
+            <div class="bank-info">
+              <div>
+                <span class="font-14 text-light-grey">{{vm.driver.bankAccountInfo.bank.name}}</span>
+              </div>
+              <div>
+                <span class="font-14 text-bluedark-light font-bold">{{vm.driver.bankAccountInfo.account}}</span>
+              </div>
+              <div>
+                <span class="font-14 text-light-grey">{{vm.driver.bankAccountInfo.identification}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--ADD SUSPICIOUS TAG-->
+  <div class="row" ng-if="vm.canToAddSuspicious && vm.driver">
+    <div class="col-sm-6">
+      <button type="button" class="btn btn-default" ng-if="vm.getUserPermission('update:drivers')"
+              ng-click="vm.addTag()"
+              ladda="vm.loading"
+              data-style="slide-left"
+              data-spinner-color="#000000">ADD SUSPICIOUS BEHAVIOR TAG
+      </button>
+    </div>
+    <div class="col-sm-6 display-flex" ng-if="vm.response.message">
+        <div class="col-sm-2">
+          <span><i class="material-icons" ng-class="vm.response.class">{{vm.response.icon}}</i></span>
+        </div>
+        <div class="col-sm-10">
+          <span class="font-10">{{vm.response.message}}</span>
+        </div>
+    </div>
+  </div>
+
+  <!--ADD ROYAL TAG-->
+  <div style="margin-top: 10px" class="row" ng-if="vm.driver">
+    <div class="col-sm-6">
+      <button type="button" class="btn btn-default" ng-if="vm.getUserPermission('update:royal')"
+              ng-click="vm.updateRoyalStatus()"
+              ladda="vm.royal.loading"
+              data-style="slide-left"
+              data-spinner-color="#000000">ROYAL USER
+      </button>
+    </div>
+    <div class="col-sm-6 display-flex" ng-if="vm.royal.message">
+      <div class="col-sm-2">
+        <span><i class="material-icons" ng-class="vm.royal.class">{{vm.royal.icon}}</i></span>
+      </div>
+      <div class="col-sm-10">
+        <span class="font-10">{{vm.royal.message}}</span>
+      </div>
+    </div>
+  </div>
+
+</div>

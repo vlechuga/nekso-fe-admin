@@ -1,0 +1,316 @@
+<div ng-if="vm.notAuthMsg" not-authorized message="vm.notAuthMsg" class="not-authorized"></div>
+<div class="container-fluid padding-footer">
+  <div class="row sub-header">
+    <div class="col-sm-9">
+      <h4>Rides ({{vm.totalRides}})</h4>
+    </div>
+    <div class="col-sm-3 text-right pull-right">
+      <a ng-href="{{vm.csvUrl}}" target="_blank">
+        <button ng-if="vm.getUserPermission('export:rides')"
+                ladda="vm.loading.export"
+                data-style="slide-left"
+                class="btn btn-sm btn-primary"
+                ng-disabled="!vm.filter.country"
+                ng-click="vm.exportToCsv()">
+          Export to CSV
+        </button>
+      </a>
+    </div>
+  </div>
+  <div class="row panel-heading">
+    <div class="row shape-light-grey">
+      <div class="col-sm-8">
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="input-group date-box has-feedback">
+              <input date-range-picker class="nekso-form__input" type="text"
+                     ng-model="vm.filter.date" options="vm.filter.date.opts" required/>
+              <i class="glyphicon glyphicon-calendar form-control-feedback no-zindex"></i>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 col-sm-offset-1 text-right">
+        <p class="input-group search-box">
+          <input class="form-control" placeholder="Search" type="text" ng-model="vm.filter.searchText"
+                 ng-keydown="vm.searchDriversOnEnter($event)"/>
+          <span class="input-group-btn margin-top-input search-btn" ng-click="vm.searchDrivers()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">search</i>
+              </button>
+            </span>
+          <span ng-if="vm.filter.searchText && vm.filter.searchText !== ''"
+                class="input-group-btn margin-top-input clear-btn" ng-click="vm.clearSearchField()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">close</i>
+              </button>
+            </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div block-ui="ridesList">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-default panel-rides panel-no-shadow">
+          <div class="row shape-light-grey">
+            <div class="col-sm-12 margin-bottom-15">
+              <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+                <li>
+                  <filter_country_state multiple="true" country="vm.filter.country"
+                                        states="vm.filter.states"></filter_country_state>
+                </li>
+                <li style="width: 200px;" ng-hide="vm.filter.state.length == 0">
+                  <select id="filter_controllers" class="nekso-form__select" ng-model="vm.filter.taxiLine">
+                    <option selected disabled value="">Taxi line</option>
+                    <option ng-repeat="taxiline in vm.taxiLines track by $index" value="{{taxiline.id}}">
+                      {{taxiline.name}}
+                    </option>
+                  </select>
+                </li>
+                <li>
+                  <select class="nekso-form__select" id="filter_ride_type" ng-model="vm.filter.corporate">
+                    <option selected disabled value="">Ride type</option>
+                    <option value="All">All</option>
+                    <option value="CORPORATE">Corporate</option>
+                    <option value="STANDARD">Standard</option>
+                    <option value="ROYAL">Royal</option>
+                  </select>
+                </li>
+                <li ng-show="vm.filter.corporate == 'CORPORATE'">
+                  <select id="filter_corporate_id" class="nekso-form__select" ng-model="vm.filter.corporate_id">
+                    <option selected disabled value="">Corporate All</option>
+                    <option ng-repeat="corporate in vm.corporates track by $index" value="{{corporate.id}}">
+                      {{corporate.name}}
+                    </option>
+                  </select>
+                </li>
+                <li style="width: 175px;">
+                  <select id="filter_tag" multiple="multiple" class="nekso-form__multiselect" ng-model="vm.filter.tag">
+                    <option ng-disabled="vm.filter.tag.indexOf('NO_BROADCAST') > -1" value="BROADCAST">
+                      Broadcast
+                    </option>
+                    <option ng-disabled="vm.filter.tag.indexOf('BROADCAST') > -1" value="NO_BROADCAST">
+                      Driver selection
+                    </option>
+                    <option value="DIGITAL_DRIVER">Digital Driver</option>
+                    <option value="STANDARD_DRIVER">Standard Driver</option>
+                  </select>
+                </li>
+                <li style="width: 175px;">
+                  <select multiple="multiple" id="filter_source" class="nekso-form__multiselect"
+                          ng-model="vm.filter.source">
+                    <option value="CORPORATE_EMPLOYEES">Corporate employees</option>
+                    <option value="CORPORATE_GUESTS">Corporate guests</option>
+                    <option value="STANDARD">Mobile App</option>
+                    <option value="QR">QR</option>
+                  </select>
+                </li>
+                <li style="width: 150px;">
+                  <select id="filter_payment"
+                          class="nekso-form__select"
+                          ng-model="vm.filter.typePayment">
+                    <option selected value="">All Payment</option>
+                    <option ng-repeat="method in vm.paymentMethods track by $index" value="{{method.key}}">
+                      {{method.name | capitalize}}
+                    </option>
+                  </select>
+                </li>
+                <li>
+                  <select class="nekso-form__select" id="filter_paidThroughNeksoAccount"
+                          ng-model="vm.filter.paidThroughNeksoAccount">
+                    <option disabled selected value="">Account</option>
+                    <option value="ALL">All</option>
+                    <option value="true">Nekso</option>
+                    <option value="false">User</option>
+                  </select>
+                </li>
+                <li style="width: 200px;">
+                  <select multiple="multiple"
+                          class="nekso-form__multiselect"
+                          id="filter_status"
+                          ng-model="vm.filter.status">
+                    <option
+                      ng-disabled="vm.disableStatusFilter(['CANCELLED_BY_DRIVER', 'CANCELLED_BY_PASSENGER', 'CANCELLED_BY_SYSTEM', 'CLOSED_BY_PASSENGER', 'CLOSED_BY_SYSTEM'])"
+                      value="CANCELLED">Cancelled
+                    </option>
+                    <option
+                      ng-disabled="vm.disableStatusFilter(['CANCELLED', 'CLOSED', 'CANCELLED_BY_PASSENGER', 'CANCELLED_BY_SYSTEM', 'CLOSED_BY_PASSENGER', 'CLOSED_BY_SYSTEM'])"
+                      value="CANCELLED_BY_DRIVER">Cancelled by driver
+                    </option>
+                    <option
+                      ng-disabled="vm.disableStatusFilter(['CANCELLED', 'CLOSED', 'CANCELLED_BY_DRIVER', 'CANCELLED_BY_SYSTEM', 'CLOSED_BY_PASSENGER', 'CLOSED_BY_SYSTEM'])"
+                      value="CANCELLED_BY_PASSENGER">Cancelled by passenger
+                    </option>
+                    <option
+                      ng-disabled="vm.disableStatusFilter(['CANCELLED', 'CLOSED', 'CANCELLED_BY_PASSENGER', 'CANCELLED_BY_DRIVER', 'CLOSED_BY_PASSENGER', 'CLOSED_BY_SYSTEM'])"
+                      value="CANCELLED_BY_SYSTEM">Cancelled by system
+                    </option>
+                    <option
+                      ng-disabled="vm.disableStatusFilter(['CLOSED_BY_PASSENGER', 'CLOSED_BY_SYSTEM', 'CANCELLED_BY_DRIVER', 'CANCELLED_BY_PASSENGER', 'CANCELLED_BY_SYSTEM'])"
+                      value="CLOSED">Closed
+                    </option>
+                    <option
+                      ng-disabled="vm.disableStatusFilter(['CLOSED', 'CANCELLED', 'CLOSED_BY_SYSTEM', 'CANCELLED_BY_DRIVER', 'CANCELLED_BY_PASSENGER', 'CANCELLED_BY_SYSTEM'])"
+                      value="CLOSED_BY_PASSENGER">Closed by passenger
+                    </option>
+                    <option
+                      ng-disabled="vm.disableStatusFilter(['CLOSED', 'CANCELLED',  'CLOSED_BY_PASSENGER', 'CANCELLED_BY_DRIVER', 'CANCELLED_BY_PASSENGER', 'CANCELLED_BY_SYSTEM'])"
+                      value="CLOSED_BY_SYSTEM">Closed by system
+                    </option>
+                    <option value="COMPLETED">Completed</option>
+                    <option value="NO_RESPONSE">No response</option>
+                    <option value="ONGOING">Ongoing</option>
+                    <option value="REJECTED">Rejected</option>
+                    <option value="REQUESTED">Requested</option>
+                  </select>
+                </li>
+                <li style="width: 150px;">
+                  <select multiple="multiple" id="filter_promotion_category" class="nekso-form__multiselect"
+                          ng-model="vm.filter.promotionCategory">
+                    <option value="ACHIEVEMENT">Achievement</option>
+                    <option value="REFERRAL">Referral</option>
+                    <option value="SYSTEM">System</option>
+                  </select>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row panel-body padding-top-null">
+            <table class="table table-hover table-condensed table-bordered">
+              <thead>
+              <tr>
+                <th class="column-header-color">
+                  Tag
+                </th>
+                <th class="column-header-color" ng-click="vm.order('createdDate')">
+                  Date
+                  <span ng-if="!vm.reverse && vm.predicate === 'createdDate'"
+                        class="fa fa-sort-down columnSortIcons"></span>
+                  <span ng-if="vm.reverse && vm.predicate === 'createdDate'"
+                        class="fa fa-sort-up columnSortIcons"></span>
+                </th>
+                <th class="column-header-color">
+                  Taxi line
+                </th>
+                <th class="column-header-color">
+                  Driver
+                </th>
+                <th class="column-header-color">
+                  Passenger
+                </th>
+                <th class="column-header-color">
+                  Pick up
+                </th>
+                <th class="column-header-color">
+                  Destination
+                </th>
+                <th class="column-header-color">
+                  Status
+                </th>
+                <th class="column-header-color">
+                  Method
+                </th>
+                <th class="column-header-color">
+                  Account
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="ride in vm.rides track by $index">
+                <td class="text-center main-td-of-tag-svg" ng-click="vm.openRideDetail(ride)">
+                  <!-- <img ng-if="ride.corporationId" ng-src="/images/icon-corporate.png" title="Corporate"> -->
+
+                  <svg ng-if="ride.source=='CORPORATE_GUESTS'" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="268.5 358.5 75 75" enable-background="new 268.5 358.5 75 75" xml:space="preserve"><path d="M306,396c6.9,0,12.5-5.6,12.5-12.5c0-6.9-5.6-12.5-12.5-12.5s-12.5,5.6-12.5,12.5C293.5,390.4,299.1,396,306,396zM306,402.2c-8.4,0-25,4.1-25,12.5v6.2h50v-6.2C331,406.3,314.1,402.2,306,402.2z"/></svg>
+
+                  <svg ng-if="ride.source=='QR'" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="268.5 358.5 75 75" enable-background="new 268.5 358.5 75 75" xml:space="preserve"><g><path d="M309.1,386.6v-6.2h-6.2v-6.2v-6.2h-6.2h-6.2h-6.2h-6.2v6.2v6.2v6.2v6.2h6.2h12.5h6.2v-6.2H309.1z M296.6,386.6h-12.5v-6.2v-6.2h6.2h6.2V386.6z"/><rect x="302.9" y="392.9" width="6.2" height="6.2"/><polygon points="321.6,374.1 321.6,367.9 315.4,367.9 309.1,367.9 309.1,374.1 315.4,374.1     "/><path d="M327.9,386.6v6.2v6.2h-6.2v-6.2h-6.2v6.2h-6.2v6.2v12.5v6.2h6.2h6.2h6.2h6.2v-6.2v-6.2v-6.2v-6.2v-6.2v-6.2v-6.2h-6.2V386.6z M327.9,411.6v6.2h-6.2h-6.2v-12.5h12.5V411.6z"/><rect x="287.3" y="377.3" width="6.2" height="6.2"/><path d="M284.1,399.1h-6.2v6.2v6.2v6.2v6.2h6.2h6.2h6.2h6.2v-6.2v-12.5v-6.2h-6.2H284.1z M296.6,417.9h-6.2h-6.2v-6.2v-6.2h12.5V417.9z"/><rect x="287.3" y="408.5" width="6.2" height="6.2"/><rect x="318.5" y="408.5" width="6.2" height="6.2"/><rect x="318.5" y="377.3" width="6.2" height="6.2"/><rect x="327.9" y="367.9" width="6.2" height="6.2"/><rect x="309.1" y="386.6" width="6.2" height="6.2"/></g></svg>
+
+                  <svg ng-if="ride.source=='CORPORATE_EMPLOYEES'" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"viewBox="268.5 358.5 75 75" enable-background="new 268.5 358.5 75 75" xml:space="preserve"><path d="M318.5,392.9c5.3,0,9.4-4.1,9.4-9.4c0-5.3-4.1-9.4-9.4-9.4s-9.4,4.1-9.4,9.4C309.1,388.8,313.2,392.9,318.5,392.9zM293.5,392.9c5.3,0,9.4-4.1,9.4-9.4c0-5.3-4.1-9.4-9.4-9.4c-5.3,0-9.4,4.1-9.4,9.4C284.1,388.8,288.2,392.9,293.5,392.9zM293.5,399.1c-7.2,0-21.9,3.7-21.9,10.9v7.8h43.7v-7.8C315.4,402.9,300.7,399.1,293.5,399.1z M318.5,399.1c-0.9,0-1.9,0-3.1,0c3.7,2.5,6.2,6.2,6.2,10.9v7.8h18.7v-7.8C340.3,402.9,325.7,399.1,318.5,399.1z"/></svg>
+
+                  <!-- <img ng-if="ride.corporationId" ng-src="/images/icon-corporate.png" title="Corporate"> -->
+                  <img ng-if="ride.driver.tags && ride.driver.tags.indexOf('DIGITAL') > -1"
+                       ng-src="/images/icon-digital-user.png" title="Digital driver">
+
+                  <i ng-if="ride.broadCast" class="material-icons" title="Broadcast">wifi_tethering</i>
+
+                  <span ng-if="!ride.corporationId && !(ride.driver.tags && ride.driver.tags.indexOf('DIGITAL') > -1)">&nbsp;</span>
+
+                  <span ng-if="ride.suspicious" class="container-suspicious">
+                    <img ng-src="/images/suspicious-icon.svg" alt=""
+                         title="User suspicious">
+                  </span>
+
+                </td>
+                <!-- <td ng-click="vm.openRideDetail(ride)">
+                  <span><strong class="clickeable">{{ride.id | idlimit:ride.id | uppercase}}</strong></span>
+                </td> -->
+                <td ng-click="vm.openRideDetail(ride)">
+                  <span>{{ride.createdDate | date:'dd/MM/yyyy hh:mm a'}}</span>
+                </td>
+                <td ng-click="vm.openRideDetail(ride)">
+                  <span>{{ride.controller.name}}</span>
+                </td>
+                <td ng-click="vm.openDriverProfile(ride)">
+                  <span><strong class="clickeable capitalize">
+                    {{ride.driver.fullName | lowercase}}
+                  </strong></span>
+                </td>
+                <td ng-click="vm.openPassengerProfile(ride)">
+                  <span><strong class="clickeable capitalize">
+                    <span ng-if="ride.corporationId">{{ride.passenger.corporation.companyName | lowercase}} / </span>{{ride.passenger.fullName | lowercase}}
+                  </strong></span>
+                </td>
+                <td ng-click="vm.openRideDetail(ride)">
+                  <span>{{ride.rideInfo.passengerPickupAddress}}</span>
+                </td>
+                <td ng-click="vm.openRideDetail(ride)">
+                  <span>{{ride.rideInfo.passengerDestinationAddress}}</span>
+                </td>
+                <td ng-click="vm.openRideDetail(ride)">
+                  <span>{{vm.getRideStatus(ride)}}</span>
+                </td>
+                <td ng-click="vm.openRideDetail(ride)">
+                  <span ng-switch="ride.paymentInfo.type">
+                    <span ng-switch-when="MERCADOPAGO">
+                       <span ng-if="ride.corporationId">{{ride.paymentInfo.type.toLowerCase().replace('mercadopago','Corporate')}}</span>
+                       <span ng-if="!ride.corporationId">{{ride.paymentInfo.type.toLowerCase().replace('mercadopago','Credit Card')}}</span>
+                    </span>
+                    <span ng-switch-when="WALLET">Nekso Credit</span>
+                    <span ng-switch-default>{{ride.paymentInfo.type | capitalize}}</span>
+                  </span>
+                </td>
+                <td ng-click="vm.openRideDetail(ride)">
+                  <span ng-hide="!ride.paymentInfo.paidThroughNeksoAccount">Nekso</span><span
+                  ng-hide="ride.paymentInfo.paidThroughNeksoAccount">User</span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bar-pagination">
+        <div class="row">
+          <div class="col-sm-8 text-left">
+            <pagination boundary-links="true" class="pagination" first-text="&laquo;"
+                        items-per-page="vm.controls.numPerPage" last-text="&raquo;" max-size="5" next-text="&rsaquo;"
+                        ng-model="vm.controls.currentPage" previous-text="&lsaquo;" rotate="false"
+                        total-items="vm.totalRides"></pagination>
+          </div>
+          <div class="col-sm-4 text-right">
+            <div class="btn-group items-per-page">
+              <label btn-radio="10" class="btn btn-default" id="btn_numPerPage10"
+                     ng-model="vm.controls.numPerPage">10</label>
+              <label btn-radio="25" class="btn btn-default" id="btn_numPerPage25"
+                     ng-model="vm.controls.numPerPage">25</label>
+              <label btn-radio="50" class="btn btn-default" id="btn_numPerPage50"
+                     ng-model="vm.controls.numPerPage">50</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

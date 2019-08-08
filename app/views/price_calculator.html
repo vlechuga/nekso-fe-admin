@@ -1,0 +1,131 @@
+<div class="container-fluid">
+  <div class="row sub-header">
+    <div class="col-sm-8">
+      <div class="input-group header-item">
+        <h3>Price Calculator</h3>
+      </div>
+    </div>
+  </div>
+  <div class="price-calculator row panel margin-null" style="margin-bottom: 40px;">
+    <div class="col-sm-12">
+      <div class="row" style="padding-top: 20px;">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-4 pricing-test">
+              <div class="row">
+                <div class="col-xs-12 padding-left-null">
+                  <label>
+                    <strong class="text-blue-light">Origin</strong>
+                  </label>
+                  <div class="input-group">
+                    <input ng-disabled="pricingSchemaForm.$invalid" class="form-control" id="origin-input" placeholder="Ingrese el origen" type="text">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-12 padding-left-null">
+                  <label>
+                    <strong class="text-blue-light">Destination</strong>
+                  </label>
+                  <div class="input-group">
+                    <input ng-disabled="pricingSchemaForm.$invalid" class="form-control" id="destination-input" placeholder="Ingrese el destino" type="text">
+                  </div>
+                </div>
+              </div>
+              <div class="row" style="padding-bottom: 20px;">
+                <div class="col-sm-9 padding-left-null padding-top-10px metric-price-calculator">
+                  <label class="estimated-cost">Cost: {{ cost.total }}</label>
+                  <div>
+                    <label class="estimated-cost">Distance: {{ distance.total | number : 2 }} KM</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row sub-header text-right">
+                <div class="btn-group items-per-page">
+                  <button ng-disabled="distance.total === '0' " class="btn btn-primary" data-style="slide-left" ladda="loading.cleanTest" name="button" ng-click="addPrice()" type="button">
+                    Add Test
+                  </button>
+                  <button class="btn btn-primary" data-style="slide-left" ladda="loading.cleanTest" name="button" ng-click="clearTest()" type="button">
+                    Test Clean
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-8">
+              <div class="price-map" id="map"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid padding-footer">
+
+
+  <div class="row sub-header">
+    <div class="col-sm-9">
+      <h4>Calculated Prices</h4>
+    </div>
+    <div class="col-sm-3 pull-right">
+      <div class="row sub-header">
+        <div class="btn-group items-per-page">
+          <button ng-disabled="calculatedPrices.length === 0 " class="btn btn-primary" data-style="slide-left" ladda="loading.cleanTest" name="button" ng-click="clearTable()" type="button">
+            Table Clean
+          </button>
+          <button ng-disabled="calculatedPrices.length === 0 " ladda="vm.loading.export" data-style="slide-left" class="btn btn-primary" filename="promotions.csv" ng-csv="exportToCsvFn()"
+                  csv-header="['Origin', 'Destination', 'Cost', 'Distance']">
+            Export to CSV
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div block-ui="promotionsList">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-default panel-rides panel-no-shadow">
+          <div class="panel-body padding-top-null">
+            <table class="table table-hover table-condensed table-bordered">
+              <thead>
+              <tr>
+                <th class="column-header-color">
+                  Origin
+                </th>
+                <th class="column-header-color">
+                  Destination
+                </th>
+                <th class="column-header-color">
+                  Cost
+                </th>
+                <th class="column-header-color">
+                  Distance
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="price in calculatedPrices track by $index">
+                <td class="outline-none">
+                  <span>{{price.origin}}</span>
+                </td>
+                <td class="outline-none">
+                  <span>{{price.destination}}</span>
+                </td>
+                <td class="outline-none">
+                  <span>{{price.price}}</span>
+                </td>
+                <td class="outline-none">
+                  <span>{{price.distance | number : 2 }} KM</span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

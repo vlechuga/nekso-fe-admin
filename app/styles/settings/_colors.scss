@@ -1,0 +1,66 @@
+/* Color variables */
+$black: #000;
+$blue: #0d47a1;
+$blue-light: #82b1ff;
+$blue-dark: #2962ff;
+$bluedark: #1c2d48;
+$bluedark-light: #586e89;
+$bluedark-dark: #141a23;
+$green: #00bfa5;
+$green-light: #64ffda;
+$green-dark: #00695c;
+$light-grey: #9d9d9d;
+$purple: #9b5dfc;
+$red: #ff0066;
+$red-light: #ff80ab;
+$red-dark: #d81b60;
+$white: white;
+
+$danger: #ff0000;
+$danger-dark: #ff9800;
+$ok: #30cd38;
+$ok-dark: #20a826;
+$requested: #909090;
+$requested-dark: #747474;
+$rejected: #ff0066;
+$rejected-dark: #d70459;
+$closed: #0066ff;
+$closed-dark: #0358d7;
+$not-response: #ffb12a;
+$not-response-dark: #da8a19;
+$ongoing: #ffea00;
+$ongoing-dark: #f4cf02;
+$audience: #b077fa;
+$audience-dark: #9d63e8;
+
+$info: #9c27b0;
+
+/* Specific color */
+$iron-grey: #d2d4d6;
+$boulder-grey: #7D7D7D;
+$alto-grey: #DDDDDD;
+$wild-sand-grey: #f5f5f5;
+$dusty-gray: #979797;
+$silver-gray: #bebebe;
+$rejected-alizarin: #e51c23; //Shared with bootsatrap
+
+/* Bootstrap color */
+$button-success: #4caf50;
+
+/* opacity colors */
+$black-4: rgba(0,0,0,.4);
+
+/* Components colors */
+$card__header-background: #edf2fe;
+$card__header-title: #698199;
+$card__header-subtitle: $dusty-gray;
+$card__content: $dusty-gray;
+
+$nekso-form-input-color: $dusty-gray !default;
+$nekso-form-border-color: #999 !default;
+$nekso-form-label-color: lighten($nekso-form-border-color, 10%) !default;
+$nekso-form-active-color: darken($nekso-form-border-color, 10%) !default;
+$nekso-form-focus-color: $card__header-title !default;
+
+/* modules > popup details */
+$popup-details-balance: #5B718B;

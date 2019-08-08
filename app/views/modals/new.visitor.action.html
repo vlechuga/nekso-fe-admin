@@ -1,0 +1,57 @@
+<div class="modal-header">
+  <button class="close" id="btn_close" ng-click="visitorModalVm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row sub-header">
+
+  </div>
+  <form name="form_register" class="newAdministratorForm" novalidate>
+    <div class="row panel margin-null">
+      <div class="col-sm-12">
+        <div class="row margin-top-15 margin-bottom-15">
+          <div class="col-sm-6">
+            <div class="input-group header-item">
+              <!-- <h4 class="margin-null">{{administratorModalVm.modalTitle}}</h4> -->
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="text-right">
+              <button class="btn btn-default btn-default-contrast" ng-click="visitorModalVm.close()">
+                Cancel
+              </button>
+              <button ladda="visitorModalVm.loading.create" class="btn btn-success" ng-click="visitorModalVm.saveAction()" ng-disabled="visitorModalVm.new.action=='' || visitorModalVm.new.comment.length==0">
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="row margin-bottom-15 margin-top-15">
+          <div class="col-sm-12">
+            <h5><strong>User name:</strong> {{visitorModalVm.userEmail}}</h5>
+          </div>
+        </div>
+        <div class="row margin-bottom-15 margin-top-15">
+          <div class="col-sm-12">
+            <select class="form-control" ng-model="visitorModalVm.new.attended">
+              <option value="" disabled>Advised by</option>
+              <option ng-repeat="promoter in visitorModalVm.promoters track by $index" value="{{promoter}}">{{promoter}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="row margin-top-15">
+          <div class="col-sm-12 margin-bottom-15">
+            <select class="form-control margin-bottom-15" ng-model="visitorModalVm.new.action">
+              <option value="" disabled="" selected="">Add new Action</option>
+              <option ng-repeat="opt in visitorModalVm.actions | orderBy" value="{{opt}}">{{opt.capitalize(this).replace(visitorModalVm.reg,' ')}}</option>
+            </select>
+          </div>
+          <div class="col-sm-12 margin-bottom-15">
+            <textarea class="form-control margin-bottom-15 min-height-100" placeholder="Comment" ng-model="visitorModalVm.new.comment"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

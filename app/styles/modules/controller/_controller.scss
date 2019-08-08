@@ -1,0 +1,24 @@
+
+.controller {
+
+  .contact_info {
+    height: __em(475);
+  }
+
+  .controller_info, .contact_info, .address_info {
+    .row {
+      padding-bottom: __em(15);
+    }
+
+    label.required {
+      font-weight: bold;
+    }
+  }
+
+  .address_info {
+    button {
+      margin-top: 50%;
+    }
+  }
+
+}

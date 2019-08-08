@@ -1,0 +1,46 @@
+<article class="edit-promotion">
+
+  <header class="row promoition-header">
+    <h4 class="col-md-6 col-xs-12">
+      Copy promotion
+      <i ng-hide="vm.isSectionReady" class="fa fa-spinner fa-spin"></i>
+    </h4>
+    <div class="col-md-6 col-xs-12 text-right container-action-buttons">
+      <button class="btn btn-default"
+              ng-click="vm.cancelCopy()">
+        Back
+      </button>
+      <button ladda="vm.loading"
+              class="btn btn-success"
+              ng-click="vm.copyPromotion()"
+              ng-disabled="edit_promotion.$invalid ||
+              !vm.promotionPicture ||
+              (vm.locationType && vm.promotion.criteria.states.length == 0) ||
+              vm.promotionService.existErrorsInSpecificSchedule(vm.isSpecificScheduleChecked)">
+        Copy
+      </button>
+    </div>
+  </header>
+
+  <section>
+
+    <form name="edit_promotion" novalidate ng-show="vm.isSectionReady">
+
+      <div class="separator"></div>
+      <!-- Conditions -->
+      <ng-include src="'/views/partials/promotion/copy_promotion/conditions.html'"></ng-include>
+      <!-- Aditional parameters  -->
+      <ng-include src="'/views/partials/promotion/copy_promotion/additional_parameters.html'"></ng-include>
+      <!-- Scheduling -->
+      <ng-include src="'/views/partials/promotion/copy_promotion/scheduling.html'"></ng-include>
+      <!-- Location -->
+      <ng-include src="'/views/partials/promotion/copy_promotion/location.html'"></ng-include>
+      <!-- Comunication -->
+      <ng-include src="'/views/partials/promotion/copy_promotion/communication.html'"></ng-include>
+      <br/><br/>
+
+    </form>
+
+  </section>
+
+</article>

@@ -1,0 +1,261 @@
+<div class="modal-header">
+  <button ng-hide="vm.loading.payment" class="close" id="btn_close" ng-click="vm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <h4 class="modal-title">Payments - Driver - History</h4>
+</div>
+<div class="modal-body">
+  <div block-ui="paymentsDriverHistoryList">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-passengers">
+
+          <div class="row sub-header">
+            <div class="col-xs-12 col-sm-5 col-md-7 col-lg-8">
+              <h5>{{vm.payment.cycle.from | date:'dd/MM/yyyy'}} - Transactions ({{vm.totalTransactions}})</h5>
+            </div>
+            <div class="col-xs-12 col-sm-7 col-md-5 col-lg-4 text-right pull-right">
+              <!-- <a href="{{}}" style="text-decoration: none;">
+                 <button
+                   ladda="vm.loading.exportToTxt" data-style="slide-left" class="btn btn-sm btn-primary"
+                   ng-click="vm.exportToTxt()">
+                   Invalidate
+                 </button>
+               </a>
+               <span>&nbsp;</span> -->
+              <a href="{{vm.getCsvUrl()}}" style="text-decoration: none;">
+                <button ng-if="vm.getUserPermission('export:payments')"
+                        ladda="vm.loading.export" data-style="expand-left" class="btn btn-sm btn-primary"
+                        ng-click="vm.exportToCsv()">
+                  Export to CSV
+                </button>
+              </a>
+            </div>
+          </div>
+
+          <div class="">
+            <div class="row">
+              <div class="col-sm-8 popup-details">
+                <div class="profile-container">
+                  <div class="img-profile">
+                    <profile-img ng-if="vm.driver" img-src="{{vm.driver.profileImg}}" img-vertical-size=" 85" img-size="85"></profile-img>
+                    <div class="status-profile">
+                      <i ng-if="vm.driver.status=='IN_REVIEW'"
+                         class="material-icons status-box bg-review">access_time</i>
+                      <i ng-if="vm.driver.status=='APPROVAL_EXPIRED'" class="material-icons status-box bg-expired">timelapse</i>
+                      <i ng-if="vm.driver.status=='OK'" class="material-icons status-box bg-ok">check_circle</i>
+                      <i ng-if="vm.driver.status=='SUSPENDED'" class="material-icons status-box bg-suspended">remove_circle_outline</i>
+                      <i ng-if="vm.driver.status=='REJECTED'" class="material-icons status-box bg-rejected">cancel</i>
+                      <i ng-if="vm.driver.status=='PENDING_RESIGNATION'" class="material-icons status-box bg-reasigned">call_split</i>
+                    </div>
+                  </div>
+                  <div class="info-profile">
+                    <h5 ng-if="vm.driver" class="text-bluedark font-bold">{{vm.metadata.driver.firstName + ' ' +
+                      vm.metadata.driver.lastName | lowercase}}</h5>
+                    <div ng-if="vm.driver && vm.driver.createdDate"
+                         class="container-raiting-joindate-rides-cancelledrate">
+                      <div class="raiting">
+                        <average-star-rating average="vm.driver.rating"></average-star-rating>
+                      </div>
+                      <div class="joindate">
+                        <span class="text-light-grey margin-top">Join date: {{vm.driver.createdDate | date:'dd/MM/yyyy'}}</span>
+                      </div>
+                    </div>
+                    <div ng-if="vm.driver"
+                         class="container-raiting-joindate-rides-cancelledrate">
+                      <div class="rides">
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                          <ul class="nav navbar-nav">
+                            <li class="dropdown">
+                              <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{vm.driver.ridesCount}}
+                                Rides <span class="caret"></span></a>
+                              <div class="dropdown-menu" role="menu">
+                                <div class="header-last-ride">
+                                  <span class="text-blue-light font-bold">Driver's last ride</span>
+                                </div>
+                                <div class="title-last-ride">
+                                  <div class="col-xs-6">
+                                    <span class="font-10 text-light-grey font-bold">Date</span>
+                                  </div>
+                                  <div class="col-xs-6">
+                                    <span class="font-10 text-light-grey font-bold">Status</span>
+                                  </div>
+                                </div>
+                                <div ng-if="!vm.lastRide" class="loading-last-ride">
+                                  <i class="fa fa-spinner fa-spin"></i>
+                                </div>
+                                <div class="last-ride">
+                                  <div class="col-xs-6">
+                                    <span class="font-12 text-light-grey">
+                                      {{vm.lastRide.createdDate | date:'dd/MM/yyyy hh:mm a'}}
+                                    </span>
+                                  </div>
+                                  <div class="col-xs-6">
+                                    <span class="font-12 text-light-grey">{{vm.lastRide.status | capitalize}} by {{vm.lastRide.statusUpdatedBy | capitalize}}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="cancelledrate">
+                        <img class="rate-chart" ng-src="{{vm.pathSourceImageForCancelledPercent}}">
+                        <span class="font-18 text-light-grey"><strong>{{vm.driver.cancelledPercentage}}</strong></span>
+                        <span class="font-lightgrey font-12">Cancelled</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+
+              <div class="col-sm-4">
+                <div class="pull-right" style="border: 4px solid #eee; padding: 10px;">
+                  <strong><span>Initial Balance:</span>
+                    <span ng-class="{'text-danger' : vm.metadata.initialBalance < 0}">{{vm.metadata.currency}}. {{vm.metadata.initialBalance | number: 2}}</span></strong>
+                  <br>
+                  <strong><span ng-class="{'text-success' : vm.metadata.balance > 0}">Final Balance:</span> <span>{{vm.metadata.currency}}. {{vm.metadata.balance | number: 2}}</span></strong>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <li>
+            <span>Filters</span>
+          </li> -->
+          <div class="row shape-light-grey">
+            <div class="col-sm-12 margin-bottom-15">
+              <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+                <li>
+                  <select class="new-select font-13" ng-model="vm.filter.types">
+                    <option disabled selected value="">Type</option>
+                    <option value="ALL">All</option>
+                    <option value="ACHIEVEMENT">Achievement</option>
+                    <option value="CORPORATE">Corporate</option>
+                    <option value="CREDIT_CARD">Credit card</option>
+                    <option value="REFERRAL_DISCOUNT">Referral discount</option>
+                    <option value="REFERRAL_DRIVER_BONUS">Referral driver bonus</option>
+                    <option value="REFERRAL_NEW_DRIVER">Referral new driver</option>
+                    <option value="SYSTEM">System</option>
+                  </select>
+                </li>
+                <li>
+                  <select class="new-select font-13" ng-model="vm.filter.withSuspicious">
+                    <option disabled selected value="">Suspicious</option>
+                    <option value="ALL">All</option>
+                    <option value="true">True</option>
+                    <option value="false">False</option>
+                  </select>
+                </li>
+                <li style="width: 175px;">
+                  <select multiple="multiple" id="filter_status_modal" class="font-13 multiple-state"
+                          ng-model="vm.filter.status">
+                    <option value="IN_PROCESS">In process</option>
+                    <option value="COMPLETED">Completed</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="REJECTED">Rejected</option>
+                  </select>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="padding-top-null">
+            <table class="table table-hover table-condensed table-bordered">
+              <thead>
+              <th style="width: 111px;">
+              </th>
+              <th class="column-header-color">
+                Time
+              </th>
+              <th class="column-header-color">
+                Reference
+              </th>
+              <th class="column-header-color">
+                Type
+              </th>
+              <th class="column-header-color">
+                Amount
+              </th>
+              <th class="column-header-color">
+                Suspicious
+              </th>
+              <th class="column-header-color">
+                Status
+              </th>
+              </thead>
+              <tbody>
+              <tr ng-repeat="trx in vm.transactions track by $index">
+                <td>
+                  <span><a href="" ng-click="vm.addCreditOrDebit(trx)" ng-if="trx.ride">Invalidate</a></span>
+                </td>
+                <td>
+                  <span>{{trx.createdAt | date:'hh:mm a'}}</span>
+                </td>
+                <td>
+                  <span>{{trx.reference}}</span>
+                </td>
+                <td>
+                  <span ng-switch="trx.paymentReason">
+                    <span ng-switch-when="SYSTEM">System</span>
+                    <span ng-switch-when="ACHIEVEMENT">Achievement</span>
+                    <span ng-switch-when="CREDIT_CARD">Credit card</span>
+                    <span ng-switch-when="CORPORATE">Corporate</span>
+                    <span ng-switch-when="REFERRAL_NEW_DRIVER">Referral new driver</span>
+                    <span ng-switch-when="REFERRAL_DISCOUNT">Referral discount</span>
+                    <span ng-switch-when="REFERRAL_DRIVER_BONUS">Referral driver bonus</span>
+                    <span ng-switch-default></span>
+                  </span>
+                </td>
+                <td>
+                  <span ng-class="{'text-danger' : trx.amount < 0}">{{trx.amount | number: 2}}</span>
+                </td>
+                <td>
+                  <span ng-switch="trx.suspicious">
+                    <span ng-switch-when="true">Yes</span>
+                    <span ng-switch-when="false">No</span>
+                  </span>
+                </td>
+                <td>
+                  <span ng-switch="trx.status">
+                    <span ng-switch-when="IN_PROCESS">In process</span>
+                    <span ng-switch-when="COMPLETED">Completed</span>
+                    <span ng-switch-when="PENDING">Pending</span>
+                    <span ng-switch-when="REJECTED">Rejected</span>
+                    <span ng-switch-default></span>
+                  </span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bar-pagination">
+        <div class="row">
+          <div class="col-sm-8 text-left">
+            <pagination boundary-links="true"
+                        class="pagination"
+                        first-text="&laquo;"
+                        items-per-page="vm.controls.numPerPage"
+                        last-text="&raquo;"
+                        max-size="5"
+                        next-text="&rsaquo;"
+                        ng-model="vm.controls.currentPage"
+                        previous-text="&lsaquo;"
+                        rotate="false"
+                        total-items="vm.totalTransactions"></pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+<div class="modal-footer">
+  <button class="btn btn-danger" ng-click="vm.close()" ng-disabled="vm.loading.load">Close</button>
+</div>

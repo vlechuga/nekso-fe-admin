@@ -1,0 +1,62 @@
+<div class="modal-header">
+  <button class="close" id="btn_close" ng-click="carModalVm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row sub-header">
+    <div class="col-sm-12">
+      <div class="input-group header-item">
+        <h4 class="margin-null">Car information</h4>
+      </div>
+    </div>
+  </div>
+  <div class="row panel margin-null">
+    <div class="col-sm-12">
+      <div class="car-panel">
+        <div class="car-photo">
+          <img-with-loading class="car-image" img-size="100" img-src="{{carModalVm.carInfo.carImg}}" img-vertical-size="255" spinner-class="background-spinner"></img-with-loading>
+        </div>
+        <div class="container-fluid car-information padding-left-null padding-right-null">
+          <div class="row">
+            <div class="col-sm-6">
+              <label>
+                <strong class="text-blue-light">Make</strong>
+              </label>
+              <h5 class="margin-null">{{carModalVm.carInfo.car.make}}</h5>
+            </div>
+            <div class="col-sm-6">
+              <label>
+                <strong class="text-blue-light">Model</strong>
+              </label>
+              <h5 class="margin-null">{{carModalVm.carInfo.car.model}}</h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <label>
+                <strong class="text-blue-light">Color</strong>
+              </label>
+              <h5 class="margin-null">{{carModalVm.getCarColor()}}</h5>
+            </div>
+            <div class="col-sm-6">
+              <label>
+                <strong class="text-blue-light">Year</strong>
+              </label>
+              <h5 class="margin-null">{{carModalVm.carInfo.year}}</h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <label>
+                <strong class="text-blue-light">Plate</strong>
+              </label>
+              <h5 class="margin-null">{{carModalVm.carInfo.plate}}</h5>
+            </div>
+            <div class="col-sm-6"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

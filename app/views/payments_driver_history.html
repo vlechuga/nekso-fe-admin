@@ -1,0 +1,276 @@
+<div class="container-fluid">
+  <div>
+    <div class="row">
+      <div class="col-sm-6">
+        <h4 class="modal-title">Detail</h4>
+      </div>
+      <div class="col-sm-6">
+        <a class="display-flex back-button pull-right" ng-click="vm.return()">
+          <i class="material-icons font-18">arrow_back</i><span class="font-12 font-bold">BACK</span>
+        </a>
+      </div>
+    </div>
+    <div block-ui="paymentsDriverHistoryList">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-driver-payment">
+            <div class="row sub-header">
+              <div class="col-xs-12 col-sm-5 col-md-7 col-lg-8">
+                <h5>{{vm.payment.cycle.from | date:'dd/MM/yyyy'}} - Transactions
+                  ({{vm.totalTransactions}})</h5>
+              </div>
+              <div class="col-xs-12 col-sm-7 col-md-5 col-lg-4 text-right pull-right">
+                <a ng-href="{{vm.csvUrl}}" style="text-decoration: none;">
+                  <button ng-if="vm.getUserPermission('export:payments')" class="btn btn-sm btn-primary" ng-click="vm.getDriverPaymentsDetailCsvUrl()">
+                    Export to CSV
+                  </button>
+                </a>
+              </div>
+            </div>
+            <div ng-if="vm.driver">
+              <div class="row">
+                <div class="col-sm-8 popup-details">
+                  <div class="profile-container">
+                    <div class="img-profile">
+                      <profile-img ng-if="vm.driver" img-src="{{vm.driver.profileImg}}" img-vertical-size=" 85"
+                                   img-size="85"></profile-img>
+                      <div class="status-profile">
+                        <i ng-if="vm.driver.status=='IN_REVIEW'"
+                           class="material-icons status-box bg-review">access_time</i>
+                        <i ng-if="vm.driver.status=='APPROVAL_EXPIRED'" class="material-icons status-box bg-expired">timelapse</i>
+                        <i ng-if="vm.driver.status=='OK'" class="material-icons status-box bg-ok">check_circle</i>
+                        <i ng-if="vm.driver.status=='SUSPENDED'" class="material-icons status-box bg-suspended">remove_circle_outline</i>
+                        <i ng-if="vm.driver.status=='REJECTED'"
+                           class="material-icons status-box bg-rejected">cancel</i>
+                        <i ng-if="vm.driver.status=='PENDING_RESIGNATION'"
+                           class="material-icons status-box bg-reasigned">call_split</i>
+                      </div>
+                    </div>
+                    <div class="info-profile">
+                      <h5 ng-if="vm.driver" class="text-bluedark font-bold">{{vm.metadata.driver.firstName + ' ' +
+                        vm.metadata.driver.lastName | lowercase}}</h5>
+                      <div ng-if="vm.driver && vm.driver.createdDate"
+                           class="container-raiting-joindate-rides-cancelledrate">
+                        <div class="raiting">
+                          <average-star-rating average="vm.driver.rating"></average-star-rating>
+                        </div>
+                        <div class="joindate">
+                          <span class="text-light-grey margin-top">Join date: {{vm.driver.createdDate | date:'dd/MM/yyyy'}}</span>
+                        </div>
+                      </div>
+                      <div ng-if="vm.driver"
+                           class="container-raiting-joindate-rides-cancelledrate">
+                        <div class="rides">
+                          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <ul class="nav navbar-nav">
+                              <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{vm.driver.ridesCount}}
+                                  Rides <span class="caret"></span></a>
+                                <div class="dropdown-menu" role="menu">
+                                  <div class="header-last-ride">
+                                    <span class="text-blue-light font-bold">Driver's last ride</span>
+                                  </div>
+                                  <div class="title-last-ride">
+                                    <div class="col-xs-6">
+                                      <span class="font-10 text-light-grey font-bold">Date</span>
+                                    </div>
+                                    <div class="col-xs-6">
+                                      <span class="font-10 text-light-grey font-bold">Status</span>
+                                    </div>
+                                  </div>
+                                  <div ng-if="!vm.lastRideDetail" class="loading-last-ride">
+                                    <i class="fa fa-spinner fa-spin"></i>
+                                  </div>
+                                  <div class="last-ride">
+                                    <div class="col-xs-6">
+                                    <span class="font-12 text-light-grey">
+                                      {{vm.lastRideDetail.createdDate | date:'dd/MM/yyyy hh:mm a'}}
+                                    </span>
+                                    </div>
+                                    <div class="col-xs-6">
+                                      <span class="font-12 text-light-grey">{{vm.lastRideDetail.status | capitalize}} by {{vm.lastRideDetail.statusUpdatedBy | capitalize}}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div class="cancelledrate">
+                          <img class="rate-chart" ng-src="{{vm.pathSourceImageForCancelledPercent}}">
+                          <span
+                            class="font-18 text-light-grey"><strong>{{vm.driver.cancelledPercentage}}</strong></span>
+                          <span class="font-lightgrey font-12">Cancelled</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-sm-4">
+                  <div class="pull-right" style="border: 4px solid #eee; padding: 10px;">
+                    <strong><span>Initial Balance:</span>
+                      <span ng-class="{'text-danger' : vm.metadata.initialBalance < 0}">{{vm.metadata.currency}}. {{vm.metadata.initialBalance | number: 2}}</span></strong>
+                    <br>
+                    <strong><span ng-class="{'text-success' : vm.metadata.balance > 0}">Final Balance:</span> <span>{{vm.metadata.currency}}. {{vm.metadata.balance | number: 2}}</span></strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="row shape-light-grey">
+              <div class="col-sm-12 margin-bottom-15">
+                <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+                  <li>
+                    <select class="nekso-form__select" ng-model="vm.filter.types">
+                      <option disabled selected value="">Type of transaction</option>
+                      <option value="ALL">All</option>
+                      <option value="ACHIEVEMENT">Achievement</option>
+                      <option value="COMMISSION">Commission</option>
+                      <option value="CORPORATE">Corporate</option>
+                      <option value="CREDIT_CARD">Credit card</option>
+                      <option value="REFERRAL_DISCOUNT">Referral discount</option>
+                      <option value="REFERRAL_DRIVER_BONUS">Referral driver bonus</option>
+                      <option value="REFERRAL_NEW_DRIVER">Referral new driver</option>
+                      <option value="SYSTEM">System</option>
+                      <option value="PROMOTIONAL_CODE">Promotional code</option>
+                      <option value="SYSTEM">System</option>
+                      <option value="PROMOTIONAL_CODE">Promotional code</option>
+                      <option value="PAYMENT">Payment</option>
+                      <option value="PAYMENT_REVERSE">Payment reverse</option>
+                      <option value="WALLET">Nekso Credit</option>
+                    </select>
+                  </li>
+                  <li>
+                    <select class="nekso-form__select" ng-model="vm.filter.withSuspicious">
+                      <option disabled selected value="">Suspicious</option>
+                      <option value="ALL">All</option>
+                      <option value="true">True</option>
+                      <option value="false">False</option>
+                    </select>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="padding-top-null">
+              <table class="table table-hover table-condensed table-bordered">
+                <thead>
+                <th class="column-header-color text-center">
+                  Note
+                </th>
+                <th class="column-header-color text-center">
+                  Time
+                </th>
+                <th class="column-header-color text-center">
+                  Type
+                </th>
+                <th class="column-header-color text-center">
+                  Amount
+                </th>
+                <th class="column-header-color text-center">
+                  Suspicious
+                </th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="trx in vm.transactions track by $index">
+                  <td class="text-center">
+                    <span><a href=""
+                             ng-click="vm.addNote(trx)"
+                             ng-if="!trx.reference &&
+                                    trx.reason !== 'DEPOSIT' &&
+                                    trx.reason !== 'SERVICE_CHARGE' &&
+                                    trx.reason !== 'CREDIT_NOTE' &&
+                                    trx.reason !== 'DEBIT_NOTE' &&
+                                    trx.reason !== 'PAYMENT' &&
+                                    trx.reason !== 'PAYMENT_REVERSE' &&
+                                    (vm.payment.status === 'MISSING_INFORMATION' ||
+                                    vm.payment.status === 'PENDING' ||
+                                    vm.payment.status === 'TRANSFERRED')">Add note</a></span>
+                    <span><a href=""
+                             ng-click="vm.viewNote(trx)"
+                             ng-if="trx.operation === 'PAYMENT_REVERSE' ||
+                                    trx.operation === 'PAYMENT' ||
+                                    (trx.operation !== 'CREDIT_NOTE' &&
+                                    trx.operation !== 'DEBIT_NOTE' &&
+                                    trx.reference)">View note</a></span>
+                    <span><a href=""
+                             ng-click="vm.viewNote(trx)"
+                             ng-if="trx.operation === 'CREDIT_NOTE' || trx.operation === 'DEBIT_NOTE'">View detail</a></span>
+                  </td>
+                  <td>
+                    <span class="text-center">{{trx.createdAt | date:'hh:mm a'}}</span>
+                  </td>
+                  <td>
+                    <span class="text-center" ng-switch="trx.reason">
+                      <span ng-switch-when="DEPOSIT">Deposit</span>
+                      <span ng-switch-when="SERVICE_CHARGE">Service charge</span>
+                      <span ng-switch-when="THIRD_PARTY_FEE">Third party fee</span>
+                      <span ng-switch-when="PROMOTION">Promotion</span>
+                      <span ng-switch-when="APPLICATION_FEE">Commission</span>
+                      <span ng-switch-when="CONTROLLER_FEE">Controller fee</span>
+                      <span ng-switch-when="NEKSO_FEE">Nekso fee</span>
+                      <span ng-switch-when="CREDIT_NOTE">Credit note</span>
+                      <span ng-switch-when="DEBIT_NOTE">Debit note</span>
+                      <span ng-switch-when="PAYMENT">Payment</span>
+                      <span ng-switch-when="PAYMENT_REVERSE">Payment reverse</span>
+                      <span ng-switch-when="SYSTEM">System</span>
+                      <span ng-switch-when="ACHIEVEMENT">Achievement</span>
+                      <span ng-switch-when="CREDIT_CARD">Credit card</span>
+                      <span ng-switch-when="CORPORATE">Corporate</span>
+                      <span ng-switch-when="REFERRAL_NEW_DRIVER">Referral new driver</span>
+                      <span ng-switch-when="REFERRAL_DISCOUNT">Referral discount</span>
+                      <span ng-switch-when="REFERRAL_DRIVER_BONUS">Referral driver bonus</span>
+                      <span ng-switch-when="COMMISSION">Commission</span>
+                      <span ng-switch-when="PROMOTIONAL_CODE">Promotional code</span>
+                      <span ng-switch-when="WALLET">Nekso Credit</span>
+                      <span ng-switch-default></span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="text-right" ng-class="{'text-danger' : trx.amount < 0}">{{trx.currency}} {{trx.amount | number: 2}}</span>
+                  </td>
+                  <td>
+                  <span class="text-center" ng-switch="trx.suspicious">
+                    <span ng-switch-when="true">Yes</span>
+                    <span ng-switch-when="false">No</span>
+                  </span>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="bar-pagination">
+          <div class="row">
+            <div class="col-sm-8 text-left">
+              <pagination boundary-links="true"
+                          class="pagination"
+                          first-text="&laquo;"
+                          items-per-page="vm.controls.numPerPage"
+                          last-text="&raquo;"
+                          max-size="5"
+                          next-text="&rsaquo;"
+                          ng-model="vm.controls.currentPage"
+                          previous-text="&lsaquo;"
+                          rotate="false"
+                          total-items="vm.totalTransactions"></pagination>
+            </div>
+            <div class="col-sm-4 text-right">
+              <div class="btn-group items-per-page">
+                <label btn-radio="10" class="btn btn-default" id="btn_numPerPage10"
+                       ng-model="vm.controls.numPerPage">10</label>
+                <label btn-radio="25" class="btn btn-default" id="btn_numPerPage25"
+                       ng-model="vm.controls.numPerPage">25</label>
+                <label btn-radio="50" class="btn btn-default" id="btn_numPerPage50"
+                       ng-model="vm.controls.numPerPage">50</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

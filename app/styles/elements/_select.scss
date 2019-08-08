@@ -1,0 +1,27 @@
+select.nekso-form__select {
+  display: block;
+  width: 100%;
+  height: __em(37);
+  padding: 0 20px 0 15px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid $wild-sand-grey;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 26px;
+  color: $dusty-gray;
+  text-decoration: none;
+  border-radius: 4px;
+  background-color: $white;
+  background-position: 97% 50%;
+  background-size: 10px 15px;
+  box-shadow: none;
+  &:focus, &:active {
+    outline: none;
+    outline-style: none;
+  }
+}
+
+select.nekso-form__select:disabled {
+  color: $iron-grey;
+}

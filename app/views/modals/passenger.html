@@ -1,0 +1,139 @@
+<div class="popup-details" block-ui="livePassenger">
+
+  <div class="close-modal">
+    <button class="close" id="btn_close" ng-click="vm.close()" type="button">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="header-item font-normal line-height-span">
+        <span class="font-black font-24">Passenger</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="profile-container">
+        <div class="img-profile">
+          <profile-img img-src="{{vm.passenger.profileImg}}" img-vertical-size="85"
+                       img-size="85"></profile-img>
+          <div class="status-profile">
+            <i ng-if="vm.passenger.status=='OK'" title="Approved"
+               class="material-icons status-box bg-ok">check_circle</i>
+            <i ng-if="vm.passenger.status=='SUSPENDED'" title="Suspended"
+               class="material-icons status-box bg-suspended">remove_circle_outline</i>
+          </div>
+        </div>
+        <div class="info-profile">
+          <span ng-if="!vm.passenger" class="font-14 font-bold font-grey margin-left">Passenger not found</span>
+
+          <div ng-if="vm.passenger">
+            <h5 class="text-bluedark font-bold">{{vm.passenger.firstName | capitalize}} {{vm.passenger.lastName |
+              capitalize}}</h5>
+            <div ng-if="vm.passenger.createdDate" class="container-raiting-joindate-rides-cancelledrate">
+              <div class="raiting">
+                <average-star-rating average="vm.passenger.rating"></average-star-rating>
+              </div>
+              <div class="joindate">
+              <span
+                class="text-light-grey margin-top">Join date: {{vm.passenger.createdDate | date:'dd/MM/yyyy'}}</span>
+              </div>
+            </div>
+            <div ng-if="vm.passenger.ridesCount" class="container-raiting-joindate-rides-cancelledrate">
+              <div class="rides">
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                  <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                      <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{vm.passenger.ridesCount}}
+                        Rides <span class="caret"></span></a>
+                      <div class="dropdown-menu" role="menu">
+                        <div class="header-last-ride">
+                          <span class="text-blue-light font-bold">Driver's last ride</span>
+                        </div>
+                        <div class="title-last-ride">
+                          <div class="col-xs-6">
+                            <span class="font-10 text-light-grey font-bold">Date</span>
+                          </div>
+                          <div class="col-xs-6">
+                            <span class="font-10 text-light-grey font-bold">Status</span>
+                          </div>
+                        </div>
+                        <div ng-if="!vm.lastRide" class="loading-last-ride">
+                          <i class="fa fa-spinner fa-spin"></i>
+                        </div>
+                        <div ng-if="vm.lastRide" class="last-ride">
+                          <div class="col-xs-6">
+                          <span
+                            class="font-12 text-light-grey">{{vm.lastRide.createdDate | date:'dd/MM/yyyy hh:mm a'}}</span>
+                          </div>
+                          <div class="col-xs-6">
+                            <span class="font-12 text-light-grey">{{vm.lastRide.status | capitalize}} by {{vm.lastRide.statusUpdatedBy | capitalize}}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="cancelledrate">
+                <img class="rate-chart" ng-src="{{vm.pathSourceImageForCancelledPercent}}">
+                <span class="font-18 text-light-grey"><strong>{{vm.passenger.cancelledPercentage}}</strong></span> <span
+                class="font-lightgrey font-12">Cancelled</span>
+              </div>
+            </div>
+            <div class="line-dividir"></div>
+            <div ng-if="vm.passenger.clubNeksoImg" class="clnekso-section">
+              <div class="img-icon">
+                <img class="clnekso-icon" ng-src="{{vm.passenger.clubNeksoImg}}">
+              </div>
+              <div class="info-clnekso">
+                <div><span class="font-12 font-lightgrey">Club Nekso Level</span></div>
+                <div><span
+                  class="font-12 text-bluedark font-bold">{{vm.passenger.currentAchievementName || 'Explorer'}}</span>
+                </div>
+                <img class="level-clnekso" ng-src="{{vm.pathSourceImageForClubNeksoStar}}">
+              </div>
+            </div>
+            <div class="line-dividir"></div>
+            <div class="contact-info">
+              <div ng-if="vm.passenger.phone" class="display-flex"><i class="material-icons font-18 text-light-grey">smartphone</i><span
+                class="font-14 font-bold font-grey margin-left">{{vm.passenger.phone}}</span></div>
+              <div ng-if="vm.passenger.email" class="display-flex"><i class="material-icons font-18 text-light-grey">mail</i><span
+                class="font-14 font-bold font-grey margin-left">{{vm.passenger.email}}</span></div>
+              <div><span class="font-12 font-grey">{{vm.passenger.location}}</span></div>
+            </div>
+            <div class="line-dividir" ng-if="vm.passenger.walletBalance"></div>
+            <div class="balance-details" ng-if="vm.passenger.walletBalance">
+              <img src="images/icon_balance.svg"/>
+              <span class="font-14 font-bold font-grey margin-left">
+              {{vm.passenger.walletCurrency}}. {{vm.passenger.walletBalance | currency: "" : 0}}
+            </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--ADD SUSPICIOUS TAG-->
+  <div class="row" ng-if="vm.canToAddSuspicious && vm.passenger">
+    <div class="col-sm-6">
+      <button type="button" class="btn btn-default" ng-if="vm.getUserPermission('update:passengers')"
+              ng-click="vm.addTag()"
+              ladda="vm.loading"
+              data-style="slide-left"
+              data-spinner-color="#000000">ADD SUSPICIOUS BEHAVIOR TAG
+      </button>
+    </div>
+    <div class="col-sm-6 display-flex" ng-if="vm.response.message">
+      <div class="col-sm-2">
+        <span><i class="material-icons" ng-class="vm.response.class">{{vm.response.icon}}</i></span>
+      </div>
+      <div class="col-sm-10">
+        <span class="font-10">{{vm.response.message}}</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,318 @@
+<div ng-if="vm.notAuthMsg" not-authorized message="vm.notAuthMsg" class="not-authorized"></div>
+
+<div class="container-fluid padding-footer full-height promotion">
+  <form name="new_message" novalidate>
+    <div class="row sub-header">
+      <div class="col-sm-6">
+        <h4>Communication Channel - Create message</h4>
+      </div>
+      <div class="col-sm-6 text-right">
+        <div class="row row-space">
+          <div class="col-sm-12">
+            <button class="btn btn-default"
+                    ng-click="vm.back()">
+              Back
+            </button>
+            <button class="btn btn-default"
+                    ng-click="vm.clear()">
+              Clear
+            </button>
+            <button ladda="vm.loading"
+                    data-style="slide-left"
+                    class="btn btn-success"
+                    ng-disabled="new_message.$invalid"
+                    ng-click="vm.createMessage()">
+              Create message
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default panel-rides panel-no-shadow" style="margin-top: 10px; margin-bottom: 10px">
+      <div class="row row-separation">
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="col-sm-12">
+              <h5 class="margin-top-null"><strong>Select Target Users</strong></h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 checkbox-list">
+              <div class="radio">
+                <label>
+                  <input type="radio" name="optionsRadios6" value="ALL" ng-model="vm.role" required>
+                  All drivers
+                </label>
+                <label>
+                  <input type="radio" name="optionsRadios6" value="DIGITAL" ng-model="vm.role" required>
+                  Digital drivers
+                </label>
+                <label>
+                  <input type="radio" name="optionsRadios6" value="TRADITIONAL" ng-model="vm.role" required>
+                  Traditional drivers
+                </label>
+                <label>
+                  <input type="radio" name="optionsRadios6" value="SELECTED" ng-model="vm.role" required>
+                  Selected drivers
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6" ng-if="vm.role === 'SELECTED'">
+          <div class="row">
+            <div class="col-sm-12">
+              <h5 class="margin-top-null"><strong>Upload CSV file</strong></h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <input type="file" file-reader="vm.csvFile" required accept=".csv"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row row-separation">
+        <div class="col-sm-12">
+          <h5><strong>Set Location</strong></h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group" ng-class="{ 'has-error' : new_message.field_country.$invalid &&  !new_message.$pristine}">
+            <select class="form-control" ng-model="vm.selectedCountry" required name="field_country">
+              <option disabled selected value="">Select country</option>
+              <option ng-repeat="country in vm.countries track by country.id" value="{{country}}">{{country.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group force-select-element-style" ng-class="{ 'force-select-element-style-has-error' : new_message.field_states.$invalid &&  !new_message.$pristine}">
+            <select multiple="multiple" id="field_states" ng-model="vm.selectedStates" name="field_states">
+              <option ng-repeat="state in vm.countryStates track by state.id" value="{{state}}">{{state.name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row row-separation">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-12">
+              <h5><strong>Description of message</strong></h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group" ng-class="{ 'has-error' : new_message.field_promotionName.$invalid &&  !new_message.$pristine}">
+                <input name="field_promotionName" class="form-control"
+                       placeholder="Message title (Max. 30 char.)"
+                       ng-model="vm.message.english.title" type="text" ng-maxlength="30" maxlength="30" required>
+                <h6 class="text-danger" ng-if="new_message.field_promotionName.$error.max &&  !new_message.field_promotionName.$pristine">Max. 20 characters</h6>
+                <h6 class="text-danger" ng-if="new_message.field_promotionName.$error.required &&  !new_message.field_promotionName.$pristine">This field is mandatory</h6>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group" ng-class="{ 'has-error' : new_message.field_shortDescription.$invalid &&  !new_message.$pristine}">
+                <textarea class="form-control" rows="2" style="resize:none;"
+                          placeholder="Short Description (Max. 60 char.)"
+                          name="field_shortDescription"
+                          ng-maxlength="60" maxlength="60" required ng-model="vm.message.english.shortDescription"></textarea>
+                <h6 class="text-danger" ng-if="new_message.field_shortDescription.$error.max &&  !new_message.field_shortDescription.$pristine">Max. 60 characters</h6>
+                <h6 class="text-danger" ng-if="new_message.field_shortDescription.$error.required &&  !new_message.field_shortDescription.$pristine">This field is mandatory</h6>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group" ng-class="{ 'has-error' : new_message.field_longDescription.$invalid &&  !new_message.$pristine}">
+                <textarea class="form-control" rows="3" style="resize:none;"
+                          placeholder="Long Description (Max. 450 char.)"
+                          name="field_longDescription"
+                          ng-maxlength="450" maxlength="450" ng-model="vm.message.english.longDescription"
+                          ng-disabled="vm.message.detailUrl"></textarea>
+                <h6 class="text-danger" ng-if="new_message.field_longDescription.$error.max &&  !new_message.field_longDescription.$pristine">Max. 300 characters</h6>
+                <h6 class="text-danger" ng-if="new_message.field_longDescription.$error.required &&  !new_message.field_longDescription.$pristine">This field is mandatory</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group" ng-class="{ 'has-error' : new_message.field_promotionNameEs.$invalid &&  !new_message.$pristine}">
+                <input name="field_promotionNameEs" class="form-control"
+                       placeholder="(Spanish)"
+                       ng-model="vm.message.spanish.title" type="text" ng-maxlength="30" maxlength="30" required>
+                <h6 class="text-danger" ng-if="new_message.field_promotionNameEs.$error.max &&  !new_message.field_promotionNameEs.$pristine">Max. 20 characters</h6>
+                <h6 class="text-danger" ng-if="new_message.field_promotionNameEs.$error.required &&  !new_message.field_promotionNameEs.$pristine">This field is mandatory</h6>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group" ng-class="{ 'has-error' : new_message.field_shortDescriptionEs.$invalid &&  !new_message.$pristine}">
+                <textarea class="form-control" rows="2" style="resize:none;"
+                          placeholder="(Spanish)"
+                          name="field_shortDescriptionEs"
+                          ng-maxlength="60" maxlength="60" required ng-model="vm.message.spanish.shortDescription"></textarea>
+                <h6 class="text-danger" ng-if="new_message.field_shortDescriptionEs.$error.max &&  !new_message.field_shortDescriptionEs.$pristine">Max. 60 characters</h6>
+                <h6 class="text-danger" ng-if="new_message.field_shortDescriptionEs.$error.required &&  !new_message.field_shortDescriptionEs.$pristine">This field is mandatory</h6>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group" ng-class="{ 'has-error' : new_message.field_longDescriptionEs.$invalid &&  !new_message.$pristine}">
+                <textarea class="form-control" rows="3" style="resize:none;"
+                          placeholder="(Spanish)"
+                          name="field_longDescriptionEs"
+                          ng-maxlength="450" maxlength="450" ng-model="vm.message.spanish.longDescription"
+                          ng-disabled="vm.message.detailUrl"></textarea>
+                <h6 class="text-danger" ng-if="new_message.field_longDescriptionEs.$error.max &&  !new_message.field_longDescriptionEs.$pristine">Max. 300 characters</h6>
+                <h6 class="text-danger"  ng-if="new_message.field_longDescriptionEs.$error.required &&  !new_message.field_longDescriptionEs.$pristine">This field is mandatory</h6>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="row row-separation">
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="col-sm-12">
+              <h5><strong>Detail link</strong></h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group" ng-class="{ 'has-error' : new_message.field_detailUrl.$invalid &&  !new_message.$pristine}">
+                <input name="field_detailUrl" class="form-control"
+                       placeholder="Detail link"
+                       ng-model="vm.message.detailUrl" type="url">
+                <h6 class="text-danger" ng-if="new_message.field_detailUrl.$error.required &&  !new_message.field_detailUrl.$pristine">This field is mandatory</h6>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="row row-separation">
+            <div class="col-sm-12">
+              <div class="form-group" ng-class="{ 'has-error' : new_message.field_imageUrl.$invalid &&  !new_message.$pristine}">
+                <input name="field_imageUrl" class="form-control"
+                       placeholder="Image url"
+                       ng-model="vm.message.pictureUrl" type="url"
+                required>
+                <h6 class="text-danger" ng-if="new_message.field_imageUrl.$error.required &&  !new_message.field_imageUrl.$pristine">This field is mandatory</h6>
+              </div>
+            </div>
+          </div> -->
+          <div class="row row-separation">
+            <div class="col-sm-12">
+              <h5><strong>Upload Image</strong></h5>
+            </div>
+          </div>
+          <div class="row row-separation">
+            <div class="col-md-8">
+              <div class="container-preview">
+                <div ng-if="!vm.file" class="preview-label">Preview</div>
+                <img ngf-thumbnail="vm.file || '/images/frame_image_promotion_default.png'" class="img-responsive">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h6><strong>Specification of images:</strong></h6>
+              <h6 ng-class="{'text-danger': (new_message.file.$error.maxHeight || new_message.file.$error.maxWidth || new_message.file.$error.minHeight || new_message.file.$error.minWidth) && !new_message.file.$pristine, 'text-success': (!new_message.file.$error.maxHeight && !new_message.file.$error.maxWidth && !new_message.file.$error.minHeight && !new_message.file.$error.minWidth) && !new_message.file.$pristine}">Dimension: 1280 x 680</h6>
+              <h6 ng-class="{'text-danger': new_message.file.$error.pattern && !new_message.file.$pristine, 'text-success': !new_message.file.$error.pattern && !new_message.file.$pristine}">Format: Only JPG</h6>
+              <h6 ng-class="{'text-danger': new_message.file.$error.maxSize && !new_message.file.$pristine, 'text-success': !new_message.file.$error.maxSize && !new_message.file.$pristine}">Max-size: 600 KB</h6>
+            </div>
+          </div>
+          <div class="row row-separation">
+            <div class="col-sm-12">
+              <div class="btn btn-default btn-sm" ngf-select ng-model="vm.file" name="file"
+                   ngf-pattern="'.jpg, .jpeg'"
+                   ngf-accept="'.jpg, .jpeg'"
+                   ngf-max-size="600KB"
+                   ngf-max-height="680"
+                   ngf-max-width="1280"
+                   ngf-min-height="680"
+                   ngf-min-width="1280"
+                   ngf-resize="{width: 1280, height: 680, centerCorp: true}"
+                   ngf-resize-if="$width > 1280 || $height > 680">Search image</div>
+              <span class="secundary-text margin-left"> {{vm.file.name}}</span>
+            </div>
+          </div>
+          <div class="row row-separation">
+            <div class="col-sm-12">
+              <h6 class="text-danger" ng-if="!vm.file && !new_message.$pristine">Select image</h6>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="row margin-bottom-15">
+            <div class="col-sm-12">
+              <h5><strong>Dates</strong></h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <label class="padding-left-null title-items-promotion">Start Date</label>
+            </div>
+            <div class="col-sm-9">
+              <p class="input-group margin-top-input date-box" ng-class="{ 'has-error' : new_message.field_from.$invalid &&  !new_message.$pristine}">
+                <input class="form-control date-picker font-11" type="datetime-local"
+                       ng-model="vm.message.validity.from" required name="field_from"/>
+              </p>
+              <h6 class="text-danger" ng-if="new_message.field_from.$error.required &&  !new_message.field_from.$pristine">This field is mandatory</h6>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <label class="padding-left-null title-items-promotion">End Date</label>
+            </div>
+            <div class="col-sm-9">
+              <p class="input-group margin-top-input date-box" ng-class="{ 'has-error' : new_message.field_to.$invalid &&  !new_message.$pristine}">
+                <input class="form-control date-picker font-11" type="datetime-local"
+                       ng-model="vm.message.validity.to" required name="field_to"/>
+              </p>
+              <h6 class="text-danger" ng-if="new_message.field_to.$error.required &&  !new_message.field_to.$pristine">This field is mandatory</h6>
+              <h6 class="text-danger" ng-if="new_message.field_to.$error.endBeforeStart">End date can't be less than Start date.</h6>
+            </div>
+          </div>
+          <div class="row row-separation aditional-parameters">
+            <div class="col-sm-12">
+              <div class="row display-flex">
+                <div class="col-sm-12">
+                  <h5>
+                    <strong>Additional parameters</strong>
+                  </h5>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-inline">
+                        <div class="form-group">
+                          <div class="checkbox">
+                            <label>
+                              <input type="checkbox" ng-model="vm.message.fixed">
+                              Fixed
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row-separation"></div>
+    </div>
+  </form>
+</div>

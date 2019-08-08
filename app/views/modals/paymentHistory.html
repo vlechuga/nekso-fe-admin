@@ -1,0 +1,62 @@
+<div class="modal-header">
+  <button class="close" id="btn_close" ng-click="vm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row sub-header">
+    <div class="col-sm-12">
+      <div class="input-group header-item">
+        <h5 class="margin-null">Payment status history</h5>
+      </div>
+    </div>
+  </div>
+  <div class="padding-top-null">
+    <table class="table table-hover table-condensed table-bordered">
+      <thead>
+        <th class="column-header-color">
+          Created at
+        </th>
+        <th class="column-header-color">
+          Status
+        </th>
+        <th class="column-header-color">
+          User
+        </th>
+        <th class="column-header-color">
+          Role
+        </th>
+        <th class="column-header-color">
+          Comments
+        </th>
+      </thead>
+      <tbody>
+        <tr ng-repeat="payment in vm.payment.statusHistory | orderBy:'-createdAt' track by $index">
+          <td class="capitalize">
+            <span>{{payment.createdAt | date:'dd/MM/yyyy hh:mm a'}}</span>
+          </td>
+          <td>
+            <span ng-switch="payment.status">
+              <span ng-switch-when="INVALID">Not valid</span>
+              <span ng-switch-when="IN_PROCESS">In process</span>
+              <span ng-switch-when="IN_REVIEW">In review</span>
+              <span ng-switch-when="PAID">Paid</span>
+              <span ng-switch-when="PENDING_TO_PAY">Pending to pay</span>
+              <span ng-switch-when="PENDING_INFORMATION">Pending for info</span>
+              <span ng-switch-default></span>
+            </span>
+          </td>
+          <td>
+            <span>{{payment.updatedByName}}</span>
+          </td>
+          <td>
+            <span>{{payment.updatedByRole}}</span>
+          </td>
+          <td>
+            <span>{{payment.comments}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

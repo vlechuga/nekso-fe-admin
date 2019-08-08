@@ -1,0 +1,65 @@
+<article class="edit-promotion">
+
+  <header class="row promoition-header">
+    <h4 class="col-md-6 col-xs-12">
+      Edit promotion
+      <i ng-hide="vm.isSectionReady" class="fa fa-spinner fa-spin"></i>
+    </h4>
+    <div class="col-md-6 col-xs-12 text-right container-action-buttons">
+      <div ng-if="!vm.editable">
+        <button class="btn btn-default"
+                ng-click="vm.openCopyPromotion()"
+                ng-if="mainVm.getUserPermission('create:promotions')">
+          Copy promotion
+        </button>
+        <button class="btn btn-default"
+                ng-click="vm.cancelEdit()">
+          Back
+        </button>
+        <button ladda="vm.loading.create"
+                ng-disabled="vm.promotionStatus === 'COMPLETED' ||
+                vm.promotionStatus === 'ARCHIVED'"
+                class="btn btn-success"
+                ng-click="vm.setEditable()"
+                ng-if="mainVm.getUserPermission('edit:promotions')">
+          Edit promotion
+        </button>
+      </div>
+      <div ng-if="vm.editable">
+        <button class="btn btn-default"
+                ng-disabled="vm.loading.edit"
+                ng-click="vm.setEditable()">
+          Cancel
+        </button>
+        <button ladda="vm.loading.edit"
+                data-style="slide-left"
+                class="btn btn-success"
+                ng-disabled="edit_promotion.$invalid ||
+                vm.promotionService.existErrorsInSpecificSchedule(vm.isSpecificScheduleChecked)"
+                ng-click="vm.editPromotion()">
+          Save
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <form name="edit_promotion" novalidate ng-show="vm.isSectionReady">
+
+      <div class="separator"></div>
+      <!-- Conditions -->
+      <ng-include src="'/views/partials/promotion/edit_promotion/conditions.html'"></ng-include>
+      <!-- Aditional parameters  -->
+      <ng-include src="'/views/partials/promotion/edit_promotion/additional_parameters.html'"></ng-include>
+      <!-- Scheduling -->
+      <ng-include src="'/views/partials/promotion/edit_promotion/scheduling.html'"></ng-include>
+      <!-- Location -->
+      <ng-include src="'/views/partials/promotion/edit_promotion/location.html'"></ng-include>
+      <!-- Comunication -->
+      <ng-include src="'/views/partials/promotion/edit_promotion/communication.html'"></ng-include>
+      <br/><br/>
+
+    </form>
+  </section>
+
+</article>

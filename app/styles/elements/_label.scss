@@ -1,0 +1,12 @@
+label.nekso-form__control-label {
+  position: absolute;
+  top: ($nekso-form-font-size / 0.6);
+  left: $nekso-form-font-size;
+  pointer-events: none;
+  padding-left: $nekso-form-spacer;
+  z-index: 1;
+  color: $nekso-form-label-color;
+  font-size: $nekso-form-font-size * 1.7;
+  font-weight: normal;
+  transition: all $nekso-form-transition-speed ease;
+}

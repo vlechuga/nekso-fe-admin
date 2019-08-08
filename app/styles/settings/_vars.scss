@@ -1,0 +1,40 @@
+/* Custom variables */
+
+// Text size base
+$size-base-font: 16 !default;
+
+// Font size for list
+$font-size-for-list: 120% !default;
+
+// General border radius
+$border-radius: 2 !default;
+
+// side-menu
+$width-side-menu: 220px;
+
+// Default shadow settings
+$shadow-h: 0px !default;
+$shadow-v: 0px !default;
+$shadow-blur: 4px !default;
+$shadow-spread: 0px !default;
+$shadow-color: $bluedark-light !default;
+$shadow-opacity: 0.75 !default;
+
+// Shadows
+$shadow-inset: inset 0 2px 2px 0 rgba(0,0,0,.14);
+$shadow-0: 0 0 1px rgba(0, 0, 0, 0);
+$shadow-2: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+$shadow-3: 0 3px 4px 0 rgba(0,0,0,.14),0 3px 3px -2px rgba(0,0,0,.2),0 1px 8px 0 rgba(0,0,0,.12);
+$shadow-4: 0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12),0 2px 4px -1px rgba(0,0,0,.2);
+$shadow-6: 0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12),0 3px 5px -1px rgba(0,0,0,.2);
+$shadow-8: 0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12),0 5px 5px -3px rgba(0,0,0,.2);
+
+// Nekso form vars ------------------------------------------------
+// Font Sizes
+$nekso-form-font-size: 1rem !default;
+$nekso-form-active-font-size: $nekso-form-font-size * 0.8 !default;
+$nekso-form-active-top: -($nekso-form-font-size*2) !default;
+
+// Animation
+$nekso-form-transition-speed: 0.1s !default;
+$nekso-form-spacer: $nekso-form-font-size * 1.5;

@@ -1,0 +1,59 @@
+@charset "UTF-8";
+
+/*  Settings
+    Global variables, config switches
+\*----------------------------------------------------------------------------*/
+@import "settings/colors";
+@import "settings/vars";
+
+/*  Tools
+    Tools like extends, mixins and functions necessary styles
+\*----------------------------------------------------------------------------*/
+@import "tools/clearfix";
+@import "tools/functions";
+@import "tools/mixins";
+@import "tools/ui-round";
+@import "tools/ui-shadow";
+
+/*  Generic
+    Ground zero styles, normalize.css, resets
+\*----------------------------------------------------------------------------*/
+@import "generic/reset";
+@import "generic/normalize";
+@import "generic/shared";
+@import "generic/box-sizing";
+@import "generic/flexbox";
+
+/*  Legacy code
+    Support current code.
+    Note: This archive is expected to disappear in the future due to
+    the restructuring of styles.
+\*----------------------------------------------------------------------------*/
+@import "base/legacy";
+
+/*  Elements
+    Global variables, config switches
+\*----------------------------------------------------------------------------*/
+@import "elements/form";
+@import "elements/button";
+@import "elements/radio";
+@import "elements/checkbox";
+@import "elements/select";
+@import "elements/input";
+@import "elements/label";
+@import "elements/multiselect";
+@import "elements/loader";
+
+/*  Components
+    Complex structures like cards, breadcrumb, search, etc...
+\*----------------------------------------------------------------------------*/
+@import "components/card";
+
+/*  Modules
+    These are project modules,.
+\*----------------------------------------------------------------------------*/
+@import "modules/promotion/add-promotion";
+@import "modules/modals/popup-details";
+@import "modules/controller/controller";
+@import "modules/bankTransfer/bank-transfer";
+

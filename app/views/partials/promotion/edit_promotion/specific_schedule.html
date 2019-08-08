@@ -1,0 +1,163 @@
+<div ng-if="vm.featureToggle.isFeatureEnabled('specificSchedule')"
+     class="row specific-schedule">
+
+  <div class="col-md-12 chackbox-range-time">
+    <input class="nekso-form__checkbox"
+           id="specific-schedule-option"
+           type="checkbox"
+           ng-model="vm.isSpecificScheduleChecked"
+           ng-disabled="(!vm.editable) || vm.promotionStatus === 'ACTIVE'">
+    <label for="specific-schedule-option">
+      Specific Schedule
+    </label>
+  </div>
+
+  <promotions_validation
+    scheduling="vm.specificScheduleArray"
+    validations="vm.promotionService.scheduleValidations">
+  </promotions_validation>
+
+  <section class="content-range-time"
+           ng-if="vm.isSpecificScheduleChecked"
+           ng-repeat="specificSchedule in vm.specificScheduleArray track by $index"
+           ng-init="inner_edit_promotion='edit_promotion_' + $index">
+
+    <ng-form name="{{inner_edit_promotion}}">
+
+      <div class="col-md-2 range-time"
+           ng-class="{ 'has-error' : edit_promotion[inner_edit_promotion].select_day_field.$error.required ||
+               vm.promotionService.scheduleValidations[$index].repeatDay }">
+
+        <select class="nekso-form__select"
+                ng-model="specificSchedule.dayOfWeek"
+                required
+                name="select_day_field"
+                ng-disabled="(!vm.editable) || vm.promotionStatus === 'ACTIVE'">
+          <option disabled value="">Select day</option>
+          <option value="MONDAY">Monday</option>
+          <option value="TUESDAY">Tuesday</option>
+          <option value="WEDNESDAY">Wednesday</option>
+          <option value="THURSDAY">Thursday</option>
+          <option value="FRIDAY">Friday</option>
+          <option value="SATURDAY">Saturday</option>
+          <option value="SUNDAY">Sunday</option>
+        </select>
+        <div class="text-danger"
+             ng-if="vm.promotionService.scheduleValidations[$index].repeatDay">
+          this day alredy exist
+        </div>
+
+      </div>
+
+      <div class="col-md-2 range-time"
+           ng-class="{ 'has-error' : edit_promotion[inner_edit_promotion].first_range_from_field.$error.required ||
+                edit_promotion[inner_edit_promotion].first_range_from_field.$error.time }">
+
+        <span>FROM TIME</span>
+        <input type="time"
+               required
+               class="nekso-form__input"
+               name="first_range_from_field"
+               ng-model="specificSchedule.hourIntervals[0].from"
+               ng-disabled="(!vm.editable) || vm.promotionStatus === 'ACTIVE'"/>
+
+        <div class="text-danger" ng-if="edit_promotion[inner_edit_promotion].first_range_from_field.$error.time">
+          Not a valid time
+        </div>
+
+      </div>
+
+      <div class="col-md-2 range-time"
+           ng-class="{ 'has-error' : edit_promotion[inner_edit_promotion].first_range_to_field.$error.required ||
+                edit_promotion[inner_edit_promotion].first_range_to_field.$error.time ||
+                vm.promotionService.scheduleValidations[$index].toFieldLessThanFromFieldInFirstBlock }">
+        <span class="time-separator"></span>
+        <span>TO TIME</span>
+        <input type="time"
+               required
+               class="nekso-form__input"
+               name="first_range_to_field"
+               ng-model="specificSchedule.hourIntervals[0].to"
+               ng-disabled="(!vm.editable) || vm.promotionStatus === 'ACTIVE'"/>
+
+        <div class="text-danger"
+             ng-if="edit_promotion[inner_edit_promotion].first_range_to_field.$error.time">
+          Not a valid time
+        </div>
+        <div class="text-danger"
+             ng-if="vm.promotionService.scheduleValidations[$index].toFieldLessThanFromFieldInFirstBlock">
+          The "TO TIME" field can not be less than to the "FROM TIME" field
+        </div>
+
+      </div>
+
+      <div class="col-md-2 range-time"
+           ng-class="{ 'has-error' : edit_promotion[inner_edit_promotion].second_range_from_field.$error.time ||
+           vm.promotionService.scheduleValidations[$index].fromFieldOfSecondBlockLessThanToFieldOfBlockOne }">
+        <span>FROM TIME </span>
+        <input type="time"
+               name="second_range_from_field"
+               placeholder="HH:mm"
+               class="nekso-form__input"
+               ng-model="specificSchedule.hourIntervals[1].from"
+               ng-disabled="(!vm.editable) || vm.promotionStatus === 'ACTIVE'"/>
+
+        <div class="text-danger" ng-if="edit_promotion[inner_edit_promotion].second_range_from_field.$error.time">
+          Not a valid time
+        </div>
+        <div class="text-danger" ng-if="vm.promotionService.scheduleValidations[$index].fromFieldOfSecondBlockLessThanToFieldOfBlockOne">
+          The "FROM TIME" field can't be less than or equal to the previous field
+        </div>
+        <div class="text-danger" ng-if="vm.promotionService.scheduleValidations[$index].fromFieldOfSecondBlockIsNotRequired">
+          This field is required
+        </div>
+
+      </div>
+
+      <div class="col-md-2 range-time"
+           ng-class="{ 'has-error' : edit_promotion[inner_edit_promotion].second_range_to_field.$error.time ||
+               vm.promotionService.scheduleValidations[$index].toFieldLessThanFromFieldInSecondBlock }">
+        <span class="time-separator"></span>
+        <span>TO TIME</span>
+        <input type="time"
+               name="second_range_to_field"
+               placeholder="HH:mm"
+               class="nekso-form__input"
+               ng-model="specificSchedule.hourIntervals[1].to"
+               ng-disabled="(!vm.editable) || vm.promotionStatus === 'ACTIVE'"/>
+
+        <div class="text-danger" ng-if="inner_edit_promotion.second_range_to_field.$error.time">
+          Not a valid time
+        </div>
+        <div class="text-danger"
+             ng-if="vm.promotionService.scheduleValidations[$index].toFieldLessThanFromFieldInSecondBlock">
+          The "TO TIME" field can't be less or equal than to the previous field
+        </div>
+        <div class="text-danger" ng-if="vm.promotionService.scheduleValidations[$index].toFieldOfSecondBlockIsNotRequired">
+          This field is required
+        </div>
+
+      </div>
+
+    </ng-form>
+
+    <div class="col-md-2" ng-show="$index < (vm.specificScheduleArray.length - 1) || $index === 4">
+      <button class="btn nekso-button"
+              ng-click="vm.removeRangeForSpecificSchedule($index)"
+              ng-disabled="(!vm.editable) || vm.promotionStatus === 'ACTIVE'">
+        remove
+      </button>
+
+    </div>
+
+    <div class="col-md-2" ng-show="$index === (vm.specificScheduleArray.length - 1) && $index < 4">
+      <button class="btn btn-default"
+              ng-click="vm.addRangeForSpecificSchedule()"
+              ng-disabled="(!vm.editable) || vm.promotionStatus === 'ACTIVE'">
+        Add
+      </button>
+    </div>
+
+  </section>
+
+</div>

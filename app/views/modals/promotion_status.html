@@ -1,0 +1,43 @@
+<div class="modal-header">
+  <button class="close" id="btn_close" ng-click="promotionStatusModalVm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row sub-header">
+    <div class="col-sm-12">
+      <div class="input-group header-item">
+        <h4 class="margin-null">Change promotion status</h4>
+      </div>
+    </div>
+  </div>
+  <form name="form_promotionStatus" class="newAdministratorForm" novalidate>
+    <div class="row panel margin-null">
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col-sm-12">
+            <p ng-if="promotionStatusModalVm.status === 'ON_HOLD'">Move this Promotion to "ON HOLD"?</p>
+            <p ng-if="promotionStatusModalVm.status === 'ACTIVE'">You are about to change this {{vm.promotionName}} to ACTIVE.</p>
+            <p ng-if="promotionStatusModalVm.status === 'ARCHIVED'">Move this promotion to ARCHIVED?</p>
+          </div>
+        </div>
+        <div ng-if="promotionStatusModalVm.status !== 'ACTIVE'" class="row">
+          <div class="col-sm-12">
+            <textarea class="form-control" rows="2" style="resize:none;"
+                      placeholder="Reason"
+                      name="field_shortDescriptionEs"
+                      ng-maxlength="300" maxlength="300" required ng-model="promotionStatusModalVm.reason"></textarea>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 15px; margin-bottom: 15px;">
+          <div class="col-sm-12 text-center">
+            <button class="btn btn-success"
+                    ladda="promotionStatusModalVm.loading" data-style="slide-left"
+                    ng-click="promotionStatusModalVm.changePromotionStatus()"
+                    ng-disabled="form_promotionStatus.$invalid">Change status</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

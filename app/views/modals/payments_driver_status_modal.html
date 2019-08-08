@@ -1,0 +1,86 @@
+<div class="modal-header">
+  <button class="close" id="btn_close" ng-click="vm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row sub-header">
+    <div class="col-sm-12">
+      <div class="input-group header-item">
+        <h4 class="margin-null">Payment status</h4>
+      </div>
+    </div>
+  </div>
+  <div class="row panel margin-null digital-driver-action-panel">
+    <div class="col-sm-12">
+      <strong>
+          <span class="pull-right" ng-switch="vm.payment.status"> Current status:
+            <span ng-switch-when="MISSING_INFORMATION">Missing information</span>
+            <span ng-switch-when="PENDING">Pending</span>
+            <span ng-switch-when="IN_REVIEW">In review</span>
+            <span ng-switch-when="IN_PROCESS">In process</span>
+            <span ng-switch-when="INVALID">Not valid</span>
+            <span ng-switch-when="PAID">Paid</span>
+            <span ng-switch-when="NOT_PAID">Not paid</span>
+            <span ng-switch-when="NOTHING_TO_PAY">Nothing to pay</span>
+            <span ng-switch-when="INVOICED">Invoiced</span>
+            <span ng-switch-when="NOTHING_TO_INVOICE">Nothing to invoice</span>
+            <span ng-switch-default></span>
+          </span>
+      </strong>
+      <form name="payment_action">
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <label for="status" style="font-weight: bold;">Status:</label>
+            <select id="status" class="form-control new-select" name="field_status" ng-model="vm.selectedStatus"
+                    required>
+              <option selected disabled value="">Select status</option>
+              <option value="IN_PROCESS">In process</option>
+              <option value="PAID">Paid</option>
+              <option value="NOT_PAID">Not paid</option>
+            </select>
+          </div>
+        </div>
+        <div class="row" ng-if="vm.selectedStatus=='NOT_PAID'">
+          <div class="col-sm-12 form-group">
+            <label for="reason" style="font-weight: bold;">Reason:</label>
+            <select id="reason" class="form-control new-select" name="field_status" ng-model="vm.selectedStatusReason"
+                    required>
+              <option selected disabled value="">Select status</option>
+              <option value="REJECTED_BY_BANK">Rejected by Bank</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <label style="font-weight: bold;">Payment method:</label>
+            <span class="font-bluedark" ng-switch="vm.selectedMethod">
+              <span ng-switch-when="BANK_ACCOUNT">Bank account</span>
+              <span ng-switch-when="MERCADOPAGO">MercadoPago</span>
+            </span>
+          </div>
+        </div>
+        <div class="row"
+             ng-if="vm.selectedMethod && vm.selectedMethod === 'MERCADOPAGO' && vm.selectedStatus === 'PAID'">
+          <div class="col-sm-12 form-group">
+            <label for="transaction" style="font-weight: bold;">Transaction ID:</label>
+            <input id="transaction" type="number" class="form-control" name="input" ng-model="vm.transactionId"
+                   required/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <label for="comments" style="font-weight: bold;">Comment:</label>
+            <textarea id="comments" class="form-control new-select" ng-model="vm.comments" maxlength="100"></textarea>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" ng-click="vm.updatePaymentStatus()" ng-disabled="payment_action.$invalid"
+          ladda="vm.loading.payment" data-style="slide-left">Confirm
+  </button>
+  <button class="btn btn-default" ng-click="vm.close()">Cancel</button>
+</div>

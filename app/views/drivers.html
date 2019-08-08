@@ -1,0 +1,287 @@
+<div ng-if="vm.notAuthMsg" not-authorized message="vm.notAuthMsg" class="not-authorized"></div>
+<div class="container-fluid padding-footer">
+  <div class="row sub-header">
+    <div class="col-sm-9">
+        <h4>Drivers ({{vm.totalDrivers}})
+        </h4>
+    </div>
+    <div class="col-sm-3 text-right pull-right">
+      <a ng-href="{{vm.csvUrl}}" target="_blank">
+        <button ng-if="vm.getUserPermission('export:drivers')"
+                class="btn btn-sm btn-primary"
+                ng-disabled="!vm.filter.country"
+                ng-click="vm.getCsvUrl()" >
+          Export to CSV
+        </button>
+      </a>
+    </div>
+  </div>
+  <div class="panel-heading">
+    <div class="row shape-light-grey">
+      <div class="col-sm-1 text-left">
+        <h5 class="text-left">Join date</h5>
+      </div>
+      <div class="col-sm-8">
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="input-group date-box has-feedback">
+              <input date-range-picker class="nekso-form__input" type="text"
+                     ng-model="vm.filter.date" options="vm.filter.date.opts" required/>
+              <i class="glyphicon glyphicon-calendar form-control-feedback no-zindex"></i>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 text-right">
+        <p class="input-group search-box">
+          <input class="form-control" placeholder="Search" type="text" ng-model="vm.filter.searchText" ng-keydown="vm.searchDriversOnEnter($event)"/>
+            <span class="input-group-btn margin-top-input search-btn" ng-click="vm.searchDrivers()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">search</i>
+              </button>
+            </span>
+            <span ng-if="vm.filter.searchText && vm.filter.searchText !== ''" class="input-group-btn margin-top-input clear-btn" ng-click="vm.clearSearchField()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">close</i>
+              </button>
+            </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div block-ui="driversList">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel-default panel panel-drivers panel-no-shadow">
+          <div class="margin-bottom-15">
+            <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+              <li>
+                <filter_country_state multiple="true" country="vm.filter.country"
+                                      states="vm.filter.states"></filter_country_state>
+              </li>
+              <li style="width: 200px;" ng-hide="!vm.filter.country">
+                <select multiple="multiple" id="filter_controllers" class="multiple-state font-13" ng-model="vm.filter.taxiLine">
+                  <option ng-repeat="taxiL in vm.taxiLines track by $index" value="{{taxiL.id}}">{{taxiL.name}}</option>
+                </select>
+              </li>
+              <li>
+                <select class="nekso-form__select" ng-model="vm.filter.tag">
+                  <option disabled selected value="">Select Tag</option>
+                  <option value="ALL">All</option>
+                  <option value="DISPATCHER">Dispatcher</option>
+                  <option value="EXECUTIVE">Executive</option>
+                  <option value="PRESIDENT">President</option>
+                  <option value="ROYAL">Royal</option>
+                  <option value="SECRETARY">Secretary</option>
+                  <option value="SUSPICIOUS">Suspicious</option>
+                  <option value="URBE">Urbe</option>
+                </select>
+              </li>
+              <li>
+                <select class="nekso-form__select" ng-model="vm.filter.type">
+                  <option disabled selected value="">Select Type</option>
+                  <option value="ALL">All</option>
+                  <option value="DIGITAL">Digital</option>
+                  <option value="STANDARD">Standard</option>
+                </select>
+              </li>
+              <li style="width: 175px;">
+                <select multiple="multiple" id="filter_status" class="nekso-form__multiselect" ng-model="vm.filter.status">
+                  <option value="OK">Approved</option>
+                  <option value="APPROVAL_EXPIRED">Approval expired</option>
+                  <option value="IN_REVIEW">In review</option>
+                  <option value="PENDING_RESIGNATION">Pending resignation</option>
+                  <option value="REJECTED">Rejected</option>
+                  <option value="SUSPENDED">Suspended</option>
+                </select>
+              </li>
+              <li>
+                <select class="nekso-form__select" ng-model="vm.filter.rating">
+                  <option disabled selected value="">Select rating</option>
+                  <option value="">All</option>
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="1.5">1.5</option>
+                  <option value="2">2</option>
+                  <option value="2.5">2.5</option>
+                  <option value="3">3</option>
+                  <option value="3.5">3.5</option>
+                  <option value="4">4</option>
+                  <option value="4.5">4.5</option>
+                  <option value="5">5</option>
+                </select>
+              </li>
+              <li>
+                <select class="nekso-form__select" id="field_status" ng-model="vm.filter.emailVerified">
+                  <option disabled selected value="">Email status</option>
+                  <option value="ALL">All</option>
+                  <option value="true">Verified</option>
+                  <option value="false">Not verified</option>
+                </select>
+              </li>
+              <li>
+                <input class="nekso-form__checkbox" id="filterByBankAccount" type="checkbox" ng-model="vm.filter.filterByBankAccount"><label for="filterByBankAccount">Filter by bank account</label>
+              </li>
+            </ul>
+          </div>
+          <div class="">
+            <table class="table table-hover table-condensed table-bordered">
+              <thead>
+                <tr>
+                  <th class="column-header-color">
+                    Tags
+                  </th>
+                  <th class="column-header-color"  ng-click="vm.order('firstName')">
+                    Name
+                    <span ng-if="!vm.reverse && vm.predicate === 'firstName'" class="fa fa-sort-down columnSortIcons"></span>
+                    <span ng-if="vm.reverse && vm.predicate === 'firstName'" class="fa fa-sort-down columnSortIcons"></span>
+                  </th>
+                  <th class="column-header-color">
+                    Email
+                  </th>
+                  <th class="column-header-color">
+                    Mobile
+                  </th>
+                  <th class="column-header-color"  ng-click="vm.order('createdDate')">
+                    Join date
+                    <span ng-if="!vm.reverse && vm.predicate === 'createdDate'" class="fa fa-sort-down columnSortIcons"></span>
+                    <span ng-if="vm.reverse && vm.predicate === 'createdDate'" class="fa fa-sort-up columnSortIcons"></span>
+                  </th>
+                  <th class="column-header-color">
+                    Taxi line
+                  </th>
+                  <th class="column-header-color"  ng-click="vm.order('ridesCount')">
+                    Rides
+                    <span ng-if="!vm.reverse && vm.predicate === 'ridesCount'" class="fa fa-sort-down columnSortIcons"></span>
+                    <span ng-if="vm.reverse && vm.predicate === 'ridesCount'" class="fa fa-sort-up columnSortIcons"></span>
+                  </th>
+                  <th class="column-header-color"  ng-click="vm.order('rating')">
+                    Rating
+                    <span ng-if="!vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-down columnSortIcons"></span>
+                    <span ng-if="vm.reverse && vm.predicate === 'rating'" class="fa fa-sort-up columnSortIcons"></span>
+                  </th>
+                  <th class="column-header-color">
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="driver in vm.drivers track by $index">
+                  <td>
+                    <div ng-if="vm.getUserPermission('update:drivers')">
+                      <img class="clickeable"
+                           ng-if="driver.tags && driver.tags.indexOf('DIGITAL') > -1"
+                           ng-src="/images/icon-digital-user.png" alt=""
+                           mwl-confirm
+                           title="Remove Digital Driver"
+                           message="Remove this user from the Digital Drivers?"
+                           confirm-text="Remove"
+                           cancel-text="Cancel"
+                           placement="right"
+                           on-confirm="vm.tagUser(driver.id, 'DIGITAL', false)"
+                           confirm-button-type="danger"
+                           cancel-button-type="default">
+                      <img class="clickeable"
+                           ng-if="!driver.tags || !(driver.tags.indexOf('DIGITAL') > -1)"
+                           ng-src="/images/icon-digital-user-inactive.png" alt=""
+                           mwl-confirm
+                           title="Assign Digital Driver"
+                           message="Add this user as a Digital Driver?"
+                           confirm-text="Confirm"
+                           cancel-text="Cancel"
+                           placement="right"
+                           on-confirm="vm.tagUser(driver.id, 'DIGITAL', true)"
+                           confirm-button-type="success"
+                           cancel-button-type="default">
+                      <div class="container-suspicious" ng-if="driver.tags && (driver.tags.indexOf('SUSPICIOUS') > -1)">
+                        <span ng-if="driver.suspiciousInfo.times && driver.suspiciousInfo.times > 0">{{driver.suspiciousInfo.times}}</span>
+                        <img class="clickeable"
+                           ng-src="images/suspicious-icon.svg" alt=""
+                           ng-click="vm.getSuspiciousHistory(driver)"
+                           mwl-confirm
+                           title="Driver suspicious Behavior"
+                           message="{{vm.suspiciousHistory}}"
+                           placement="right"
+                           confirm-text="Remove"
+                           confirm-button-type="danger"
+                           on-confirm="vm.tagUser(driver.id, 'SUSPICIOUS', false)">
+                      </div>
+                    </div>
+                    <div ng-if="!vm.getUserPermission('update:drivers')">
+                      <img ng-if="driver.tags && driver.tags.indexOf('DIGITAL') > -1"
+                           ng-src="/images/icon-digital-user.png" title="Digital Driver">
+                      <img ng-if="driver.tags && driver.tags.indexOf('ROYAL') > -1"
+                           ng-src="/images/icon-royal.png" title="Royal Driver">
+                      <div class="container-suspicious" ng-if="driver.tags && (driver.tags.indexOf('SUSPICIOUS') > -1)">
+                        <span ng-if="driver.suspiciousInfo.times && driver.suspiciousInfo.times > 0">{{driver.suspiciousInfo.times}}</span>
+                        <img ng-src="images/suspicious-icon.svg" title="Suspicious">
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span><strong class="clickeable capitalize" ng-click="vm.openDriverProfile(driver)">
+                      {{driver.fullName | lowercase}}
+                    </strong></span>
+                  </td>
+                  <td>
+                    <span ng-if="driver.emailVerified">
+                      <i class="fa fa-check-square-o text-success fa-lg"></i>
+                    </span>
+                    <span ng-if="!driver.emailVerified">
+                      <i class="fa fa-minus-square-o text-danger fa-lg"></i>
+                    </span>
+                    <span class="cell-email">{{driver.email}}</span>
+                  </td>
+                  <td>
+                    <span>{{driver.phone}}</span>
+                  </td>
+                  <td>
+                    <span>{{driver.createdDate | date:'dd/MM/yyyy'}}</span>
+                  </td>
+                  <td>
+                    <span>{{driver.controller.name}}</span>
+                  </td>
+                  <td>
+                    <span>{{driver.ridesCount}}</span>
+                  </td>
+                  <td class="rating-column">
+                    <i class="stars material-icons">star_rate</i> {{driver.rating}}
+                  </td>
+                  <td>
+                    <span data-toggle="tooltip" data-placement="left" data-original-title="{{vm.getSuspendedDescription(driver.userStatusInfo.suspendReasons[0])}}"><strong class="clickeable capitalize">{{vm.getDriverStatus(driver.status)}}</strong></span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bar-pagination">
+        <div class="row">
+          <div class="col-sm-8 text-left">
+            <pagination boundary-links="true"
+                        class="pagination"
+                        first-text="&laquo;"
+                        items-per-page="vm.controls.numPerPage"
+                        last-text="&raquo;"
+                        max-size="5"
+                        next-text="&rsaquo;"
+                        ng-model="vm.controls.currentPage"
+                        previous-text="&lsaquo;"
+                        rotate="false"
+                        total-items="vm.totalDrivers"></pagination>
+          </div>
+          <div class="col-sm-4 text-right">
+            <div class="btn-group items-per-page">
+              <label btn-radio="10" class="btn btn-default" id="btn_numPerPage10" ng-model="vm.controls.numPerPage">10</label>
+              <label btn-radio="25" class="btn btn-default" id="btn_numPerPage25" ng-model="vm.controls.numPerPage">25</label>
+              <label btn-radio="50" class="btn btn-default" id="btn_numPerPage50" ng-model="vm.controls.numPerPage">50</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

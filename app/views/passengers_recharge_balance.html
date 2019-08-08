@@ -1,0 +1,194 @@
+<div ng-if="vm.notAuthMsg" not-authorized message="vm.notAuthMsg" class="not-authorized"></div>
+<div class="container-payments-bank-transfer container-fluid padding-footer">
+  <div class="row sub-header">
+    <div class="col-sm-9">
+      <h4>Other Payments ({{vm.totalPassengers}})</h4>
+    </div>
+    <div class="col-sm-3 text-right pull-right">
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+          <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <li ng-if="vm.getUserPermission('create:recharge_balance')">
+            <a ng-click="vm.openAddPayment()">Add Payment</a>
+          </li>
+          <li ng-if="vm.getUserPermission('export:recharge_balance')">
+            <a ng-href="{{vm.csvUrl}}" ng-click="vm.getBankTransferToCSV()" target="_blank">Export</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="panel-heading">
+    <div class="row shape-light-grey">
+      <div class="col-sm-1 text-left">
+        <h5 class="text-left">Reported date</h5>
+      </div>
+      <div class="col-sm-8">
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="input-group date-box has-feedback">
+              <input date-range-picker class="nekso-form__input" type="text"
+                     ng-model="vm.filter.date" options="vm.filter.date.opts" required/>
+              <i class="glyphicon glyphicon-calendar form-control-feedback no-zindex"></i>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 text-right">
+        <p class="input-group search-box">
+          <input class="form-control nekso-form__input" placeholder="Search" type="text" ng-model="vm.filter.searchText"
+                 ng-keydown="vm.searchDriversOnEnter($event)"/>
+          <span class="input-group-btn margin-top-input search-btn" ng-click="vm.searchDrivers()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">search</i>
+              </button>
+            </span>
+          <span ng-if="vm.filter.searchText && vm.filter.searchText !== ''"
+                class="input-group-btn margin-top-input clear-btn" ng-click="vm.clearSearchField()">
+              <button class="btn btn-default" type="button">
+                <i class="material-icons text-dark-grey">close</i>
+              </button>
+            </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div block-ui="passengersList">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-bank-transfer">
+          <div class="row shape-light-grey">
+            <div class="col-sm-12 margin-bottom-15">
+              <ul class="list-inline margin-bottom-null ul-menu-of-filters">
+                <li>
+                  <select class="nekso-form__select" id="field_status" ng-model="vm.filter.status">
+                    <option disabled selected value="">Select status</option>
+                    <option value="">All</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="APPROVED">Approved</option>
+                    <option value="REJECTED">Rejected</option>
+                  </select>
+                </li>
+                <li style="width: 200px;">
+                  <select class="nekso-form__select" id="field_source" ng-model="vm.filter.sources">
+                    <option disabled selected value="">Select Source</option>
+                    <option value="">All</option>
+                    <option value="MPANDCO">MPANDCO</option>
+                    <option value="MULTIPAGO_BANESCO">MULTIPAGO BANESCO</option>
+                  </select>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="padding-top-null">
+            <table class="table table-hover table-condensed table-bordered">
+
+              <thead>
+                <th class="column-header-color" ng-click="vm.order('createdAt')">
+                  Reported date
+                  <span ng-if="!vm.reverse && vm.predicate === 'createdAt'" class="fa fa-sort-down columnSortIcons"></span>
+                  <span ng-if="vm.reverse && vm.predicate === 'createdAt'" class="fa fa-sort-up columnSortIcons"></span>
+                </th>
+                <th class="column-header-color" ng-click="vm.order('status')">
+                  Status
+                  <span ng-if="!vm.reverse && vm.predicate === 'status'" class="fa fa-sort-down columnSortIcons"></span>
+                  <span ng-if="vm.reverse && vm.predicate === 'status'" class="fa fa-sort-up columnSortIcons"></span>
+                </th>
+                <th class="column-header-color" ng-click="vm.order('updatedAt')">
+                  Updated Date
+                  <span ng-if="!vm.reverse && vm.predicate === 'updatedAt'" class="fa fa-sort-down columnSortIcons"></span>
+                  <span ng-if="vm.reverse && vm.predicate === 'updatedAt'" class="fa fa-sort-up columnSortIcons"></span>
+                </th>
+                <th class="column-header-color">
+                  Name
+                </th>
+                <th class="column-header-color">
+                  Email
+                </th>
+                <th class="column-header-color">
+                  Phone
+                </th>
+                <th class="column-header-color" ng-click="vm.order('amount')">
+                  Amount
+                  <span ng-if="!vm.reverse && vm.predicate === 'amount'" class="fa fa-sort-down columnSortIcons"></span>
+                  <span ng-if="vm.reverse && vm.predicate === 'amount'" class="fa fa-sort-up columnSortIcons"></span>
+                </th>
+                <th class="column-header-color">
+                  Source
+                </th>
+              </thead>
+
+              <tbody>
+              <tr ng-repeat="passenger in vm.passengers track by $index">
+
+                <td>
+                  <span>{{passenger.createdAt | date:'dd/MM/yyyy'}}</span>
+                </td>
+                <td>
+                  <div class="column-status-style" ng-switch="passenger.status">
+                    <i ng-switch-when="PENDING" class="material-icons status-box bg-review"
+                       tooltip="Pending" tooltip-placement="right">query_builder</i>
+                    <i ng-switch-when="APPROVED" class="material-icons status-box bg-ok" tooltip="Approved"
+                       tooltip-placement="right">check_circle</i>
+                    <i ng-switch-when="REJECTED" class="material-icons status-box bg-rejected"
+                       tooltip="Rejected" tooltip-placement="right">cancel</i>
+                  </div>
+                </td>
+                <td>
+                  <span>{{passenger.updatedAt | date:'dd/MM/yyyy'}}</span>
+                </td>
+                <td ng-click="vm.openPassengerProfile(passenger)">
+                  <span class="bold">{{passenger.user.fullName | lowercase}}</span>
+                </td>
+                <td>
+                  <span>{{passenger.user.email}}</span>
+                </td>
+                <td>
+                  <span>{{passenger.user.phone}}</span>
+                </td>
+                <td>
+                  <span>{{passenger.countryInfo.currencySymbol}} {{passenger.amount | number:2}}</span>
+                </td>
+                <td>
+                  <span>{{passenger.source}}</span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bar-pagination">
+        <div class="row">
+          <div class="col-sm-8 text-left">
+            <pagination boundary-links="true"
+                        class="pagination"
+                        first-text="&laquo;"
+                        items-per-page="vm.controls.numPerPage"
+                        last-text="&raquo;"
+                        max-size="5"
+                        next-text="&rsaquo;"
+                        ng-model="vm.controls.currentPage"
+                        previous-text="&lsaquo;"
+                        rotate="false"
+                        total-items="vm.totalPassengers">
+            </pagination>
+          </div>
+          <div class="col-sm-4 text-right">
+            <div class="btn-group items-per-page">
+              <label btn-radio="10" class="btn btn-default" id="btn_numPerPage10"
+                     ng-model="vm.controls.numPerPage">10</label>
+              <label btn-radio="25" class="btn btn-default" id="btn_numPerPage25"
+                     ng-model="vm.controls.numPerPage">25</label>
+              <label btn-radio="50" class="btn btn-default" id="btn_numPerPage50"
+                     ng-model="vm.controls.numPerPage">50</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

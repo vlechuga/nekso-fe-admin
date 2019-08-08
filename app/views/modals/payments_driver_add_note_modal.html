@@ -1,0 +1,69 @@
+<div class="modal-header">
+  <button class="close" id="btn_close" ng-click="vm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <h4 class="modal-title">Add {{vm.noteTitle}}</h4>
+</div>
+<div class="modal-body">
+  <div class="row payment-credit-debit-note-panel">
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-12 header">
+          <h5 class="text-center" ng-switch="vm.trxType">
+            <span ng-switch-when="DEPOSIT">Deposit</span>
+            <span ng-switch-when="SERVICE_CHARGE">Service charge</span>
+            <span ng-switch-when="THIRD_PARTY_FEE">Third party fee</span>
+            <span ng-switch-when="PROMOTION">Promotion</span>
+            <span ng-switch-when="APPLICATION_FEE">Commission</span>
+            <span ng-switch-when="CONTROLLER_FEE">Controller fee</span>
+            <span ng-switch-when="NEKSO_FEE">Nekso fee</span>
+            <span ng-switch-when="CREDIT_NOTE">Credit note</span>
+            <span ng-switch-when="DEBIT_NOTE">Debit note</span>
+            <span ng-switch-when="PAYMENT">Payment</span>
+            <span ng-switch-when="PAYMENT_REVERSE">Payment reverse</span>
+            <span ng-switch-when="SYSTEM">System</span>
+            <span ng-switch-when="ACHIEVEMENT">Achievement</span>
+            <span ng-switch-when="CREDIT_CARD">Credit card</span>
+            <span ng-switch-when="CORPORATE">Corporate</span>
+            <span ng-switch-when="REFERRAL_NEW_DRIVER">Referral new driver</span>
+            <span ng-switch-when="REFERRAL_DISCOUNT">Referral discount</span>
+            <span ng-switch-when="REFERRAL_DRIVER_BONUS">Referral driver bonus</span>
+            <span ng-switch-when="COMMISSION">Commission</span>
+            <span ng-switch-when="PROMOTIONAL_CODE">Promotional code</span>
+            <span ng-switch-default></span>
+          </h5>
+          <h4 class="text-center">{{vm.currency}} {{vm.trxAmount | number:2}}</h4>
+        </div>
+      </div>
+      <form name="payment_action" novalidate>
+        <div class="row body">
+          <div class="col-sm-12 form-group">
+            <label for="amount" class="font-bold">Amount of note:</label>
+            <input id="amount" name="input_amount" type="number" class="form-control"
+                   min="1"
+                   max="{{vm.transaction.amount | abs}}"
+                   ng-model="vm.noteAmount"
+                   required />
+            <span class="text-danger"
+                  ng-show="payment_action.input_amount.$error.required && !payment_action.input_amount.$pristine">This field is mandatory</span>
+            <span class="text-danger"
+                  ng-show="payment_action.input_amount.$error.min && !payment_action.input_amount.$pristine">Min. 1</span>
+            <span class="text-danger"
+                  ng-show="payment_action.input_amount.$error.max && !payment_action.input_amount.$pristine">Can't be more than the transaction</span>
+          </div>
+          <div class="col-sm-12 form-group">
+            <label for="reason" class="font-bold">Reason:</label>
+            <textarea id="reason" name="input_reason" class="form-control new-select" ng-model="vm.comment" maxlength="140" minlength="1" required></textarea>
+            <span class="text-danger"
+                  ng-show="payment_action.input_reason.$error.required && !payment_action.input_reason.$pristine">This field is mandatory</span>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" ng-click="vm.updatePayments()" ng-disabled="payment_action.$invalid"
+          ladda="vm.loading" data-style="slide-left" >Confirm</button>
+  <button class="btn btn-default" ng-click="vm.close()">Cancel</button>
+</div>

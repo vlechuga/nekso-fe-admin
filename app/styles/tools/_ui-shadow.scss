@@ -1,0 +1,17 @@
+@mixin __ui-shadow(
+  $h-shadow: $shadow-h,
+  $v-shadow: $shadow-v,
+  $blur: $shadow-blur,
+  $spread: $shadow-spread,
+  $color: $shadow-color,
+  $opacity: $shadow-opacity) {
+  @include __prefix(box-shadow, #{$h-shadow $v-shadow} #{$blur} #{$spread} rgba($color, $opacity));
+}
+
+@mixin __ui-shadow-o($arg...) {
+  @include __prefix(box-shadow, $arg);
+}
+
+@mixin __ui-text-shadow($arg: 0 1px 2px rgba(0, 0, 0, 0.25)) {
+  @include __prefix(text-shadow, $arg);
+}

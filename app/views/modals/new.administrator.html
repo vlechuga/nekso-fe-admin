@@ -1,0 +1,163 @@
+<div class="modal-header">
+  <button class="close" id="btn_close" ng-click="administratorModalVm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row sub-header">
+    <div class="col-sm-6">
+      <div class="input-group header-item">
+        <h4 class="margin-null">{{administratorModalVm.modalTitle}}</h4>
+        <h6 class="padding-left-null margin-bottom-null margin-null">Fill the fields with the new user information.</h6>
+      </div>
+    </div>
+    <div class="col-sm-6 text-right">
+      <div class="header-item m-l-10 pull-right" ng-if="!administratorModalVm.new && !administratorModalVm.editable && administratorModalVm.getUserPermission('update:administration')">
+        <button class="btn btn-primary" name="button" ng-click="administratorModalVm.setEditable()">Edit profile</button>
+      </div>
+      <div class="header-item m-l-10 pull-right" ng-if="administratorModalVm.editable && !administratorModalVm.new">
+        <button class="btn btn-danger" name="button" ng-click="administratorModalVm.removeEditable()">Cancel</button>
+      </div>
+      <div class="header-item m-l-10 pull-right" ng-if="administratorModalVm.editable && !administratorModalVm.new">
+        <button ladda="administratorModalVm.loading.create" data-style="slide-left" class="btn btn-success" ng-click="administratorModalVm.editAdministrator()" ng-disabled="form_edit_corporate.$invalid">
+          Save profile
+        </button>
+      </div>
+      <div class="col-sm-6 row header-item" ng-if="administratorModalVm.new">
+        <button ng-if="administratorModalVm.new" ladda="administratorModalVm.loading.create" data-style="slide-left" class="btn btn-success" ng-disabled="form_edit_corporate.$invalid || form_edit_corporate.$pristine" ng-click="administratorModalVm.createAdministrator()">
+          Create user
+        </button>
+      </div>
+    </div>
+  </div>
+  <form name="form_register" class="newAdministratorForm" novalidate>
+    <div class="row panel margin-null">
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="form-group margin-null" ng-class="{ 'has-error' : form_edit_corporate.field_firstName.$invalid && (!form_edit_corporate.field_firstName.$pristine || !form_edit_corporate.$pristine) }">
+              <label class="padding-left-null control-label">First name</label>
+              <div class="">
+                <input ng-disabled="!administratorModalVm.editable" name="field_firstName" class="form-control" ng-model="administratorModalVm.administrator.firstName" type="text" ng-maxlength="20" required>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group margin-null" ng-class="{ 'has-error' : form_edit_corporate.field_lastName.$invalid && (!form_edit_corporate.field_lastName.$pristine || !form_edit_corporate.$pristine) }">
+              <label class="padding-left-null control-label">Last name</label>
+              <div class="">
+                <input ng-disabled="!administratorModalVm.editable" name="field_lastName" class="form-control" ng-model="administratorModalVm.administrator.lastName" type="text" ng-maxlength="20" required>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="form-group margin-null" ng-class="{ 'has-error' : form_edit_corporate.field_email.$invalid && (!form_edit_corporate.field_email.$pristine || !form_edit_corporate.$pristine) }">
+              <label class="padding-left-null control-label">Email</label>
+              <div class="">
+                <input ng-disabled="!administratorModalVm.editable" name="field_email" class="form-control" type="email" required ng-model="administratorModalVm.administrator.email" ng-pattern="/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i">
+                <span class="help-block" ng-show="form_edit_corporate.field_email.$error.pattern && !form_edit_corporate.field_email.$pristine">Enter a valid email</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6" ng-if="!administratorModalVm.new">
+            <div class="form-group margin-null" ng-class="{ 'has-error' : form_edit_corporate.field_status.$invalid && (!form_edit_corporate.field_status.$pristine || !form_edit_corporate.$pristine) }">
+              <label class="padding-left-null control-label">Status</label>
+              <div class="">
+                <select ng-disabled="!administratorModalVm.editable" name="field_status" class="form-control" ng-model="administratorModalVm.administrator.status" required>
+                  <option disabled selected value="">Select</option>
+                  <option value="OK">ACTIVE</option>
+                  <option value="SUSPENDED">SUSPENDED</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="padding: 10px 0;">
+          <div class="col-xs-6">
+            <div class="" ng-class="{ 'has-error' : form_edit_corporate.field_user_states.$invalid && (!form_edit_corporate.field_user_states.$pristine || !form_edit_corporate.$pristine) }">
+              <label class="padding-left-null control-label" style="margin-top: 0;">User country</label>
+            </div>
+            <div class="" ng-class="{ 'has-error' : form_edit_corporate.field_user_states.$invalid && (!form_edit_corporate.field_user_states.$pristine || !form_edit_corporate.$pristine) }">
+              <select class="font-13 new-select" ng-disabled="!administratorModalVm.editable" name="field_user_states_country" ng-model="administratorModalVm.administrator.userCountry" required>
+                <option disabled selected value="">Select User Country</option>
+                <option ng-repeat="country in administratorModalVm.country" value="{{country}}">{{country}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="" ng-class="{ 'has-error' : form_edit_corporate.field_user_states.$invalid && (!form_edit_corporate.field_user_states.$pristine || !form_edit_corporate.$pristine) }">
+              <label class="padding-left-null control-label" style="margin-top: 0;">User state</label>
+            </div>
+                <!-- <label class="padding-left-null col-sm-3 control-label" style="margin-top: 0;">Allowed states</label> -->
+            <div class="" ng-class="{ 'has-error' : form_edit_corporate.field_user_states.$invalid && (!form_edit_corporate.field_user_states.$pristine || !form_edit_corporate.$pristine) }">
+              <select class="font-13 new-select" ng-disabled="!administratorModalVm.editable || !administratorModalVm.checkUserEmpty()" name="field_user_states" ng-model="administratorModalVm.administrator.userCountryState" required>
+                <option disabled selected value="">Select User State</option>
+                <option ng-repeat="obj in administratorModalVm.states | orderBy: 'name'" ng-if="administratorModalVm.checkUserEmpty() && obj.country == administratorModalVm.administrator.userCountry && administratorModalVm.administrator.userCountry.length > 1" value="{{obj.name}}">{{obj.name}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="padding: 10px 0;">
+          <div class="col-xs-6">
+            <div class="" ng-class="{ 'has-error' : form_edit_corporate.field_states.$invalid && (!form_edit_corporate.field_states.$pristine || !form_edit_corporate.$pristine) }">
+              <label class="padding-left-null control-label" style="margin-top: 0;">Allowed country</label>
+            </div>
+            <div class="" ng-class="{ 'has-error' : form_edit_corporate.field_states.$invalid && (!form_edit_corporate.field_states.$pristine || !form_edit_corporate.$pristine) }">
+              <select class="wa1300" multiple="multiple" ng-disabled="!administratorModalVm.editable" name="field_states_country" class="form-control" ng-model="administratorModalVm.administrator.country" required ng-hide="administratorModalVm.loadingMultiSelect">
+                <option ng-repeat="country in administratorModalVm.country" value="{{country}}">{{country}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="" ng-class="{ 'has-error' : form_edit_corporate.field_states.$invalid && (!form_edit_corporate.field_states.$pristine || !form_edit_corporate.$pristine) }">
+              <label class="padding-left-null control-label" style="margin-top: 0;">Allowed states</label>
+            </div>
+                <!-- <label class="padding-left-null col-sm-3 control-label" style="margin-top: 0;">Allowed states</label> -->
+            <div class="" ng-class="{ 'has-error' : form_edit_corporate.field_states.$invalid && (!form_edit_corporate.field_states.$pristine || !form_edit_corporate.$pristine) }">
+              <select class="wa1301" multiple="multiple" ng-disabled="!administratorModalVm.editable" name="field_states" class="form-control" ng-model="administratorModalVm.administrator.countryStates" required ng-hide="administratorModalVm.loadingMultiSelect">
+                <optgroup ng-repeat="country in administratorModalVm.country" ng-if="administratorModalVm.checkEmpty() && administratorModalVm.administrator.country.indexOf(country) !== -1 && administratorModalVm.administrator.country.length > 1" label="{{country}}">
+                  <option ng-repeat="obj in administratorModalVm.states" ng-if="obj.country == country" value="{{obj.name}}">{{obj.name}}</option>
+                </optgroup>
+                <option ng-repeat="obj in administratorModalVm.states" ng-if="obj.country == administratorModalVm.administrator.country[0] && administratorModalVm.administrator.country.length == 1" value="{{obj.name}}">{{obj.name}}</option>
+              <option ng-repeat="obj in administratorModalVm.states" ng-if="!obj.country" value="{{obj.name}}">{{obj.name}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="padding: 5px 0;">
+        <div class="col-sm-12">
+          <table>
+            <thead>
+            <tr>
+              <th>Sections</th>
+              <th class="text-center" style="padding: 0 5px">Create</th>
+              <th class="text-center" style="padding: 0 5px">Read</th>
+              <th class="text-center" style="padding: 0 5px">Update</th>
+              <th class="text-center" style="padding: 0 5px">Export</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="section in administratorModalVm.permissions.sections track by $index">
+              <td ng-click="administratorModalVm.updatePermissions(section)">{{section.description.capitalize()}}</td>
+              <td class="text-center"><input type="checkbox" ng-disabled="!administratorModalVm.editable" ng-click="administratorModalVm.checkPermission(section.create.id,section)" ng-if="section.create" class="checkbox-permissions" inner-id="{{section.create.id}}" sectionName="{{section.name}}"></td>
+              <td class="text-center"><input type="checkbox" ng-disabled="!administratorModalVm.editable" ng-click="administratorModalVm.checkPermission(section.read.id,section)" ng-if="section.read" class="checkbox-permissions" inner-id="{{section.read.id}}" sectionName="{{section.name}}"></td>
+              <td class="text-center"><input type="checkbox" ng-disabled="!administratorModalVm.editable" ng-click="administratorModalVm.checkPermission(section.update.id,section)" ng-if="section.update" class="checkbox-permissions" inner-id="{{section.update.id}}" sectionName="{{section.name}}"></td>
+              <td class="text-center"><input type="checkbox" ng-disabled="!administratorModalVm.editable" ng-click="administratorModalVm.checkPermission(section.export.id,section)" ng-if="section.export" class="checkbox-permissions" inner-id="{{section.export.id}}" sectionName="{{section.name}}"></td>
+            </tr>
+            <tr>
+              <td colspan="5" ng-click="administratorModalVm.updatePermissions('all')" class="text-center">Select all</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 text-center" style="padding-top: 25px;">
+      </div>
+    </div>
+  </form>
+</div>

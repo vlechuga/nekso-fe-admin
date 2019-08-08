@@ -1,0 +1,283 @@
+<div class="modal-header">
+  <button class="close" id="btn_close" ng-click="vm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row sub-header">
+    <div class="col-xs-6">
+      <div class="input-group header-item">
+        <h4 class="margin-null">{{vm.modalTitle}}</h4>
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <div class="row header-item"
+           ng-if="!vm.editable && vm.getUserPermission('update:corporate')">
+        <div class="col-sm-12 text-right">
+          <button class="btn btn-primary" name="button"
+                  ng-disabled="vm.loading.status"
+                  ng-click="vm.setEditable()">Edit Corporation
+          </button>
+        </div>
+      </div>
+      <div class="row header-item" ng-if="vm.editable">
+        <div class="col-xs-6 text-right">
+          <button class="btn btn-success" name="button" ng-click="vm.editCorporate()"
+                  ladda="vm.loading.update"
+                  ng-disabled="form_edit_corporate.$invalid">Update
+          </button>
+        </div>
+        <div class="col-xs-6 text-right">
+          <button class="btn btn-danger" name="button" ng-disabled="vm.loading.update" ng-click="vm.removeEditable()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form id="form_edit_corporate" name="form_edit_corporate" novalidate>
+    <div class="row">
+      <div class="col-sm-5">
+        <div class="form-group row">
+          <div class="col-sm-4">
+            <label for="field_id_type"><strong>Type:</strong></label>
+            <select id="field_id_type" name="field_id_type" class="font-13" ng-disabled="!vm.editable"
+                    name="field_id_type"
+                    ng-model="vm.corporate.taxIdType" ng-options="tax for tax in vm.shortLocation.country.taxIdTypes | orderBy">
+              <option disabled selected value="">Type</option>
+            </select>
+          </div>
+          <div class="col-sm-8">
+            <label for="field_corporateRif"><strong>VAT:</strong></label>
+            <input id="field_corporateRif" ng-disabled="!vm.editable" name="field_corporateRif"
+                   class="form-control font-13"
+                   ng-model="vm.corporate.taxIdNumber" type="text" maxlength="20" >
+          </div>
+        </div>
+      </div>
+      <div class="form-group col-sm-7"
+           ng-class="{ 'has-error' : form_edit_corporate.field_corporateName.$error.required}">
+        <label for="field_corporateName"><strong>Name:</strong></label>
+        <input id="field_corporateName" ng-disabled="!vm.editable" name="field_corporateName"
+               class="form-control" ng-model="vm.corporate.companyName" type="text" maxlength="50"
+               required>
+        <span class="help-block"
+              ng-show="form_edit_corporate.field_corporateName.$error.required && vm.editable">Enter a valid name</span>
+      </div>
+    </div>
+
+    <!-- NEW FIELD -->
+    <div class="row">
+      <div class="form-group col-sm-4"
+           ng-class="{ 'has-error' : form_edit_corporate.field_country.$error.required}">
+        <label for="field_country"><strong>Country:</strong></label>
+        <select id="field_country" class="font-13" ng-disabled="!vm.editable" name="field_country" required
+                ng-model="vm.shortLocation.country"
+                ng-options="country.name for country in vm.countries | orderBy:'name'">
+          <option disabled selected value="">Select a country</option>
+        </select>
+        <span class="help-block"
+              ng-show="form_edit_corporate.field_country.$error.required && vm.editable">Select a Country</span>
+      </div>
+      <div class="form-group col-sm-4"
+           ng-class="{ 'has-error' : form_edit_corporate.filter_states.$error.required}">
+        <label for="filter_states"><strong>State:</strong></label>
+        <select id="filter_states" class="new-select font-13" required
+                ng-disabled="!vm.editable || !vm.shortLocation.country.iso" name="filter_states"
+                ng-model="vm.shortLocation.state" ng-options="state.name for state in vm.getStatesByCountry()">
+          <option disabled selected value="">Select a state</option>
+        </select>
+        <span class="help-block"
+              ng-show="form_edit_corporate.filter_states.$error.required && vm.editable">Select a State</span>
+      </div>
+
+      <div class="form-group col-sm-4"
+           ng-class="{ 'has-error' : form_edit_corporate.filter_city.$error.required}">
+        <label for="filter_city"><strong>City:</strong></label>
+        <select id="filter_city" class="new-select font-13" ng-disabled="!vm.editable" name="filter_city"
+                ng-model="vm.shortLocation.city" ng-options="city for city in vm.shortLocation.state.cities | orderBy">
+          <option disabled selected value="">Select a city</option>
+        </select>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="form-group col-sm-6"
+           ng-class="{ 'has-error' : form_edit_corporate.field_contactName.$error.required}">
+        <label for="field_contactName"><strong>Contact name:</strong></label>
+        <input id="field_contactName" ng-disabled="!vm.editable" name="field_contactName" class="form-control"
+               ng-model="vm.corporate.contactName" type="text" maxlength="50" required>
+        <span class="help-block"
+              ng-show="form_edit_corporate.field_contactName.$error.required && vm.editable">Enter a valid contact name</span>
+      </div>
+      <div class="form-group col-sm-6"
+           ng-class="{ 'has-error' : (form_edit_corporate.field_email.$error.required || form_edit_corporate.field_email.$error.pattern)}">
+        <label for="field_email"><strong>Email:</strong></label>
+        <input id="field_email" ng-disabled="!vm.editable" name="field_email" class="form-control"
+               type="email" required
+               ng-model="vm.corporate.email"
+               ng-pattern="/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i">
+        <span class="help-block"
+              ng-show="(form_edit_corporate.field_email.$error.required || form_edit_corporate.field_email.$error.pattern) && vm.editable">Enter a valid email</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group row"
+             ng-class="{ 'has-error' : (form_edit_corporate.field_phone.$error.required || form_edit_corporate.field_phone.$error.maxlength || form_edit_corporate.field_phone.$error.pattern)}">
+          <div class="col-sm-3">
+            <label for="field_phone_code"><strong>Code</strong></label>
+            <input id="field_phone_code"
+                   name="field_phone_code"
+                   class="form-control"
+                   ng-model="vm.phone.callingCode"
+                   type="text"
+                   ng-disabled="true">
+          </div>
+          <div class="col-sm-9">
+            <label for="field_phone"><strong>Phone (1):</strong></label>
+            <input id="field_phone"
+                   name="field_phone"
+                   class="form-control"
+                   ng-model="vm.phone.first"
+                   ng-pattern="/^[+0-9]*$/"
+                   maxlength={{vm.shortLocation.country.digits}}
+                   placeholder=""
+                   required
+                   type="text"
+                   ng-disabled="!vm.editable">
+            <span class="help-block"
+                  ng-show="(form_edit_corporate.field_phone.$error.required || form_edit_corporate.field_phone.$error.maxlength || form_edit_corporate.field_phone.$error.pattern) && vm.editable">Enter a valid phone number</span>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group row"
+             ng-class="{ 'has-error' : (form_edit_corporate.field_phone_2.$error.required || form_edit_corporate.field_phone_2.$error.maxlength || form_edit_corporate.field_phone_2.$error.pattern)}">
+          <div class="col-sm-3">
+            <label for="field_phone_code_2"><strong>Code</strong></label>
+            <input id="field_phone_code_2"
+                   name="field_phone_code_2"
+                   class="form-control"
+                   ng-model="vm.phone.callingCode"
+                   type="text"
+                   ng-disabled="true">
+          </div>
+          <div class="col-sm-9">
+            <label for="field_phone_2"><strong>Phone (2):</strong></label>
+            <input id="field_phone_2"
+                   name="field_phone_2"
+                   class="form-control"
+                   ng-model="vm.phone.secondPhoneNumber"
+                   ng-pattern="/^[+0-9]*$/"
+                   maxlength={{vm.shortLocation.country.digits}}
+                   placeholder=""
+                   type="text"
+                   ng-disabled="!vm.editable">
+            <span class="help-block"
+                  ng-show="(form_edit_corporate.field_phone_2.$error.required || form_edit_corporate.field_phone_2.$error.maxlength || form_edit_corporate.field_phone_2.$error.pattern) && vm.editable">Enter a valid phone number</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-4"
+           ng-class="{ 'has-error' : form_edit_corporate.field_corp_type.$error.required}">
+        <label for="field_corp_type"><strong>Corporate type:</strong></label>
+        <select id="field_corp_type" class="font-13 new-select" ng-model="vm.corporate.salesInfo.type"
+                name="field_corp_type" ng-disabled="!vm.editable">
+          <option disabled selected value="">Type</option>
+          <option ng-repeat="(key, value) in vm.types | orderBy" value="{{key}}">{{value}}</option>
+        </select>
+        <span class="help-block"
+              ng-show="form_edit_corporate.field_corp_type.$error.required && vm.editable">Select a valid type</span>
+      </div>
+      <div class="form-group col-sm-4"
+           ng-class="{ 'has-error' : form_edit_corporate.field_corp_size.$error.required }">
+        <label for="field_corp_size"><strong>Corporate size: </strong></label>
+        <select id="field_corp_size" class="new-select font-13" name="field_corp_size"
+                ng-disabled="!vm.editable" ng-model="vm.corporate.salesInfo.size">
+          <option disabled selected value="">Size</option>
+          <option ng-repeat="(key, value) in vm.sizes" value="{{key}}">{{value}}</option>
+        </select>
+        <span class="help-block"
+              ng-show="form_edit_corporate.field_corp_size.$error.required && vm.editable">Select a valid Size</span>
+      </div>
+      <div class="form-group col-sm-4"
+           ng-class="{ 'has-error' : form_edit_corporate.field_corp_needs.$error.required}">
+        <label for="field_corp_needs"><strong>Corporate needs:</strong></label>
+        <select id="field_corp_needs" name="field_corp_needs" class="new-select font-13"
+                ng-model="vm.corporate.salesInfo.transportationNeed" ng-disabled="!vm.editable">
+          <option disabled selected value="">Corporate Needs</option>
+          <option value="EMPLOYEES">Employees</option>
+          <option value="VISITORS">Visitors</option>
+        </select>
+        <span class="help-block"
+              ng-show="form_edit_corporate.field_corp_needs.$error.required && vm.editable">Select a need</span>
+      </div>
+    </div>
+
+    <!-- NEW FIELD -->
+    <div class="row">
+      <div class="form-group col-sm-4"
+           ng-class="{ 'has-error' : form_edit_corporate.field_fiscal_address.$error.required}">
+        <label for="field_fiscal_address"><strong>Fiscal Address:</strong></label>
+        <textarea ng-disabled="!vm.editable" id="field_fiscal_address" name="field_fiscal_address" class="form-control"
+                  rows="4"
+                  style="resize:vertical;" ng-model="vm.corporate.salesInfo.fiscalAddress"></textarea>
+        <span class="help-block"
+              ng-show="form_edit_corporate.field_fiscal_address.$error.required && vm.editable">Enter a valid Address</span>
+      </div>
+      <div class="form-group col-sm-4"
+           ng-class="{ 'has-error' : form_edit_corporate.field_invoice_address.$error.required}">
+        <label for="field_invoice_address"><strong>Invoice Address:</strong></label>
+        <textarea ng-disabled="!vm.editable" id="field_invoice_address" name="field_invoice_address"
+                  class="form-control" rows="4"
+                  style="resize:vertical;" ng-model="vm.corporate.salesInfo.invoiceAddress"></textarea>
+        <span class="help-block"
+              ng-show="form_edit_corporate.field_invoice_address.$error.required && vm.editable">Enter a valid Address</span>
+      </div>
+      <div class="form-group col-sm-4">
+        <label for="field_address"><strong>Address (location):</strong></label>
+        <textarea ng-disabled="true" id="field_address" class="form-control" rows="4"
+                  style="resize:vertical;" ng-model="vm.corporate.address"></textarea>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><strong>Documents:</strong></label>
+        <div class="col-sm-10">
+          <select multiple="multiple" id="filter_documents" name="filter_documents" class="multiple-state font-13"
+                  ng-model="vm.corporate.salesInfo.documents">
+            <option ng-repeat="(key, value) in vm.dataSourceDocuments" value="{{key}}">{{value}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row" id="status" ng-if="!vm.editable && vm.getUserPermission('update:corporate')">
+      <div class="col-sm-12 text-center" style="padding-top: 25px;">
+        <button ladda="vm.loading.status" data-style="slide-left" ng-if="vm.corporate.btnOk"
+                class="btn btn-success" ng-click="vm.editCorporateStatus('OK')">
+          Approve corporation
+        </button>
+        <button ladda="vm.loading.status" data-style="slide-left"
+                ng-if="vm.corporate.btnReject" class="btn btn-danger"
+                ng-click="vm.editCorporateStatus('REJECTED')">
+          Reject corporation
+        </button>
+        <button ladda="vm.loading.status" data-style="slide-left"
+                ng-if="vm.corporate.btnReview" class="btn btn-warning"
+                ng-click="vm.editCorporateStatus('IN_REVIEW')">
+          Review corporation
+        </button>
+        <button ladda="vm.loading.status" data-style="slide-left"
+                ng-if="vm.corporate.btnSuspend" class="btn btn-danger"
+                ng-click="vm.editCorporateStatus('SUSPENDED')">
+          Suspend corporation
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

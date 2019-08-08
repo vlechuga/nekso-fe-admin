@@ -1,0 +1,52 @@
+<div class="container-fluid full-height">
+  <div class="row full-height">
+    <div class="ride-monitor-map" id="ride-monitor-map">
+    </div>
+  </div>
+  <div class="row ride-monitor-controls">
+    <div class="col-sm-12">
+
+      <div class="row sub-header">
+        <div class="col-sm-3 text-left">
+        </div>
+        <div class="col-sm-6">
+
+        </div>
+        <div class="col-sm-3">
+          <div class="controls pull-right">
+            <h6>{{vm.getMarkersLength('DRIVERS')}} total available drivers.</h6>
+            <h6>{{vm.getMarkersLength('DIGITAL')}} digital drivers.</h6>
+            <!-- <h6>{{vm.getMarkersLength('PASSENGERS')}} passenger requests.</h6> -->
+            <!-- <select id="field_source" ng-model="vm.filter.state" multiple="multiple" style="width: 60%;" ng-hide="vm.loadingMultiSelect"> -->
+              <!-- <option disabled selected value="">Filter by States</option> -->
+              <!-- <option value="ALL">All</option> -->
+              <!-- <option value="STANDARD">Standard</option>
+              <option value="QR">QR</option>
+              <option value="CORPORATE_GUESTS">Corporate guests</option>
+              <option value="CORPORATE_EMPLOYEES">Corporate employees</option>
+              <option value="false">Conventional</option> -->
+              <!-- <option ng-repeat="state in vm.statesArr | orderBy" value="{{state}}">{{state}}</option> -->
+            <!-- </select> -->
+
+            <!-- <select multiple="multiple" id="field_source" ng-model="vm.filter.state" ng-hide="vm.loadingMultiSelect">
+              <optgroup ng-repeat="country in vm.states.country" label="{{country}}">
+                <option ng-repeat="obj in vm.statesArr | orderBy" ng-if="obj.country == country" value="{{obj.name}}">{{obj.name}}</option>
+              </optgroup>
+              <option ng-repeat="obj in vm.statesArr" ng-if="!obj.country" value="{{obj.name}}">{{obj.name}}</option>
+            </select> -->
+
+            <select class="font-13 new-select" ng-model="vm.filter.country">
+              <option selected value="">Select country</option>
+              <option ng-repeat="country in vm.states.country" value="{{country}}">{{country}}</option>
+            </select>
+            <p></p>
+            <select multiple="multiple" id="field_source" class="multiple-state font-13" ng-model="vm.filter.state" ng-hide="vm.loadingMultiSelect">
+              <option ng-repeat="obj in vm.statesArr | orderBy: 'name'" ng-if="obj.country == vm.filter.country && vm.filter.country" value="{{obj.name}}">{{obj.name}}</option>
+              <option ng-repeat="obj in vm.statesArr" ng-if="!obj.country && !vm.filter.country" value="{{obj.name}}">{{obj.name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

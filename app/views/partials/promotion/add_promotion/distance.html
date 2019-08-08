@@ -1,0 +1,111 @@
+<section ng-if="vm.distanceChecked">
+
+  <article class="row">
+    <div class="col-md-12 col-xs-12"
+         ng-class="{'has-error' : vm.submitted && new_promotion.field_distanceType.$invalid && !new_promotion.$pristine}">
+      <select class="nekso-form__select"
+              ng-model="vm.distanceOption"
+              name="field_distanceType"
+              required>
+        <option value="" disabled selected>Select condition</option>
+        <option value="between">Between</option>
+        <option value="less-than">Less than</option>
+        <option value="more-than">More than</option>
+      </select>
+      <h6 class="text-danger"
+          ng-if="new_promotion.field_distanceType.$error.required &&
+              !new_promotion.field_distanceType.$pristine">
+        This field is mandatory
+      </h6>
+    </div>
+  </article>
+
+  <article class="row" ng-if="vm.distanceOption !== ''">
+
+      <div class="nekso-form__container-input-label"
+      ng-if="vm.distanceOption === 'between' || vm.distanceOption === 'more-than'"
+      ng-class="{
+      'col-md-6 col-xs-12': vm.distanceOption === 'between',
+      'col-md-12 col-xs-12': vm.distanceOption !== 'between',
+      'has-error' : vm.submitted && new_promotion.distance_from.$invalid && !new_promotion.$pristine
+      }">
+        <div class="nekso-form__container-input-label__flex-elements">
+          <span ng-if="vm.distanceOption === 'between'">FROM</span>
+          <input class="nekso-form__input"
+                 type="number"
+                 placeholder="0"
+                 ng-model="vm.distance.from"
+                 name="distance_from"
+                 required
+                 min="0"
+                 max="99999999"/>
+          <label>Km.</label>
+        </div>
+        <div class="nekso-form__container-input-label__errors">
+          <h6 class="text-danger"
+              ng-if="new_promotion.distance_from.$error.required &&
+              !new_promotion.distance_from.$pristine">
+            This field is mandatory
+          </h6>
+          <h6 class="text-danger"
+              ng-if="new_promotion.distance_from.$error.min &&
+              !new_promotion.distance_from.$pristine">
+            Min. 0
+          </h6>
+          <h6 class="text-danger"
+              ng-if="new_promotion.distance_from.$error.max &&
+              !new_promotion.distance_from.$pristine">
+            Max. 99999999
+          </h6>
+        </div>
+      </div>
+
+      <div class="nekso-form__container-input-label"
+      ng-if="vm.distanceOption === 'between' || vm.distanceOption === 'less-than'"
+      ng-class="{
+      'col-md-6 col-xs-12': vm.distanceOption === 'between',
+      'col-md-12 col-xs-12': vm.distanceOption !== 'between',
+      'has-error' : vm.submitted && new_promotion.distance_to.$invalid && !new_promotion.$pristine
+      }">
+        <div class="nekso-form__container-input-label__flex-elements">
+          <span ng-if="vm.distanceOption === 'between'">TO</span>
+          <input class="nekso-form__input"
+                 type="number"
+                 placeholder="0"
+                 name="distance_to"
+                 ng-model="vm.distance.to"
+                 required
+                 max="99999999"
+                 min="0"/>
+          <label>Km.</label>
+        </div>
+        <div class="nekso-form__container-input-label__errors">
+          <h6 class="text-danger"
+              ng-if="new_promotion.distance_to.$error.required &&
+            !new_promotion.distance_to.$pristine">
+            This field is mandatory
+          </h6>
+          <h6 class="text-danger"
+              ng-if="new_promotion.distance_to.$error.min &&
+            !new_promotion.distance_to.$pristine">
+            Min. 0
+          </h6>
+          <h6 class="text-danger"
+              ng-if="new_promotion.distance_to.$error.max &&
+            !new_promotion.distance_to.$pristine">
+            Max. 99999999
+          </h6>
+        </div>
+      </div>
+
+      <div class="col-md-12 col-xs-12" ng-if="vm.distanceOption === 'between'">
+        <h6 class="text-danger"
+            ng-if="new_promotion.distance_to.$error.rangeDistanceBetween ||
+           new_promotion.distance_from.$error.rangeDistanceBetween">
+          The final range (To) can not be less or equal than to the initial range (From).
+        </h6>
+      </div>
+
+  </article>
+
+</section>

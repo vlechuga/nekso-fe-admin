@@ -1,0 +1,249 @@
+<article class="card aditional-parameters">
+
+  <header class="card__header">
+    <div class="card__header-title"><strong>Additional Parameters</strong></div>
+    <div class="card__header-subtitle">Set additional parameters to create a promotion.</div>
+  </header>
+
+  <div class="card__content">
+
+    <div class="row">
+
+      <!-- Usage per user -->
+      <div class="parameter col-md-4 col-xs-12">
+        <div>
+          <input class="nekso-form__checkbox"
+                 id="option-usage-per-user"
+                 type="checkbox"
+                 ng-model="vm.usagePerUser">
+          <label for="option-usage-per-user">
+            Usage per user
+            <span class="description">
+              Indicate how many times the target will be able
+              to enjoy the promotion.
+            </span>
+          </label>
+        </div>
+        <div ng-if="vm.usagePerUser">
+          <br/>
+          <div class="form-group usage-per-user"
+               ng-class="{ 'has-error' : vm.submitted && vm.submitted && new_promotion.field_usagePerUser.$invalid &&
+                           !new_promotion.$pristine}">
+            <input class="nekso-form__input"
+                   type="number"
+                   id="usage-per-user-input"
+                   placeholder="Set max usage per user"
+                   ng-model="vm.promotion.criteria.usagePerUser"
+                   required
+                   name="field_usagePerUser"
+                   min="1"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ride interval -->
+      <div class="parameter col-md-4 col-xs-12">
+        <div>
+          <input class="nekso-form__checkbox"
+                 id="option-ride-interval"
+                 type="checkbox"
+                 ng-model="vm.rideInterval">
+          <label for="option-ride-interval">
+            Ride interval
+            <span class="description">
+              Set after how many rides will the selected target get the reward.
+            </span>
+          </label>
+        </div>
+        <div ng-if="vm.rideInterval">
+          <br/>
+          <div class="form-group ride-interval"
+               ng-class="{ 'has-error' : vm.submitted && vm.submitted && new_promotion.field_rideInterval.$invalid &&
+                          !new_promotion.$pristine}">
+            <input class="nekso-form__input"
+                   type="number"
+                   id="ride-interval-input"
+                   ng-model="vm.promotion.criteria.completedRidesDuringValidity"
+                   ng-required="vm.rideInterval"
+                   name="field_rideInterval"
+                   placeholder="Set completed ride interval"
+                   min="1"
+                   max="9999999999"/>
+
+            <h6 class="text-danger"
+                ng-if="new_promotion.field_rideInterval.$error.required &&
+                           !new_promotion.field_rideInterval.$pristine">
+              This field is mandatory</h6>
+            <h6 class="text-danger"
+                ng-if="new_promotion.field_rideInterval.$error.min &&
+                           !new_promotion.field_rideInterval.$pristine">
+              Min. 1</h6>
+            <h6 class="text-danger"
+                ng-if="new_promotion.field_rideInterval.$error.max &&
+                           !new_promotion.field_rideInterval.$pristine">
+              Max. 9999999999</h6>
+          </div>
+        </div>
+      </div>
+
+      <!-- High priority -->
+      <div class="parameter col-md-4 col-xs-12">
+        <input class="nekso-form__checkbox"
+               id="option-high-priority"
+               type="checkbox"
+               ng-disabled="vm.categoryOption !== 'SYSTEM'"
+               ng-model="vm.isHighPriority">
+        <label for="option-high-priority">
+          High priority
+          <span class="description">
+            An important promotion that must come first over
+            any other promotion to the selected target.
+          </span>
+        </label>
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <!-- Exclude the suspicious users -->
+      <div class="parameter col-md-4 col-xs-12">
+
+        <input class="nekso-form__checkbox"
+               id="option-ignore-suspicious"
+               type="checkbox"
+               ng-model="vm.ignoreSuspicious">
+        <label for="option-ignore-suspicious">
+          Exclude the suspicious users
+          <span class="description">
+            The users tagged as suspicious will not received the promotion.
+          </span>
+        </label>
+
+      </div>
+
+      <!-- First ride -->
+      <div class="parameter col-md-4 col-xs-12">
+
+        <input class="nekso-form__checkbox"
+               id="option-first-ride"
+               type="checkbox"
+               ng-model="vm.forFirstRide"
+               ng-disabled="vm.addCorporation || vm.isCouponCode">
+        <label for="option-first-ride">
+          First ride
+          <span class="description">
+            Offer a reward when the target selected makes their first ride.
+          </span>
+        </label>
+
+      </div>
+
+      <!-- Hidden -->
+      <div class="parameter col-md-4 col-xs-12"
+           ng-if="vm.role === 'PASSENGER'">
+        <input class="nekso-form__checkbox"
+               id="option-hidden"
+               type="checkbox"
+               ng-model="vm.isHidden">
+        <label for="option-hidden">
+          Hidden
+          <span class="description">
+            Hide a promotion created for all users.
+          </span>
+        </label>
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <!-- Promotional code -->
+      <div class="parameter col-md-4 col-xs-12"
+           ng-if="!vm.featureToggle.isFeatureEnabled('category')">
+
+        <input class="nekso-form__checkbox"
+               id="promotional-code-option"
+               type="checkbox"
+               ng-model="vm.isCouponCode"
+               ng-disabled="vm.forFirstRide || vm.addCorporation"
+               ng-click="vm.usagePerUser=vm.isCouponCode">
+        <label for="promotional-code-option">
+          Promotional code
+          <span class="description">
+            Set information to create a promotional code.
+          </span>
+        </label>
+
+      </div>
+
+      <!-- Select corporation -->
+      <div class="parameter col-md-4 col-xs-12"
+           ng-if="!vm.featureToggle.isFeatureEnabled('category')">
+
+        <input type="checkbox"
+               class="nekso-form__checkbox"
+               id="corporation-option"
+               ng-model="vm.addCorporation"
+               ng-disabled="vm.forFirstRide || vm.isCouponCode">
+        <label for="corporation-option">
+          Select corporation
+          <span class="description">
+            Set information to create a coupon code promotion.
+          </span>
+        </label>
+
+        <ng-include src="'/views/partials/promotion/add_promotion/select_corporation.html'" ng-if="vm.addCorporation"></ng-include>
+
+      </div>
+
+      <!-- Distance -->
+      <div class="parameter col-md-4 col-xs-12"
+           ng-if="vm.featureToggle.isFeatureEnabled('distance')">
+
+        <input class="nekso-form__checkbox"
+               id="option-distance"
+               type="checkbox"
+               ng-model="vm.distanceChecked">
+        <label for="option-distance">
+          Distance
+          <span class="description">
+            Set in Km when promotion is applied.
+          </span>
+        </label>
+
+        <ng-include src="'/views/partials/promotion/add_promotion/distance.html'"></ng-include>
+
+      </div>
+
+      <!-- Cancellation Rate -->
+      <div class="parameter col-md-4 col-xs-12"
+           ng-if="vm.role === 'PASSENGER' || vm.role === 'DRIVER'">
+
+        <input class="nekso-form__checkbox"
+               id="option-cancellation-rate"
+               type="checkbox"
+               ng-model="vm.cancellationRateChecked">
+        <label for="option-cancellation-rate">
+          Cancellation Rate
+          <span class="description">
+            Set the % of cancellation of the users to whom the promotion will apply.
+          </span>
+        </label>
+
+        <ng-include src="'/views/partials/promotion/add_promotion/cancellation_rate.html'"></ng-include>
+
+      </div>
+
+    </div>
+
+    <div class="row" ng-if="!vm.featureToggle.isFeatureEnabled('category')">
+      <!-- Promotional code module -->
+      <div class="col-md-12 col-xs-12 promotional-code-container">
+        <div ng-include="'/views/partials/promotion/add_promotion/promotional_code.html'" ng-if="vm.isCouponCode"></div>
+      </div>
+    </div>
+
+  </div>
+
+</article>

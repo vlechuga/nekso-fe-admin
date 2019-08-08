@@ -1,0 +1,43 @@
+<div class="modal-header">
+  <button class="close" id="btn_close" ng-click="vm.close()" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <h4 class="modal-title">{{vm.transfer.user.fullName}}</h4>
+</div>
+<div class="modal-body">
+  <div class="row payment-credit-debit-note-panel">
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-12 header">
+          <h5 class="text-center">Bank.: {{vm.transfer.banks.to.name}}</h5>
+          <h5 class="text-center">Reference.: {{vm.transfer.reference}}</h5>
+          <h5 class="text-center">Amount.: {{vm.transfer.countryInfo.currencySymbol}} {{vm.transfer.amount |
+            number:2}}</h5>
+        </div>
+      </div>
+      <form name="transfer_action" novalidate>
+        <div class="row body">
+          <div class="col-sm-12 form-group">
+            <label for="field_status" class="font-bold">Status:</label>
+            <select class="nekso-form__select" id="field_status" ng-model="vm.status">
+              <option disabled selected value="">New status</option>
+              <option value="APPROVED">Approved</option>
+              <option value="REJECTED">Rejected</option>
+            </select>
+          </div>
+          <div class="col-sm-12 form-group">
+            <label for="comment" class="font-bold">Comment:</label>
+            <textarea id="comment" name="input_comment" class="form-control new-select" ng-model="vm.comment"
+                      maxlength="150" minlength="1" required></textarea>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" ng-click="vm.updateStatus()" ng-disabled="transfer_action.$invalid"
+          ladda="vm.loading" data-style="slide-left">Confirm
+  </button>
+  <button class="btn btn-default" ng-click="vm.close()">Cancel</button>
+</div>

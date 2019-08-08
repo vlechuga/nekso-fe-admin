@@ -1,0 +1,770 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>nekso | Admin dashboard</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <!-- build:css(.) styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css" />
+  <link rel="stylesheet" href="bower_components/ngToast/dist/ngToast.css" />
+  <link rel="stylesheet" href="bower_components/angular-block-ui/dist/angular-block-ui.css" />
+  <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css" />
+  <link rel="stylesheet" href="bower_components/ladda/dist/ladda.min.css" />
+  <link rel="stylesheet" href="bower_components/bootstrap-daterangepicker/daterangepicker.css" />
+  <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+  <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="bower_components/multiple-select/multiple-select.css" />
+  <link rel="stylesheet" href="bower_components/cal-heatmap/cal-heatmap.css" />
+  <link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.css" />
+  <link rel="stylesheet" href="bower_components/bootstrap-select/dist/css/bootstrap-select.css" />
+  <!-- endbower -->
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="bower_components/angular-bootstrap/ui-bootstrap-csp.css">
+  <link rel="stylesheet" href="bower_components/bootswatch/paper/bootstrap.css">
+  <!-- endbuild -->
+  <!-- build:css(.tmp) styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+</head>
+
+<body class="site" ng-app="neksoFeAdmindashboardApp" ng-controller="MainCtrl as mainVm" ng-cloak>
+<toast></toast>
+<!--[if lte IE 8]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+  your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<!-- Add your site or application content here -->
+<nav class="site-header navbar navbar-fixed-top">
+  <div class="container-fluid site-header-container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mobile-menu"
+              aria-expanded="false">
+        <i class="material-icons">menu</i>
+      </button>
+      <a href="#/" class="navbar-brand">
+        <svg class="logo-svg" version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 182.3 72.7" enable-background="new 0 0 182.3 72.7" xml:space="preserve"><path id="XMLID_31_" fill="#FF0066" d="M121.4,14.2c-0.2,0-0.5-0.1-0.7-0.1H87.2h0h-0.1v0c-4.4,0-7.9,3.6-7.9,7.9c0,4.3,3.5,7.9,7.8,7.9v0l10.9,0c1.4,0,2.7,0.9,3,2.3c0.4,1.9-1,3.6-2.9,3.6h0l0,0H85.9c-1.6,0-3-0.6-4.1-1.7L70.3,22.8l8.6-8.6h-7.1L66.9,19V4.7H62V24l-9.8,9.8l0,0c-1.6,1.4-3.6,2.2-5.7,2.2c-1.1,0-2.1-0.2-3-0.6l14.9-14.9L56,18.1h0c-2.6-2.6-6.3-4.1-10.3-3.9c-6.5,0.4-11.9,5.6-12.5,12.2c-0.3,3.6,0.8,6.9,2.9,9.5l-5,5.1l0-4.4v-8.8c0-6.9-5.1-12.9-12-13.5c0,0-0.1,0-0.1,0c-0.3,0-0.7,0-1,0h-0.5c-0.3,0-0.7,0-1,0c0,0-0.1,0-0.1,0c-6.9,0.7-12,6.6-12,13.5l0,13.2h5l0-13.2c0-2.1,0.7-4.2,2.1-5.8c1.6-1.8,3.9-2.8,6.3-2.8c2.4,0,4.7,1,6.3,2.8c1.4,1.6,2.1,3.7,2.1,5.8l0,25l13.7-13.7c2,1.2,4.3,1.8,6.7,1.8c3.6,0,6.8-1.4,9.2-3.7l0,0l0.1-0.1c0.1-0.1,0.2-0.2,0.3-0.3L62,31V41h4.9V26.5l13.1,13.1c0.9,0.9,2.1,1.4,3.3,1.4H98v0h0c3.4,0,6.5-2.2,7.5-5.4c1.7-5.4-2.3-10.4-7.5-10.5v0h-11c-1.6,0-3-1.3-3-3c0-1.6,1.3-3,3-3H102v0h19.5v0.1c2.8,0.1,5.3,1.5,6.9,3.9c0.5,0.8,0.9,1.8,1.1,2.8c0.7,3.5-0.7,6.9-3.7,8.8c-0.8,0.6-1.8,0.9-2.8,1.1c-2.9,0.6-5.7-0.3-7.7-2.3c-1.6-1.6-2.5-3.7-2.5-5.9c0-1,0.2-1.9,0.5-2.8h-5.2c-0.3,1.6-0.4,3.4-0.1,5.2c1,5.9,6,10.4,11.9,10.9c7.9,0.7,14.6-5.5,14.6-13.3C134.6,20.3,128.7,14.3,121.4,14.2z M39.6,32.3c-0.9-1.4-1.4-3-1.4-4.7c0-2.2,0.8-4.3,2.3-5.8c1.6-1.7,3.8-2.6,6.1-2.6c1.7,0,3.3,0.5,4.7,1.4L39.6,32.3z"/><g><path fill="#1C2D48" d="M175,44.8H46c-3.4,0-6.6,1.3-9,3.7L17.7,67.9h160.2V47.6C177.8,46,176.6,44.8,175,44.8z M46.4,62.4l-0.9-2.7h-4.5L40,62.4h-2l4.3-11.6h1.8l4.2,11.6H46.4z M58.6,57.4c0,1.5-0.5,2.6-1.4,3.5c-0.9,0.9-2.1,1.4-3.6,1.4h-3.8V50.7h3.8c1.5,0,2.7,0.5,3.6,1.4s1.4,2.1,1.4,3.5V57.4z M72.6,62.4h-1.9v-4l0.2-5l0,0l-3.4,9H66l-3.4-9l0,0l0.2,5v4h-1.9V50.7h2.5l3.3,8.9h0l3.4-8.9h2.5V62.4z M77.3,62.4h-1.9V50.7h1.9V62.4z M89.2,62.4h-1.9l-5.2-8.5l0,0v8.5h-1.9V50.7h1.9l5.2,8.5l0,0v-8.5h1.9V62.4zM94,62.4H92V50.7H94V62.4z M103.8,61.7c-0.8,0.6-1.8,0.9-3.1,0.9c-1.2,0-2.3-0.3-3.2-1c-0.9-0.6-1.4-1.5-1.3-2.6l0,0h1.9c0,0.7,0.2,1.2,0.7,1.6s1.1,0.5,1.9,0.5c0.7,0,1.3-0.1,1.7-0.4c0.4-0.3,0.6-0.7,0.6-1.2c0-0.5-0.2-0.9-0.5-1.2c-0.4-0.3-1-0.6-1.9-0.8c-1.3-0.3-2.3-0.8-3-1.4c-0.7-0.6-1-1.3-1-2.2c0-0.9,0.4-1.7,1.2-2.3s1.8-0.9,3-0.9c1.3,0,2.3,0.3,3.1,1c0.8,0.7,1.1,1.5,1.1,2.5l0,0H103c0-0.6-0.2-1.1-0.6-1.4c-0.4-0.4-1-0.6-1.7-0.6c-0.7,0-1.3,0.2-1.6,0.5s-0.6,0.7-0.6,1.2c0,0.4,0.2,0.8,0.6,1.1s1.1,0.6,2,0.8c1.2,0.3,2.2,0.8,2.8,1.4c0.6,0.6,1,1.3,1,2.3C105,60.3,104.6,61.1,103.8,61.7z M115.1,52.3h-3.5v10.1h-1.9V52.3h-3.5v-1.6h9V52.3z M125.7,62.4h-2c-0.2-0.2-0.3-0.5-0.4-0.8c-0.1-0.4-0.1-0.7-0.1-1.1v-0.9c0-0.6-0.2-1.1-0.5-1.4c-0.3-0.4-0.8-0.5-1.4-0.5h-2.6v4.8h-1.9V50.7h4.3c1.3,0,2.3,0.3,3,0.9s1.1,1.4,1.1,2.5c0,0.6-0.2,1.1-0.5,1.6c-0.3,0.4-0.8,0.8-1.4,1c0.7,0.2,1.1,0.5,1.4,1s0.4,1,0.4,1.7v1c0,0.3,0,0.7,0.1,1s0.2,0.6,0.4,0.7V62.4zM135,62.4l-0.9-2.7h-4.5l-0.9,2.7h-2l4.3-11.6h1.8l4.2,11.6H135z M146.4,52.3h-3.5v10.1H141V52.3h-3.5v-1.6h9V52.3z M150.2,62.4h-1.9V50.7h1.9V62.4zM157.8,62.4H156l-4.1-11.6h2.1l2.8,8.6l0.2,0.8h0l0.2-0.8l2.8-8.6h2.1L157.8,62.4z M172.4,57.6c0,1.4-0.4,2.6-1.3,3.5c-0.9,0.9-2,1.4-3.5,1.4c-1.4,0-2.5-0.5-3.4-1.4c-0.9-0.9-1.3-2.1-1.3-3.5v-2.1c0-1.4,0.4-2.6,1.3-3.5c0.9-0.9,2-1.4,3.4-1.4c1.4,0,2.6,0.5,3.5,1.4c0.9,0.9,1.3,2.1,1.3,3.5V57.6z"/><path fill="#1C2D48" d="M53.6,52.3h-1.8v8.5h1.8c1,0,1.7-0.3,2.3-0.9c0.6-0.6,0.8-1.4,0.8-2.4v-1.8c0-1-0.3-1.8-0.8-2.4S54.6,52.3,53.6,52.3z"/><polygon fill="#1C2D48" points="131.8,53.1 130.1,58 133.5,58 131.9,53.1"/><path fill="#1C2D48" d="M121.1,52.3h-2.4V56h2.2c0.8,0,1.3-0.1,1.7-0.4s0.5-0.8,0.5-1.4c0-0.6-0.2-1-0.5-1.4C122.4,52.5,121.8,52.3,121.1,52.3z"/><polygon fill="#1C2D48" points="43.2,53.1 41.5,58 44.9,58 43.3,53.1"/><path fill="#1C2D48" d="M167.6,52.2c-0.9,0-1.5,0.3-2,0.9c-0.5,0.6-0.7,1.4-0.7,2.4v2.1c0,1,0.2,1.8,0.7,2.4c0.5,0.6,1.2,0.9,2,0.9c0.9,0,1.6-0.3,2.1-0.9c0.5-0.6,0.8-1.4,0.8-2.4v-2.1c0-1-0.3-1.8-0.8-2.4S168.5,52.2,167.6,52.2z"/></g></svg>
+      </a>
+    </div>
+    <div id="mobile-menu" class="navbar-collapse collapse menu-container-mobile" role="navigation"
+         aria-expanded="false">
+      <ul class="nav navbar-nav">
+        <li class="user-name">
+          <span class="text-white m-l-5"><strong>{{mainVm.getUsername()}}</strong></span>
+        </li>
+        <li role="separator" class="divider"></li>
+        <li>
+          <a href="" data-target="#item4" data-toggle="collapse" data-parent="#stacked-menu2">
+                  <span>
+                    <i class="material-icons">dashboard</i>
+                  </span> Overview
+            <span class="arrow-down">
+                    <i class="material-icons">keyboard_arrow_down</i>
+                  </span>
+          </a>
+          <ul class="nav nav-stacked collapse in left-submenu" id="item4">
+            <li ng-if="mainVm.getUserPermission('read:overview')">
+              <a href="#/overview">
+                    <span>
+                     <i class="material-icons">assessment</i>
+                    </span> Summary
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:monitor')">
+              <a href="#/monitor">
+                    <span>
+                      <i class="material-icons">network_wifi</i>
+                    </span> Monitor
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:sos')">
+          <a href="#/SOS">
+                  <span>
+                    <i class="material-icons">warning</i>
+                  </span> SOS
+          </a>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:administration')">
+          <a href="#/administration">
+                  <span>
+                    <i class="material-icons">settings</i>
+                  </span> Administration
+          </a>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:drivers')">
+          <a href="#/drivers">
+                  <span>
+                    <i class="material-icons">directions_car</i>
+                  </span> Drivers
+          </a>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:passengers')">
+          <a href="#/passengers">
+                  <span>
+                    <i class="material-icons">person</i>
+                  </span> Passengers
+          </a>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:rides')">
+          <a href="#/rides">
+                  <span>
+                    <i class="material-icons">map</i>
+                  </span> Rides
+          </a>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:rides')">
+          <a href="#/reports">
+                  <span>
+                    <i class="material-icons">assignment</i>
+                  </span> Reports
+          </a>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:tl')">
+          <a href="#/controllers">
+                  <span>
+                    <i class="material-icons">local_taxi</i>
+                  </span> Taxi lines
+          </a>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:corporate')">
+          <a href="#/corporate">
+              <span>
+                <i class="material-icons">business_center</i>
+              </span> Corporate
+          </a>
+        </li>
+        <!-- //////////////////////////////////////////// -->
+        <li ng-if="mainVm.getUserPermission('read:club_driver')">
+          <a href="" data-target="#item7" data-toggle="collapse" data-parent="#stacked-menu2">
+            <span>
+              <i class="material-icons">star</i>
+            </span> Club Nekso
+            <span class="arrow-down">
+              <i class="material-icons">keyboard_arrow_down</i>
+            </span>
+          </a>
+          <ul class="nav nav-pills nav-stacked collapse in left-submenu" id="item7">
+            <li ng-if="mainVm.getUserPermission('read:club_driver')">
+              <a href="#/club_nekso/drivers">
+                <span><i class="material-icons">directions_car</i></span> Drivers
+              </a>
+            </li>
+          </ul>
+        </li>
+        <!-- //////////////////////////////////////////// -->
+        <li ng-if="mainVm.getUserPermission('read:communication')">
+          <a href="" data-target="#item5" data-toggle="collapse" data-parent="#stacked-menu2">
+              <span>
+                <i class="material-icons">contact_phone</i>
+              </span> Communication
+            <span class="arrow-down">
+                <i class="material-icons">keyboard_arrow_down</i>
+              </span>
+          </a>
+          <ul class="nav nav-pills nav-stacked collapse in left-submenu" id="item5">
+            <li ng-if="mainVm.getUserPermission('read:communication')">
+              <a href="#/communication/passengers">
+                <span><i class="material-icons">person</i></span> Passengers
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:communication')">
+              <a href="#/communication/drivers">
+                <span><i class="material-icons">directions_car</i></span> Drivers
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:communication')">
+              <a href="#/communication/drivers/digital">
+                <span><i class="material-icons">smartphone</i></span> Digital Drivers
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:communication')">
+              <a href="#/communication/statistics">
+                <span><i class="material-icons">trending_up</i></span> Statistics
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:communication')">
+              <a href="#/communication/visitors">
+                <span><i class="material-icons">supervisor_account</i></span> Visitors
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:communication')">
+              <a href="#/communication/channel/messages">
+                    <span>
+                      <i class="material-icons">move_to_inbox</i>
+                    </span> Channel
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:promotions')">
+          <a href="" data-target="#item6" data-toggle="collapse" data-parent="#stacked-menu2">
+                  <span>
+                    <i class="material-icons">local_offer</i>
+                  </span> Promotion
+            <span class="arrow-down">
+                    <i class="material-icons">keyboard_arrow_down</i>
+                  </span>
+          </a>
+          <ul class="nav nav-pills nav-stacked collapse in left-submenu" id="item6">
+            <li ng-if="mainVm.getUserPermission('create:promotions')">
+              <a href="#/promotions/new"><span><i class="material-icons">add_box</i></span> Add Promotion</a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:promotions')">
+              <a href="#/promotions"><span><i class="material-icons">history</i></span> All Promotions</a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:promotions')">
+              <a href="#/promotions/corporate"><span><i class="material-icons">business_center</i></span> Corporate</a>
+            </li>
+          </ul>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:phone_code')">
+          <a href="#/validation_code">
+            <span><i class="material-icons">phone</i></span> Validation Code
+          </a>
+        </li>
+        <li>
+          <a href="#/price_calculator">
+            <span><i class="material-icons">attach_money</i></span> Price Calculator
+          </a>
+        </li>
+      </ul>
+      <ul class="nav nav-pills nav-stacked left-menu" id="stacked-menu2">
+        <li>
+          <a href="" ng-click="mainVm.logout()">
+                  <span>
+                    <i class="material-icons">exit_to_app</i>
+                  </span> Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- /.container-fluid -->
+</nav>
+
+<div class="site-body">
+  <div class="site-content scroll-x-null padding-ng-view">
+    <div class="container-fluid full-height-main">
+      <div class="row full-height">
+        <div class="full-height">
+          <div ng-view class="full-height"></div>
+        </div>
+      </div>
+      <div class="row footer" ng-class="{'full-width': !mainVm.isLoggedIn()}">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-12">
+              <span class="hidden-xs">© 2017 Nekso. <a href="https://nekso.io/help/terminos/#pasajero">Terms and Conditions</a> - <a
+                href="https://nekso.io/help/terminos/#privacidad">Privacy Policy</a></span>
+              <span class="visible-xs-block">© 2017 Nekso.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ng-if="mainVm.isLoggedIn()" class="site-nav hidden-xs">
+    <div class="menu-container">
+      <ul class="nav nav-pills nav-stacked left-menu scrollbar" id="stacked-menu style-default">
+        <li class="user-name">
+          <span class="text-white m-l-5"><strong>{{mainVm.getUsername()}}</strong></span>
+        </li>
+        <li role="separator" class="divider"></li>
+        <li>
+          <a href="" data-target="#item1" data-toggle="collapse" data-parent="#stacked-menu">
+                  <span>
+                    <i class="material-icons">dashboard</i>
+                  </span> Overview
+            <span class="arrow-down">
+                    <i class="material-icons">keyboard_arrow_down</i>
+                  </span>
+          </a>
+          <ul class="nav nav-stacked collapse in left-submenu" id="item1">
+            <li ng-if="mainVm.getUserPermission('read:overview')">
+              <a href="#/overview">
+                    <span>
+                     <i class="material-icons">assessment</i>
+                    </span> Summary
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:monitor')">
+              <a href="#/monitor">
+                    <span>
+                      <i class="material-icons">network_wifi</i>
+                    </span> Monitor
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:monitor')">
+              <a href="#/live">
+                    <span>
+                      <i class="material-icons">timeline</i>
+                    </span> Live
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:sos')">
+          <a href="#/sos">
+                  <span>
+                    <i class="material-icons">warning</i>
+                  </span> SOS
+          </a>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:administration')">
+          <a href="#/administration">
+                  <span>
+                    <i class="material-icons">settings</i>
+                  </span> Administration
+          </a>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:drivers')">
+          <a href="#/drivers">
+                  <span>
+                    <i class="material-icons">directions_car</i>
+                  </span>Drivers
+          </a>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:passengers')">
+          <a href="#/passengers">
+                  <span>
+                    <i class="material-icons">person</i>
+                  </span>Passengers
+          </a>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:rides')">
+          <a href="#/rides">
+                  <span>
+                    <i class="material-icons">map</i>
+                  </span> Rides
+          </a>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:rides')">
+          <a href="#/reports">
+                  <span>
+                    <i class="material-icons">assignment</i>
+                  </span> Reports
+          </a>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:tl')">
+          <a href="#/controllers">
+                  <span>
+                    <i class="material-icons">local_taxi</i>
+                  </span> Taxi lines
+          </a>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:corporate')">
+          <a href="" data-target="#item12" data-toggle="collapse" data-parent="#stacked-menu">
+            <span>
+              <i class="material-icons">business_center</i>
+            </span> Corporate
+            <span class="arrow-down">
+              <i class="material-icons">keyboard_arrow_down</i>
+            </span>
+          </a>
+          <ul class="nav nav-pills nav-stacked collapse in left-submenu" id="item12">
+            <li ng-if="mainVm.getUserPermission('read:corporate')">
+              <a href="#/corporate">
+                <span><i class="material-icons">directions_car</i></span>All
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:corporate')">
+              <a href="#/corporate/sales_package">
+                <span><i class="material-icons">directions_car</i></span> Sales Package
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:payments')">
+          <a href="" data-target="#item13" data-toggle="collapse" data-parent="#stacked-menu">
+            <span>
+              <i class="material-icons">payment</i>
+            </span> Payments
+            <span class="arrow-down">
+              <i class="material-icons">keyboard_arrow_down</i>
+            </span>
+          </a>
+          <ul class="nav nav-pills nav-stacked collapse in left-submenu" id="item13">
+            <li ng-if="mainVm.getUserPermission('read:payments')">
+              <a href="#/payments/driver">
+                <span><i class="material-icons">directions_car</i></span>Driver
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:payments')">
+              <a href="#/payments/corporate">
+                <span><i class="material-icons">business_center</i></span> Corporate
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:bank_transfer')">
+              <a href="#/payments/passenger/bank-transfer">
+                <span><i class="material-icons">monetization_on</i></span>Passenger Bank Transfer
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:recharge_balance')">
+              <a href="#/payments/passenger/recharge-balance">
+                <span><i class="material-icons">monetization_on</i></span>Passenger Other Payments
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:commission_driver')">
+              <a href="#/payments/driver/bank-transfer">
+                <span><i class="material-icons">monetization_on</i></span>Driver Bank Transfer
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:club_driver')">
+          <a href="" data-target="#item8" data-toggle="collapse" data-parent="#stacked-menu">
+            <span>
+              <i class="material-icons">star</i>
+            </span> Club Nekso
+            <span class="arrow-down">
+              <i class="material-icons">keyboard_arrow_down</i>
+            </span>
+          </a>
+          <ul class="nav nav-pills nav-stacked collapse in left-submenu" id="item8">
+            <li ng-if="mainVm.getUserPermission('read:club_driver')">
+              <a href="#/club_nekso/drivers">
+                <span><i class="material-icons">directions_car</i></span> Drivers
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:communication')">
+          <a href="" data-target="#item2" data-toggle="collapse" data-parent="#stacked-menu">
+            <span>
+              <i class="material-icons">contact_phone</i>
+            </span> Communication
+            <span class="arrow-down">
+              <i class="material-icons">keyboard_arrow_down</i>
+            </span>
+          </a>
+          <ul class="nav nav-pills nav-stacked collapse in left-submenu" id="item2">
+            <li ng-if="mainVm.getUserPermission('read:communication')">
+              <a href="#/communication/passengers">
+                <span><i class="material-icons">person</i></span> Passengers
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:communication')">
+              <a href="#/communication/drivers">
+                <span><i class="material-icons">directions_car</i></span> Drivers
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:communication')">
+              <a href="#/communication/drivers/digital">
+                <span><i class="material-icons">smartphone</i></span> Digital Drivers
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:communication')">
+              <a href="#/communication/statistics">
+                <span><i class="material-icons">trending_up</i></span> Statistics
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:communication')">
+              <a href="#/communication/visitors">
+                <span><i class="material-icons">supervisor_account</i></span> Visitors
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:communication')">
+              <a href="#/communication/channel/messages">
+                <span>
+                  <i class="material-icons">move_to_inbox</i>
+                </span> Channel
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:promotions')">
+          <a href="" data-target="#item3" data-toggle="collapse" data-parent="#stacked-menu">
+                  <span>
+                    <i class="material-icons">local_offer</i>
+                  </span> Promotion
+            <span class="arrow-down">
+                    <i class="material-icons">keyboard_arrow_down</i>
+                  </span>
+          </a>
+          <ul class="nav nav-pills nav-stacked collapse in left-submenu" id="item3">
+            <li ng-if="mainVm.getUserPermission('create:promotions')">
+              <a href="#/promotions/new"><span><i class="material-icons">add_box</i></span> Add Promotion</a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:promotions')">
+              <a href="#/promotions"><span><i class="material-icons">history</i></span> All Promotions</a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('read:promotions')">
+              <a href="#/promotions/corporate"><span><i class="material-icons">business_center</i></span> Corporate</a>
+            </li>
+          </ul>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:phone_code')">
+          <a href="#/validation_code">
+            <span><i class="material-icons">phone</i></span> Validation Code
+          </a>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:royal')">
+          <a href="" data-target="#item10" data-toggle="collapse" data-parent="#stacked-menu">
+            <span><i class="material-icons">loupe</i></span> Royal
+            <span class="arrow-down">
+              <i class="material-icons">keyboard_arrow_down</i>
+            </span>
+          </a>
+          <ul class="nav nav-pills nav-stacked collapse in left-submenu" id="item10">
+            <li>
+              <a href="#/royal">
+                <span><i class="material-icons">directions_car</i></span> Drivers
+              </a>
+            </li>
+            <li>
+              <a href="#/royal_settings">
+                <span><i class="material-icons">tune</i></span> Settings
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li ng-if="mainVm.getUserPermission('read:invoice')">
+          <a href="#" data-target="#item11" data-toggle="collapse" data-parent="#stacked-menu">
+            <span><i class="material-icons">account_balance_wallet</i></span> Invoicing
+            <span class="arrow-down">
+              <i class="material-icons">keyboard_arrow_down</i>
+            </span>
+          </a>
+          <ul class="nav nav-pills nav-stacked collapse in left-submenu" id="item11">
+            <li ng-if="mainVm.getUserPermission('export:invoice')">
+              <a href="#/invoice_report">
+                <span><i class="material-icons">directions_car</i></span> Reports
+              </a>
+            </li>
+            <li ng-if="mainVm.getUserPermission('update:invoice')">
+              <a href="#/invoice_settings">
+                <span><i class="material-icons">tune</i></span> Settings
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="" data-target="#item9" data-toggle="collapse" data-parent="#stacked-menu">
+            <span>
+              <i class="material-icons">monetization_on</i>
+            </span> Price settings
+            <span class="arrow-down">
+              <i class="material-icons">keyboard_arrow_down</i>
+            </span>
+          </a>
+          <ul class="nav nav-pills nav-stacked collapse in left-submenu" id="item9">
+            <li>
+              <a href="#/price_schema">
+                <span><i class="material-icons">tune</i></span> Schema
+              </a>
+            </li>
+            <li>
+              <a href="#/price_calculator">
+                <span><i class="material-icons">keyboard</i></span> Calculator
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <div class="button-logout">
+        <ul class="nav nav-pills nav-stacked left-menu" id="stacked-menu">
+          <li>
+            <a href="" ng-click="mainVm.logout()">
+              <span>
+                <i class="material-icons">exit_to_app</i>
+              </span> Logout
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+<script>
+  !function (A, n, g, u, l, a, r) {
+    A.GoogleAnalyticsObject = l, A[l] = A[l] || function () {
+        (A[l].q = A[l].q || []).push(arguments)
+      }, A[l].l = +new Date, a = n.createElement(g),
+      r = n.getElementsByTagName(g)[0], a.src = u, r.parentNode.insertBefore(a, r)
+  }(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-XXXXX-X');
+  ga('send', 'pageview');
+</script>
+<!--<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<div load-scripts></div>
+<!-- build:js(.) scripts/vendor.js -->
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-aria/angular-aria.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/angular-messages/angular-messages.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-touch/angular-touch.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/angular-simple-logger/dist/angular-simple-logger.js"></script>
+<script src="bower_components/lodash/lodash.js"></script>
+<script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
+<script src="bower_components/Chart.js/Chart.js"></script>
+<script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
+<script src="bower_components/ng-csv/build/ng-csv.min.js"></script>
+<script src="bower_components/a0-angular-storage/dist/angular-storage.js"></script>
+<script src="bower_components/ngToast/dist/ngToast.js"></script>
+<script src="bower_components/angular-block-ui/dist/angular-block-ui.js"></script>
+<script src="bower_components/moment/moment.js"></script>
+<script src="bower_components/d3/d3.js"></script>
+<script src="bower_components/nvd3/build/nv.d3.js"></script>
+<script src="bower_components/spin.js/spin.js"></script>
+<script src="bower_components/ladda/dist/ladda.min.js"></script>
+<script src="bower_components/angular-ladda/dist/angular-ladda.min.js"></script>
+<script src="bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="bower_components/angular-daterangepicker/js/angular-daterangepicker.js"></script>
+<script src="bower_components/angular-material/angular-material.js"></script>
+<script src="bower_components/angular-bootstrap-confirm/dist/angular-bootstrap-confirm.js"></script>
+<script src="bower_components/multiple-select/multiple-select.js"></script>
+<script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
+<script src="bower_components/angular-http-auth/src/http-auth-interceptor.js"></script>
+<script src="bower_components/checklist-model/checklist-model.js"></script>
+<script src="bower_components/cal-heatmap/cal-heatmap.js"></script>
+<script src="bower_components/heatmap.js-amd/build/heatmap.js"></script>
+<script src="bower_components/heatmap.js-amd/plugins/svg-area-heatmap.js"></script>
+<script src="bower_components/angular-filter/dist/angular-filter.js"></script>
+<script src="bower_components/ng-tags-input/ng-tags-input.js"></script>
+<script src="bower_components/bootstrap-select/dist/js/bootstrap-select.js"></script>
+<script src="bower_components/angular-maskmoney/angular-maskmoney.js"></script>
+<script src="bower_components/angular-maskmoney/jquery.maskMoney.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:js({.tmp,app}) scripts/scripts.js -->
+<script src="scripts/app.js"></script>
+<script src="scripts/config.js"></script>
+<script src="scripts/mqttws31.js"></script>
+<script src="scripts/stringbuilder.js"></script>
+
+<!-- Controllers -->
+<script src="scripts/controllers/login.js"></script>
+<script src="scripts/controllers/main.js"></script>
+<script src="scripts/controllers/home.js"></script>
+<script src="scripts/controllers/controllers.js"></script>
+<script src="scripts/controllers/drivers.js"></script>
+<script src="scripts/controllers/passengers.js"></script>
+<script src="scripts/controllers/passengers_bank_transfer.js"></script>
+<script src="scripts/controllers/passenger_bank_transfer_status_modal.js"></script>
+<script src="scripts/controllers/passenger_bank_transfer_csv_modal.js"></script>
+<script src="scripts/controllers/rides.js"></script>
+<script src="scripts/controllers/live_rides.js"></script>
+<script src="scripts/controllers/ride.live.monitor.modal.js"></script>
+<script src="scripts/controllers/reports.js"></script>
+<script src="scripts/controllers/ride.modal.js"></script>
+<script src="scripts/controllers/route.modal.js"></script>
+<script src="scripts/controllers/passenger.modal.js"></script>
+<script src="scripts/controllers/driver.modal.js"></script>
+<script src="scripts/controllers/car.modal.js"></script>
+<script src="scripts/controllers/royal.modal.js"></script>
+<script src="scripts/controllers/ride.monitor.js"></script>
+<script src="scripts/controllers/new.administrator.modal.js"></script>
+<script src="scripts/controllers/new.visitor.action.modal.js"></script>
+<script src="scripts/controllers/edit.visitor.modal.js"></script>
+<script src="scripts/controllers/new.controller.modal.js"></script>
+<script src="scripts/controllers/edit.controller.modal.js"></script>
+<script src="scripts/controllers/edit.administrator.modal.js"></script>
+<script src="scripts/controllers/sos.js"></script>
+<script src="scripts/controllers/phone_code.js"></script>
+<script src="scripts/controllers/notifications.js"></script>
+<script src="scripts/controllers/permissions.js"></script>
+<script src="scripts/controllers/corporate.js"></script>
+<script src="scripts/controllers/corporate_sales_package.js"></script>
+<script src="scripts/controllers/corporate_sales_package_detail_modal.js"></script>
+<script src="scripts/controllers/payments_corporate.js"></script>
+<script src="scripts/controllers/payments_driver.js"></script>
+<script src="scripts/controllers/edit.corporate.modal.js"></script>
+<script src="scripts/controllers/payments.corporate.modal.js"></script>
+<script src="scripts/controllers/recover.password.modal.js"></script>
+<script src="scripts/controllers/commpassengers.js"></script>
+<script src="scripts/controllers/commdrivers.js"></script>
+<script src="scripts/controllers/clubdrivers.js"></script>
+<script src="scripts/controllers/club.history.js"></script>
+<script src="scripts/controllers/clubpassengers.js"></script>
+<script src="scripts/controllers/commstatistics.js"></script>
+<script src="scripts/controllers/commvisitors.js"></script>
+<script src="scripts/controllers/promotions.js"></script>
+<script src="scripts/controllers/promotions_new.js"></script>
+<script src="scripts/controllers/promotions_edit.js"></script>
+<script src="scripts/controllers/promotion_status.modal.js"></script>
+<script src="scripts/controllers/promotions_copy.js"></script>
+<script src="scripts/controllers/corporates_promotions.js"></script>
+<script src="scripts/controllers/digital-drivers.js"></script>
+<script src="scripts/controllers/digital-drivers-action-modal.js"></script>
+<script src="scripts/controllers/price_calculator.js"></script>
+<script src="scripts/controllers/price_schema.js"></script>
+<script src="scripts/controllers/add.balance.modal.js"></script>
+<script src="scripts/controllers/royal.js"></script>
+<script src="scripts/controllers/royal_settings.js"></script>
+<script src="scripts/controllers/invoice_report.js"></script>
+<script src="scripts/controllers/invoice_settings.js"></script>
+<script src="scripts/controllers/payments-driver-status-modal.js"></script>
+<script src="scripts/controllers/communication_channel.js"></script>
+<script src="scripts/controllers/communication_channel_new.js"></script>
+<script src="scripts/controllers/communication_channel_edit.js"></script>
+<script src="scripts/controllers/communication_channel_preview.modal.js"></script>
+<script src="scripts/controllers/confirm-modal.js"></script>
+<script src="scripts/controllers/payments_driver_history.js"></script>
+<script src="scripts/controllers/payments_driver_note_modal.js"></script>
+<script src="scripts/controllers/corporate_sales_package_detail_edit_modal.js"></script>
+<script src="scripts/controllers/drivers_bank_transfer.js"></script>
+<script src="scripts/controllers/driver_bank_transfer_status_modal.js"></script>
+<script src="scripts/controllers/passengers_recharge_balance.js"></script>
+<script src="scripts/controllers/passengers_recharge_balance_add_modal.js"></script>
+
+<!-- Providers -->
+<script src="scripts/services/admin.js"></script>
+<script src="scripts/services/util.js"></script>
+<script src="scripts/services/authentication.js"></script>
+<script src="scripts/services/promotions.js"></script>
+<script src="scripts/providers/feature_toggle.factory.js"></script>
+
+<!-- Filters -->
+<script src="scripts/filters/idlimit.js"></script>
+<script src="scripts/filters/capitalize.js"></script>
+<script src="scripts/filters/abs.js"></script>
+<script src="scripts/filters/cutText.js"></script>
+
+<!-- Directives -->
+<script src="scripts/directives/img-loading.js"></script>
+<script src="scripts/directives/avg-star-rating.js"></script>
+<script src="scripts/directives/profile-img.js"></script>
+<script src="scripts/directives/not-authorized.js"></script>
+<script src="scripts/directives/scripts.js"></script>
+<script src="scripts/directives/csv-reader.js"></script>
+<script src="scripts/directives/filter-country-state.js"></script>
+<script src="scripts/directives/promotions-validation.js"></script>
+
+<!-- endbuild -->
+<script type="text/javascript">
+  function showHideMenu() {
+    if ($(window).width() < 768) {
+      $('#main-menu').removeClass('in');
+    } else {
+      $('#main-menu').addClass('in');
+    }
+  }
+  showHideMenu();
+  $(window).on('resize', showHideMenu);
+</script>
+</body>
+
+</html>
